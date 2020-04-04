@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <base id="base" href="/course/">
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta http-equiv="x-ua-compatible" content="ie=edge"/>
+    <script>
+        function getContextPath() {
+            var pathName = document.location.pathname;
+            var index = pathName.substr(1).indexOf("/");
+            var result = pathName.substr(0, index + 1);
+            return result + '/';
+        }
+        document.getElementById('base').href = getContextPath();
+    </script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css" />
+        <link href="https://cdn.bootcss.com/animate.css/3.7.2/animate.css" rel="stylesheet" />
+        <link rel="stylesheet" href="css/my-style.css" />
+    </head>
+    <body>
+        <div class="ui container my-padding-top-2">
+            <div class="ui horizontal divider"><h1>创建课程</h1></div>
+
+            <div class="animated bounceInDown">
+                <div class="ui grid  my-patted-5 my-padding-left-2">
+                    <div class="ui  eight wide column">
+                        <form class="ui form">
+                            <div class="field">
+                                <div class="ui labeled input">
+                                    <div class="ui label">课程名</div>
+                                    <input type="text" />
+                                </div>
+                            </div>
+                            <div class="field">
+                                <div class="ui labeled input">
+                                    <div class="ui label">课程号</div>
+                                    <input type="text" />
+                                </div>
+                            </div>
+                            <div class="field">
+                                <div class="ui labeled input">
+                                    <div class="ui label">描述</div>
+                                    <input type="text" />
+                                </div>
+                            </div>
+                            <div class="field">
+                                <label for="uploadFile" class="ui button mini">选择封面</label>
+                                <input type="file" id="uploadFile" style="display: none;" />
+                            </div>
+                            <div class="ui black reset button right floated small">
+                                清空
+                            </div>
+                            <div class="ui green right labeled icon button small">
+                                创建
+                                <i class="checkmark icon"></i>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="ui  five wide column">
+                        <h3>封面</h3>
+                        <img class="ui medium rounded image" id="uploaded-img" src="https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=2462524992,179895772&fm=26&gp=0.jpg" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+    <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+    <script src="js/my.js"/>
+    <script>
+        // //在input file内容改变的时候触发事件
+        // $("#cover").change(function() {
+        //     //获取input file的files文件数组;
+        //     //$('#filed')获取的是jQuery对象，.get(0)转为原生对象;
+        //     //这边默认只能选一个，但是存放形式仍然是数组，所以取第一个元素使用[0];
+        //     var file = $("#cover").get(0).files[0];
+        //     //创建用来读取此文件的对象
+        //     var reader = new FileReader();
+        //     //使用该对象读取file文件
+        //     reader.readAsDataURL(file);
+        //     //读取文件成功后执行的方法函数
+        //     reader.onload = function(e) {
+        //         //读取成功后返回的一个参数e，整个的一个进度事件
+        //         console.log(e);
+        //         //选择所要显示图片的img，要赋值给img的src就是e中target下result里面
+        //         //的base64编码格式的地址
+        //         $("#image-show").get(0).src = e.target.result;
+        //     };
+        // });
+        $(".ui.form").form({
+            inline: true,
+            revalidate: true,
+            transition: "slide down",
+            on: "blur",
+            fields: {
+                name: {
+                    identifier: "name",
+                    rules: [
+                        {
+                            type: "empty",
+                            prompt: "请输入账号!"
+                        },
+                        {
+                            type: "minLength[6]",
+                            prompt: "账号不少于6位"
+                        }
+                    ]
+                },
+                password: {
+                    identifier: "password",
+                    rules: [
+                        {
+                            type: "empty",
+                            prompt: "请输入密码!"
+                        },
+                        {
+                            type: "minLength[6]",
+                            prompt: "密码不少于6位"
+                        }
+                    ]
+                }
+            }
+        });
+    </script>
+</html>

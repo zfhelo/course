@@ -1,0 +1,35 @@
+<div xmlns:th="http://www.thymeleaf.org">
+    <!--导航-->
+    <nav th:fragment="menu(active,dropdown)" class="ui  attached segment my-padded-tb-mini">
+        <div class="ui container">
+            <div class="ui  secondary stackable menu">
+                <h2 class="ui teal header item">Course</h2>
+                <a href="#" th:href="@{/tea/index}" class="item" th:classappend="${active == 'index'} ? 'active'"><i class="home icon"></i>首页</a>
+                <a href="#" class="item" th:classappend="${active == 'xx'} ? 'active'"><i class="comment alternate outline icon"></i>讨论区</a>
+                <a href="#" class="item" th:classappend="${active == 'xx'} ? 'active'"><i class="box icon"></i>资源</a>
+                <a href="#" th:href="@{/admin/index.html}" class="item" th:classappend="${active == 'xx'} ? 'active'"><i class="cog icon"></i>课程管理</a>
+
+                <!--搜索-->
+                <div class="right item">
+                    <div class="ui icon input ">
+                        <input type="text" placeholder="搜索..."/>
+                        <i class="search icon link"></i>
+                    </div>
+                </div>
+                <div class="right menu">
+                    <div class="ui dropdown item">
+                        <div>
+                            <img class="ui avatar image" src="https://unsplash.it/100/100?image=1005"/>
+                            zfhelo
+                        </div>
+                        <i class="dropdown icon"></i>
+                        <div th:replace="${dropdown}" class="menu">
+                            <div class="item">注销</div>
+                            <a class="item" href="edit-detial.html">修改资料</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+</div>

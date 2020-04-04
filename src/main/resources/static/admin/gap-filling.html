@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css" />
+        <link href="https://cdn.bootcss.com/animate.css/3.7.2/animate.css" rel="stylesheet" />
+        <link rel="stylesheet" href="css/my-style.css" />
+    </head>
+    <body>
+        <div class="ui container my-padding-top-2">
+            <div class="ui stackable">
+                <div class="ui horizontal divider"><h1>填空题</h1></div>
+                <div class="animated bounceInDown">
+                    <div class="ui search">
+                        <div class="ui label large black basic icon my-font-weight">
+                            当前课程
+                            <i class="angle right icon"></i>
+                            <span>未选择</span>
+                            <!-- 保存课程号 -->
+                            <input type="hidden" />
+                        </div>
+                        <div class="ui action input">
+                            <input type="text" placeholder="搜索..." />
+                            <select class="ui compact selection dropdown">
+                                <option value="all">课程号</option>
+                                <option value="articles" disabled>题干</option>
+                                <option value="products" disabled>选项</option>
+                            </select>
+                            <div class="ui button">搜索</div>
+                        </div>
+
+                        <button class="ui icon green button" onclick="showEditDialog()"><i class="plus icon"></i>添加题目</button>
+                        <div class="ui button red mini right floated">删除已选题目</div>
+                    </div>
+
+                    <table class="ui celled table">
+                        <thead>
+                            <tr>
+                                <th width="1">
+                                    <div class="ui mini checkbox">
+                                        <input type="checkbox" />
+                                        <label></label>
+                                    </div>
+                                </th>
+                                <th>题目</th>
+                                <th>答案</th>
+                                <th>分值</th>
+                                <th>
+                                    操作
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div class="ui mini checkbox">
+                                        <input type="checkbox" />
+                                        <label></label>
+                                    </div>
+                                </td>
+                                <td>数据结构</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td width="190">
+                                    <button onclick="showEditDialog()" class="ui mini primary button"><i class="icon edit"></i> 编辑</button>
+                                    <button class="ui mini red button"><i class="archive icon"></i>删除</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th colspan="8">
+                                    <div class="ui mini pagination menu">
+                                        <div class="item">1</div>
+                                        <div class="item active">2</div>
+                                    </div>
+                                </th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                    <span class="my-font-tips">定位到对应课程在进行本页其他操作</span>
+                </div>
+            </div>
+
+            <!-- 弹出编辑框 -->
+            <!-- 弹出编辑框 -->
+            <div class="ui modal">
+                <i class="close icon"></i>
+                <div class="header">
+                    添加题目
+                </div>
+                <div class="content">
+                    <form class="ui form">
+                        <div class="field">
+                            <h3>题干</h3>
+                            <div id="div1"></div>
+                        </div>
+
+                        <div class="ui fields">
+
+                            <div class="field">
+                                <div class="ui labeled input">
+                                    <div class="ui label">答案</div>
+                                    <input type="text" />
+                                </div>
+                            </div>
+                            <div class="field">
+                                <div class="ui labeled input">
+                                    <div class="ui label">分值</div>
+                                    <input type="text" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ui button reset" style="display: none;"></div>
+                    </form>
+                </div>
+                <div class="actions">
+                    <div class="ui black deny button small" onclick="f()">
+                        取消
+                    </div>
+                    <div class="ui green right labeled icon button small">
+                        确认
+                        <i class="checkmark icon"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+    <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+    <script src="https://cdn.bootcss.com/wangEditor/10.0.13/wangEditor.min.js"></script>
+    <script>
+        var showEditDialog = function() {
+            $(".ui.modal").modal("show");
+        };
+        //在input file内容改变的时候触发事件
+        $("#cover").change(function() {
+            //获取input file的files文件数组;
+            //$('#filed')获取的是jQuery对象，.get(0)转为原生对象;
+            //这边默认只能选一个，但是存放形式仍然是数组，所以取第一个元素使用[0];
+            var file = $("#cover").get(0).files[0];
+            //创建用来读取此文件的对象
+            var reader = new FileReader();
+            //使用该对象读取file文件
+            reader.readAsDataURL(file);
+            //读取文件成功后执行的方法函数
+            reader.onload = function(e) {
+                //读取成功后返回的一个参数e，整个的一个进度事件
+                console.log(e);
+                //选择所要显示图片的img，要赋值给img的src就是e中target下result里面
+                //的base64编码格式的地址
+                $("#image-show").get(0).src = e.target.result;
+            };
+        });
+        var f = function() {
+            $(".button.reset").click();
+        };
+
+        var E = window.wangEditor;
+        var editor = new E("#div1");
+        editor.create();
+    </script>
+</html>

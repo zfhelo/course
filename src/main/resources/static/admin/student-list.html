@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css" />
+        <link href="https://cdn.bootcss.com/animate.css/3.7.2/animate.css" rel="stylesheet" />
+        <link rel="stylesheet" href="css/my-style.css" />
+        <title>首页</title>
+    </head>
+    <body>
+        <div class="ui container my-padding-top-2">
+            <div class="ui stackable">
+                <div class="ui horizontal divider"><h1>学员管理</h1></div>
+                <div class="animated bounceInDown">
+                    <div class="ui search">
+                        <div class="ui label large black basic icon my-font-weight">
+                            当前课程
+                            <i class="angle right icon"></i>
+                            <span>未选择</span>
+                            <!-- 保存课程号 -->
+                            <input type="hidden" />
+                        </div>
+                        <div class="ui action input">
+                            <input type="text" placeholder="搜索..." />
+                            <select class="ui compact selection dropdown">
+                                <option value="all">课程号</option>
+                                <option value="articles" disabled>题干</option>
+                                <option value="products" disabled>选项</option>
+                            </select>
+                            <div class="ui button">搜索</div>
+                        </div>
+
+                        <div class="ui button red mini right floated">删除已选题目</div>
+                    </div>
+
+                    <table class="ui celled table">
+                        <thead>
+                            <tr>
+                                <th width="1">
+                                    <div class="ui mini checkbox">
+                                        <input type="checkbox" />
+                                        <label></label>
+                                    </div>
+                                </th>
+                                <th>姓名</th>
+                                <th>加入时间</th>
+                                <th>平时分</th>
+                                <th>成绩</th>
+                                <th>
+                                    操作
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div class="ui mini checkbox">
+                                        <input type="checkbox" />
+                                        <label></label>
+                                    </div>
+                                </td>
+                                <td>数据结构</td>
+                                <td>100</td>
+                                <td>99</td>
+                                <td>1</td>
+                                <td width="190">
+                                    <button class="ui mini primary button" onclick="showEditDialog()"><i class="icon edit"></i> 编辑</button>
+                                    <button class="ui mini red button"><i class="archive icon"></i>删除</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th colspan="8">
+                                    <div class="ui mini pagination menu">
+                                        <div class="item">1</div>
+                                        <div class="item active">2</div>
+                                    </div>
+                                </th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                    <span class="my-font-tips">定位到对应课程在进行本页其他操作</span>
+                </div>
+            </div>
+            <div class="ui tiny modal">
+                <div class="header">修改成绩</div>
+                <div class="input content">
+                    <div class="ui labeled input">
+                        <div class="ui label">
+                            平时分
+                        </div>
+                        <input type="text" />
+                    </div>
+                    <div class="ui labeled input">
+                        <div class="ui label">
+                            总成绩
+                        </div>
+                        <input type="text" />
+                    </div>
+                </div>
+                <div class="actions">
+                    <div class="ui black deny mini button">
+                        取消
+                    </div>
+                    <div class="ui right icon green mini button">
+                        更新
+                        <i class="icon check"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+    <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+    <script src="https://cdn.bootcss.com/wangEditor/10.0.13/wangEditor.min.js"></script>
+    <script>
+        var showEditDialog = function() {
+            $(".ui.modal").modal("show");
+        };
+        var f = function() {
+            $(".button.reset").click();
+        };
+
+        var E = window.wangEditor;
+        var editor = new E("#div1");
+        editor.create();
+    </script>
+</html>

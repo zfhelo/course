@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css" />
+        <link href="https://cdn.bootcss.com/animate.css/3.7.2/animate.css" rel="stylesheet" />
+        <link href="../static/css/jquery.filer.css" type="text/css" rel="stylesheet" />
+        <link href="../static/css/themes/jquery.filer-dragdropbox-theme.css" type="text/css" rel="stylesheet" />
+        <link rel="stylesheet" href="../static/css/my-style.css" />
+        <title>首页</title>
+    </head>
+    <style></style>
+    <body>
+        <!--导航-->
+        <nav class="ui  attached segment my-padded-tb-mini">
+            <div class="ui container">
+                <div class="ui  secondary stackable menu">
+                    <h2 class="ui teal header item">Course</h2>
+                    <a href="#" class="active item"><i class="home icon"></i>首页</a>
+                    <a href="#" class="item"><i class="book icon"></i>课程</a>
+                    <a href="#" class="item"><i class="sticky note outline icon"></i>作业</a>
+                    <a href="#" class="item"><i class="pen square icon"></i>考试</a>
+                    <a href="#" class="item"><i class="comment alternate outline icon"></i>讨论区</a>
+                    <a href="#" class="item"><i class="box icon"></i>资源</a>
+
+                    <!--搜索-->
+                    <div class="right item">
+                        <div class="ui icon input ">
+                            <input type="text" placeholder="搜索..." />
+                            <i class="search icon link"></i>
+                        </div>
+                    </div>
+                    <div class="right menu">
+                        <div class="ui dropdown item">
+                            <div>
+                                <img class="ui avatar image" src="https://unsplash.it/100/100?image=1005" />
+                                zfhelo
+                            </div>
+                            <i class="dropdown icon"></i>
+                            <div class="menu">
+                                <div class="item">注销</div>
+                                <a class="item" href="edit-detial.html">修改资料</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <div class="ui container segment margin-top-3">
+            <div class="ui grid stackable">
+                <div class="ui nine wide column">
+                    <div class="ui segments">
+                        <div class="ui segment blue">
+                            <div class="ui action input">
+                                <input type="text" placeholder="搜索..." />
+                                <select class="ui compact selection dropdown">
+                                    <option selected="" value="articles">课程号</option>
+                                    <option value="products">描述</option>
+                                </select>
+                                <div class="ui button primary mini">筛选</div>
+                            </div>
+                        </div>
+
+                        <div class="ui segment  grid stackable my-margin-top-0">
+                            <div class="ui five wide column"><h4 class="ui header">java入门</h4></div>
+                            <div class="ui eleven wide right aligned column">
+                                所属课程：<span>java</span> 上传者 <span>xxx</span> 大小 <span>210M</span>
+                                <a href="">下载</a>
+                                <a href="">删除</a>
+                            </div>
+                        </div>
+                        <div class="ui segment grid   stackable my-margin-top-0">
+                            <div class="ui five wide column"><h4 class="ui header">java入门</h4></div>
+                            <div class="ui eleven wide right aligned column">
+                                所属课程：<span>java</span> 上传者 <span>xxx</span> 大小 <span>210M</span>
+                                <a href="">下载</a>
+                                <a href="">删除</a>
+                            </div>
+                        </div>
+                        <div class="ui segment grid  stackable my-margin-top-0">
+                            <div class="ui five wide column"><h4 class="ui header">java入门</h4></div>
+                            <div class="ui eleven wide right aligned column">
+                                所属课程：<span>java</span> 上传者 <span>xxx</span> 大小 <span>210M</span>
+                                <a href="">下载</a>
+                                <a href="">删除</a>
+                            </div>
+                        </div>
+                        <div class="ui segment grid  stackable my-margin-top-0">
+                            <div class="ui five wide column"><h4 class="ui header">java入门</h4></div>
+                            <div class="ui eleven wide right aligned column">
+                                所属课程：<span>java</span> 上传者 <span>xxx</span> 大小 <span>210M</span>
+                                <a href="">下载</a>
+                                <a href="">删除</a>
+                            </div>
+                        </div>
+                        <div class="ui segment grid  stackable my-margin-top-0">
+                            <div class="ui five wide column"><h4 class="ui header">java入门</h4></div>
+                            <div class="ui eleven wide right aligned column">
+                                所属课程：<span>java</span> 上传者 <span>xxx</span> 大小 <span>210M</span>
+                                <a href="">下载</a>
+                                <a href="">删除</a>
+                            </div>
+                        </div>
+                        <div class="ui segment grid   stackable my-margin-top-0">
+                            <div class="ui five wide column"><h4 class="ui header">java入门</h4></div>
+                            <div class="ui eleven wide right aligned column">
+                                所属课程：<span>java</span> 上传者 <span>xxx</span> 大小 <span>210M</span>
+                                <a href="">下载</a>
+                                <a href="">删除</a>
+                            </div>
+                        </div>
+                        <div class="ui segment">页码...</div>
+                    </div>
+                </div>
+                <div class="ui seven wide column centered" style="text-align: center;">
+                    <div class="ui left corner labeled input">
+                        <input type="text" placeholder="描述" />
+                        <div class="ui left corner label blue">
+                            <i class="asterisk icon"></i>
+                        </div>
+                    </div>
+                    <div class="ui left corner labeled input">
+                        <input type="text" placeholder="课程号" />
+                        <div class="ui left corner label blue">
+                            <i class="asterisk icon"></i>
+                        </div>
+                    </div>
+                    <div class=" my-margin-top-08">
+                        <input type="file" name="files[]" id="filer_input" multiple="multiple" />
+                        <div class="ui animated fade button primary mini ">
+                            <div class="visible content"><i class="icon upload"> </i> 上传</div>
+                            <div class="hidden content"><i class="icon cloud"></i></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+    <!-- <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script> -->
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+    <script src="../static/js/jquery.filer.min.js"></script>
+    <script>
+        $(".ui.dropdown").dropdown({
+            on: "hover"
+        });
+    </script>
+    <script>
+        $("#filer_input").filer({
+            changeInput:
+                '<div class="jFiler-input-dragDrop"><div class="jFiler-input-inner"><div class="jFiler-input-icon"><i class="icon-jfi-cloud-up-o"></i></div><div class="jFiler-input-text"><h3>Drag&Drop files here</h3> <span style="display:inline-block; margin: 15px 0">or</span></div><a class="jFiler-input-choose-btn blue">Browse Files</a></div></div>',
+            showThumbs: true,
+            limit: 2,
+            theme: "dragdropbox",
+            templates: {
+                box: '<ul class="jFiler-items-list jFiler-items-grid" style="margin-left: 45px;"></ul>',
+                item:
+                    '<li class="jFiler-item">\
+                    <div class="jFiler-item-container">\
+                        <div class="jFiler-item-inner">\
+                            <div class="jFiler-item-thumb">\
+                                <div class="jFiler-item-status"></div>\
+                                <div class="jFiler-item-info">\
+                                    <span class="jFiler-item-title"><b title="{{fi-name}}">{{fi-name | limitTo: 25}}</b></span>\
+                                    <span class="jFiler-item-others">{{fi-size2}}</span>\
+                                </div>\
+                                {{fi-image}}\
+                            </div>\
+                            <div class="jFiler-item-assets jFiler-row">\
+                                <ul class="list-inline pull-left">\
+                                    <li>{{fi-progressBar}}</li>\
+                                </ul>\
+                                <ul class="list-inline pull-right">\
+                                    <li><a class="icon-jfi-trash jFiler-item-trash-action"></a></li>\
+                                </ul>\
+                            </div>\
+                        </div>\
+                    </div>\
+                </li>',
+                itemAppend:
+                    '<li class="jFiler-item">\
+                        <div class="jFiler-item-container">\
+                            <div class="jFiler-item-inner">\
+                                <div class="jFiler-item-thumb">\
+                                    <div class="jFiler-item-status"></div>\
+                                    <div class="jFiler-item-info">\
+                                        <span class="jFiler-item-title"><b title="{{fi-name}}">{{fi-name | limitTo: 25}}</b></span>\
+                                        <span class="jFiler-item-others">{{fi-size2}}</span>\
+                                    </div>\
+                                    {{fi-image}}\
+                                </div>\
+                                <div class="jFiler-item-assets jFiler-row">\
+                                    <ul class="list-inline pull-left">\
+                                        <li><span class="jFiler-item-others">{{fi-icon}}</span></li>\
+                                    </ul>\
+                                    <ul class="list-inline pull-right">\
+                                        <li><a class="icon-jfi-trash jFiler-item-trash-action"></a></li>\
+                                    </ul>\
+                                </div>\
+                            </div>\
+                        </div>\
+                    </li>',
+                progressBar: '<div class="bar"></div>',
+                itemAppendToEnd: false,
+                removeConfirmation: true,
+                _selectors: {
+                    list: ".jFiler-items-list",
+                    item: ".jFiler-item",
+                    progressBar: ".bar",
+                    remove: ".jFiler-item-trash-action"
+                }
+            },
+            dragDrop: {
+                dragEnter: null,
+                dragLeave: null,
+                drop: null
+            },
+            uploadFile: {
+                url: "./php/upload.php",
+                data: null,
+                type: "POST",
+                enctype: "multipart/form-data",
+                beforeSend: function() {},
+                success: function(data, el) {
+                    var parent = el.find(".jFiler-jProgressBar").parent();
+                    el.find(".jFiler-jProgressBar").fadeOut("slow", function() {
+                        $('<div class="jFiler-item-others text-success"><i class="icon-jfi-check-circle"></i> Success</div>')
+                            .hide()
+                            .appendTo(parent)
+                            .fadeIn("slow");
+                    });
+                },
+                error: function(el) {
+                    var parent = el.find(".jFiler-jProgressBar").parent();
+                    el.find(".jFiler-jProgressBar").fadeOut("slow", function() {
+                        $('<div class="jFiler-item-others text-error"><i class="icon-jfi-minus-circle"></i> Error</div>')
+                            .hide()
+                            .appendTo(parent)
+                            .fadeIn("slow");
+                    });
+                },
+                statusCode: null,
+                onProgress: null,
+                onComplete: null
+            },
+            onRemove: function(itemEl, file) {
+                var file = file.name;
+                $.post("./php/remove_file.php", { file: file });
+            }
+        });
+    </script>
+</html>

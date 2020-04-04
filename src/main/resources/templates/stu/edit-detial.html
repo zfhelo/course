@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+    </head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css" />
+    <link href="https://cdn.bootcss.com/animate.css/3.7.2/animate.css" rel="stylesheet" />
+
+    <link rel="stylesheet" href="../static/css/my-style.css" />
+    <style>
+        .hide {
+            display: none !important;
+        }
+    </style>
+    <body style="background-image: url(https://i.loli.net/2020/03/27/7zpgTsbHovPuJm6.png);">
+        <!--导航-->
+        <nav class="ui  attached segment my-padded-tb-mini">
+            <div class="ui container">
+                <div class="ui  secondary stackable menu">
+                    <h2 class="ui teal header item">Course</h2>
+                    <a href="#" class="item"><i class="home icon"></i>首页</a>
+                    <a href="#" class="item"><i class="book icon"></i>课程</a>
+                    <a href="#" class="item"><i class="sticky note outline icon"></i>作业</a>
+                    <a href="#" class="item"><i class="pen square icon"></i>考试</a>
+                    <a href="#" class="item"><i class="comment alternate outline icon"></i>讨论区</a>
+                    <a href="#" class="item"><i class="box icon"></i>资源</a>
+
+                    <!--搜索-->
+                    <div class="right item">
+                        <div class="ui icon input ">
+                            <input type="text" placeholder="搜索..." />
+                            <i class="search icon link"></i>
+                        </div>
+                    </div>
+                    <div class="right menu">
+                        <div class="ui dropdown item">
+                            <div>
+                                <img class="ui avatar image" src="https://unsplash.it/100/100?image=1005" />
+                                zfhelo
+                            </div>
+                            <i class="dropdown icon"></i>
+                            <div class="menu">
+                                <div class="item">注销</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <div class="ui container margin-top-2 ">
+            <div class="ui segment" style="padding: 70px;">
+                <div class="ui grid stackable">
+                    <div class="ui six wide column">
+                        <img class="ui small rounded image" id="image-show" src="https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=2394742770,4178322136&fm=26&gp=0.jpg" />
+                        <label for="head-img" class="ui button mini basic ">更换</label>
+                        <input type="file" id="head-img" style="display: none;" />
+                        <!-- 图片改变显示 -->
+                        <button class="ui button mini primary hide" id="update-img">提交</button>
+
+                        <div class="ui header">
+                            姓名: <span class="my-margin-left-1">xxxxxx</span>
+                            <div class="ui button tiny basic" onclick="edit('name')">修改</div>
+                        </div>
+                        <hr />
+                        <div class="ui header">账号: <span class="my-margin-left-1">1123445</span></div>
+                        <hr />
+                        <div class="ui header">
+                            密码: <span class="my-margin-left-1">xxxxxx</span>
+                            <div class="ui button mini basic" onclick="edit('password')">修改</div>
+                        </div>
+                        <hr />
+                        <div class="ui header">
+                            邮箱: <span class="my-margin-left-1">123456@gmail.com</span>
+                            <div class="ui button mini basic" onclick="edit('email')">修改</div>
+                        </div>
+                        <hr />
+                        <div class="ui header">
+                            手机: <span class="my-margin-left-1">15256357363</span>
+                            <div class="ui button mini basic" onclick="edit('phone')">修改</div>
+                        </div>
+                    </div>
+                    <div class="ui tow wide column"></div>
+                    <div class="ui eight wide column aligned eidts">
+                        <div class="edit-name hide tag">
+                            <div class="ui labeled input">
+                                <label class="ui label">姓名</label>
+                                <input type="text" />
+                                <div class="ui button primary">提交</div>
+                            </div>
+                        </div>
+                        <div class="edit-email hide tag">
+                            <!-- 验证旧邮箱 -->
+                            <div>
+                                <div class="ui labeled input my-patted-3">
+                                    <label class="ui label">验证码</label>
+                                    <input type="text" placeholder="查看邮箱" />
+                                    <div class="ui button" style="width: 70px !important;">发送</div>
+                                </div>
+                                <br />
+                                <div class="ui button primary">继续</div>
+                            </div>
+                            <!-- 验证新邮箱 -->
+                            <div class="hide">
+                                <div class="ui labeled input">
+                                    <label class="ui label">新邮箱</label>
+                                    <input type="text" />
+                                </div>
+                                <div class="ui labeled input my-patted-3">
+                                    <label class="ui label">验证码</label>
+                                    <input type="text" placeholder="查看邮箱" />
+                                    <div class="ui button" style="width: 70px !important;">发送</div>
+                                </div>
+                                <br />
+                                <div class="ui button primary">提交</div>
+                            </div>
+                        </div>
+                        <div class="edit-phone hide tag">
+                            <div class="ui labeled input">
+                                <label class="ui label">手机号</label>
+                                <input type="text" />
+                                <div class="ui button primary">提交</div>
+                            </div>
+                        </div>
+                        <div class="edit-password hide tag">
+                            <div class="ui labeled input my-patted-3">
+                                <label class="ui label ">原密码</label>
+                                <input type="text" />
+                            </div>
+                            <div class="ui labeled input my-patted-3">
+                                <label class="ui label">新秘密</label>
+                                <input type="text" />
+                            </div>
+                            <div class="ui labeled input my-patted-3">
+                                <label class="ui label">新秘密</label>
+                                <input type="text" />
+                            </div>
+                            <div class="ui labeled input my-patted-3">
+                                <label class="ui label">验证码</label>
+                                <input type="text" placeholder="查看邮箱" />
+                                <div class="ui button" style="width: 70px !important;">发送</div>
+                            </div>
+                            <br />
+                            <div class="ui button primary my-patted-3">提交</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+    <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+    <script>
+        //在input file内容改变的时候触发事件
+        $("#head-img").change(function() {
+            //获取input file的files文件数组;
+            //$('#filed')获取的是jQuery对象，.get(0)转为原生对象;
+            //这边默认只能选一个，但是存放形式仍然是数组，所以取第一个元素使用[0];
+            var file = $("#head-img").get(0).files[0];
+            //创建用来读取此文件的对象
+            var reader = new FileReader();
+            //使用该对象读取file文件
+            reader.readAsDataURL(file);
+            //读取文件成功后执行的方法函数
+            reader.onload = function(e) {
+                //读取成功后返回的一个参数e，整个的一个进度事件
+                console.log(e);
+                //选择所要显示图片的img，要赋值给img的src就是e中target下result里面
+                //的base64编码格式的地址
+                $("#image-show").get(0).src = e.target.result;
+                $("#update-img").removeClass("hide");
+            };
+        });
+        function showDialog() {
+            $(".ui.modal").modal("show");
+        }
+        $(".ui.dropdown").dropdown({
+            on: "hover"
+        });
+
+        function edit(str) {
+            $(".edit-" + str).toggleClass("tag");
+            $(".tag").addClass("hide");
+            $(".edit-" + str).toggleClass("hide");
+            $(".edit-" + str).toggleClass("tag");
+        }
+    </script>
+</html>

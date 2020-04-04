@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.gdpi.course.mapper.StudentMapper">
+    <insert id="addStudent" parameterType="student" useGeneratedKeys="true" keyColumn="id">
+        INSERT INTO student(username, nickname, password, photo)
+        VALUES(#{username}, #{nickname}, #{password}, #{photo})
+    </insert>
+
+    <select id="findByUsername" parameterType="string" resultType="student">
+        SELECT * FROM student WHERE username = #{username}
+    </select>
+</mapper>

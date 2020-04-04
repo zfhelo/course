@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css" />
+        <link href="https://cdn.bootcss.com/animate.css/3.7.2/animate.css" rel="stylesheet" />
+        <link rel="stylesheet" href="../static/css/my-style.css" />
+        <title>首页</title>
+    </head>
+    <body>
+        <!--导航-->
+        <nav class="ui  attached segment my-padded-tb-mini">
+            <div class="ui container">
+                <div class="ui  secondary stackable menu">
+                    <h2 class="ui teal header item">Course</h2>
+                    <a href="#" class="item"><i class="home icon"></i>首页</a>
+                    <a href="#" class="item"><i class="book icon"></i>课程</a>
+                    <a href="#" class="item"><i class="sticky note outline icon"></i>作业</a>
+                    <a href="#" class="item active"><i class="pen square icon"></i>考试</a>
+                    <a href="#" class="item"><i class="comment alternate outline icon"></i>讨论区</a>
+                    <a href="#" class="item"><i class="user icon"></i>个人中心</a>
+
+                    <!--搜索-->
+                    <div class="right item">
+                        <div class="ui icon input ">
+                            <input type="text" placeholder="搜索..." />
+                            <i class="search icon link"></i>
+                        </div>
+                    </div>
+                    <a href="#" class="item"><i class="motorcycle icon"></i>登出</a>
+                </div>
+            </div>
+        </nav>
+
+        <div class="ui container margin-top-2">
+            <div class="ui attached segment big center aligned">
+                <div class="ui icon"><i class="book icon"></i>数据结构</div>
+            </div>
+            <table class="animated bounceInDown ui attached celled table">
+                <thead>
+                    <tr>
+                        <th>标题</th>
+                        <th>发布时间</th>
+                        <th>结束时间</th>
+                        <th>总分</th>
+                        <th>得分</th>
+                        <th>状态</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>aop练习</td>
+                        <td>2020-01-01 8:8:8</td>
+                        <td>2020-01-01 8:8:8</td>
+                        <td>100</td>
+                        <td>99</td>
+                        <td>已提交</td>
+                        <td>
+                            <a href="#" class="ui mini blue basic button"> 详情 <i class="angle double right icon"></i> </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>aop练习</td>
+                        <td>2020-01-01 8:8:8</td>
+                        <td>2020-01-01 8:8:8</td>
+                        <td>100</td>
+                        <td>99</td>
+                        <td>已提交</td>
+                        <td>
+                            <a href="#" class="ui mini blue basic button"> 详情 <i class="angle double right icon"></i> </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>aop练习</td>
+                        <td>2020-01-01 8:8:8</td>
+                        <td>2020-01-01 8:8:8</td>
+                        <td>100</td>
+                        <td>99</td>
+                        <td>已提交</td>
+                        <td>
+                            <a href="#" class="ui mini blue basic button"> 详情 <i class="angle double right icon"></i> </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>aop练习</td>
+                        <td>2020-01-01 8:8:8</td>
+                        <td>2020-01-01 8:8:8</td>
+                        <td>100</td>
+                        <td>99</td>
+                        <td>已提交</td>
+                        <td>
+                            <a href="#" class="ui mini blue basic button"> 详情 <i class="angle double right icon"></i> </a>
+                        </td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th colspan="7">
+                            <div class="ui mini pagination menu">
+                                <a class="item">上一页</a>
+                                <a class="item">下一页</a>
+                            </div>
+                        </th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </body>
+    <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+</html>

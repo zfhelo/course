@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="icon" th:href="favicon.ico" type="image/x-icon">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css" />
+        <link rel="stylesheet" href="css/my-style.css" />
+        <title>首页</title>
+    </head>
+    <body style="background-image: url(https://i.loli.net/2020/03/27/7zpgTsbHovPuJm6.png);">
+        <!--导航-->
+        <nav class="ui  attached segment my-padded-tb-mini">
+            <div class="ui container">
+                <div class="ui  secondary stackable menu">
+                    <h2 class="ui teal header item">Course</h2>
+                    <a href="#" class="active item"><i class="home icon"></i>首页</a>
+                    <a href="#" class="item"><i class="book icon"></i>课程</a>
+                    <a href="#" class="item"><i class="sticky note outline icon"></i>作业</a>
+                    <a href="#" class="item"><i class="pen square icon"></i>考试</a>
+                    <a href="#" class="item"><i class="comment alternate outline icon"></i>讨论区</a>
+                    <a href="#" class="item"><i class="box icon"></i>资源</a>
+
+                    <!--搜索-->
+                    <div class="right item">
+                        <div class="ui icon input ">
+                            <input type="text" placeholder="搜索..." />
+                            <i class="search icon link"></i>
+                        </div>
+                    </div>
+                    <div class="right menu">
+                        <div class="ui dropdown item">
+                            <div>
+                                <img class="ui avatar image" src="https://unsplash.it/100/100?image=1005" />
+                                zfhelo
+                            </div>
+                            <i class="dropdown icon"></i>
+                            <div class="menu">
+                                <div class="item">注销</div>
+                                <a class="item" href="edit-detial.html">修改资料</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <div class="ui container margin-top-2">
+            <div class="ui grid stackable">
+                <div class="twelve wide column">
+                    <!-- 待填充 -->
+                </div>
+                <div class="four wide right aligned column">
+                    <!--公告-->
+                    <div class="ui segments my-margin-top-large">
+                        <div class="ui segment  left aligned secondary"><i class="bullhorn icon"></i> 课程公告</div>
+                        <div class="ui segment">
+                            <i class="circle     teal  mini icon"></i>
+                            数据结构
+
+                            <div class="ui basic left pointing mini label">13</div>
+                        </div>
+                        <div class="ui segment">
+                            <!-- <i class="circle teal teal mini icon"></i> -->
+                            数据结构
+
+                            <div class="ui basic left pointing mini label">13</div>
+                        </div>
+                        <div class="ui segment">
+                            <!-- <i class="circle     teal  mini icon"></i> -->
+                            数据结构
+
+                            <div class="ui basic left pointing mini label">13</div>
+                        </div>
+                    </div>
+                    <!-- 作业 -->
+                    <div class="ui segments my-margin-top-large">
+                        <div class="ui segment  left aligned secondary"><i class="sticky note outline icon"></i> 作业</div>
+                        <div class="ui segment">
+                            数据结构
+
+                            <div class="ui basic left pointing mini label">13</div>
+                            <i class="circle     teal  mini icon"></i>
+                        </div>
+                        <div class="ui segment">
+                            数据结构
+
+                            <div class="ui basic left pointing mini label">13</div>
+                            <i class="circle     teal  mini icon"></i>
+                        </div>
+                        <div class="ui segment">
+                            数据结构
+
+                            <div class="ui basic left pointing mini label">13</div>
+                            <i class="circle     teal  mini icon"></i>
+                        </div>
+                    </div>
+                    <!-- 考试 -->
+                    <div class="ui segments my-margin-top-large">
+                        <div class="ui segment  left aligned secondary"><i class="pen square icon"></i> 考试</div>
+                        <div class="ui segment">
+                            数据结构期末考试
+
+                            <i class="circle     teal  mini icon"></i>
+                        </div>
+                        <div class="ui segment">
+                            数据结构期末考试
+
+                            <i class="circle teal  mini icon"></i>
+                        </div>
+                        <div class="ui segment">
+                            数据结构期末考试
+
+                            <i class="circle     teal  mini icon"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+    <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+    <script>
+        $(".ui.dropdown").dropdown({
+            on: "hover"
+        });
+    </script>
+</html>

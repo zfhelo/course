@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css" />
+        <link href="https://cdn.bootcss.com/animate.css/3.7.2/animate.css" rel="stylesheet" />
+        <link href="https://cdn.bootcss.com/semantic-ui-calendar/0.0.8/calendar.min.css" rel="stylesheet" />
+        <link rel="stylesheet" href="css/my-style.css" />
+    </head>
+    <body>
+        <div class="ui container my-padding-top-2">
+            <div class="ui stackable">
+                <div class="ui horizontal divider"><h1>测验列表</h1></div>
+                <div class="animated bounceInDown">
+                    <div class="ui search">
+                        <div class="ui label large black basic icon my-font-weight">
+                            当前课程
+                            <i class="angle right icon"></i>
+                            <span>未选择</span>
+                            <!-- 保存课程号 -->
+                            <input type="hidden" />
+                        </div>
+                        <div class="ui action input">
+                            <input type="text" placeholder="搜索..." />
+                            <select class="ui compact selection dropdown">
+                                <option value="all">课程号</option>
+                                <option value="articles" disabled>题干</option>
+                                <option value="products" disabled>选项</option>
+                            </select>
+                            <div class="ui button">搜索</div>
+                        </div>
+                    </div>
+
+                    <table class="ui celled table">
+                        <thead>
+                            <tr>
+                                <th>标题</th>
+                                <th>发布时间</th>
+                                <th>结束时间</th>
+                                <th>提交人数</th>
+                                <th>状态</th>
+                                <th width="70">分值</th>
+                                <th width="300">
+                                    操作
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>数据结构</td>
+                                <td>
+                                    2020
+                                </td>
+                                <td>
+                                    2020
+                                </td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>
+                                    <a class="ui mini primary button" href="exam-detail-edit.html"><i class="icon edit"></i> 编辑</a>
+                                    <a class="ui mini teal button" href="exam-detail-list.html"><i class="icon users"></i> 完成情况</a>
+                                    <button class="ui mini red button"><i class="archive icon"></i>删除</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th colspan="8">
+                                    <div class="ui mini pagination menu">
+                                        <div class="item">1</div>
+                                        <div class="item active">2</div>
+                                    </div>
+                                </th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                    <span class="my-font-tips">定位到对应课程在进行本页其他操作</span>
+                </div>
+            </div>
+        </div>
+    </body>
+    <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+    <script src="https://cdn.bootcss.com/semantic-ui-calendar/0.0.8/calendar.min.js"></script>
+
+    <script>
+        var f = function() {
+            $(".button.reset").click();
+        };
+    </script>
+</html>
