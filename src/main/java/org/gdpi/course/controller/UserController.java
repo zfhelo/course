@@ -2,6 +2,7 @@ package org.gdpi.course.controller;
 
 import org.gdpi.course.entity.Student;
 import org.gdpi.course.entity.Teacher;
+import org.gdpi.course.exception.UserAlreadyExistedException;
 import org.gdpi.course.reponse.SimpleResponse;
 import org.gdpi.course.service.StudentService;
 import org.gdpi.course.service.TeacherService;
@@ -53,7 +54,13 @@ public class UserController {
         }
         teacher.setNickname(teacher.getUsername());
         teacher.setPhoto(headImage);
-        teacherService.addTeacher(teacher);
+
+        try {
+            teacherService.addTeacher(teacher);
+        } catch (UserAlreadyExistedException e) {
+            return SimpleResponse.error(e.getMessage());
+        }
+
         return SimpleResponse.success();
     }
 
@@ -76,7 +83,13 @@ public class UserController {
         }
         student.setNickname(student.getUsername());
         student.setPhoto(headImage);
-        studentService.addStudent(student);
+
+        try {
+            studentService.addStudent(student);
+        } catch (UserAlreadyExistedException e) {
+            return SimpleResponse.error(e.getMessage());
+        }
+
         return SimpleResponse.success();
     }
 

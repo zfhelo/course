@@ -3,7 +3,6 @@ package org.gdpi.course.service.impl;
 import org.gdpi.course.entity.Course;
 import org.gdpi.course.entity.Teacher;
 import org.gdpi.course.exception.CourseAlreadyExistedException;
-import org.gdpi.course.exception.CourseNotFoundException;
 import org.gdpi.course.mapper.CourseMapper;
 import org.gdpi.course.mapper.TeacherMapper;
 import org.gdpi.course.service.CourseService;
@@ -17,6 +16,7 @@ import java.util.List;
  */
 @Service("courseService")
 public class CourseServiceImpl implements CourseService {
+
 
     @Resource
     private CourseMapper courseMapper;
@@ -42,16 +42,21 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public List<Course> findByTeaId(Integer teaId) {
-       return findByTeaId(teaId);
+       return courseMapper.findByTeaId(teaId);
     }
 
     @Override
-    public Integer deleteById(Integer id) throws CourseNotFoundException {
+    public Integer deleteByIdAndTeaId(Integer id, Integer teaId) {
+       return courseMapper.deleteByIdAndTeaId(id, teaId);
+    }
 
-        Integer integer = courseMapper.deleteById(id);
-        if (integer == 0) {
-            throw new CourseNotFoundException();
-        }
-        return integer;
+    @Override
+    public Course findByIdAndTeaId(Integer id, Integer teaId) {
+        return courseMapper.findByIdAndTeaId(id, teaId);
+    }
+
+    @Override
+    public Integer updateCourse(Course course) {
+        return courseMapper.updateCourse(course);
     }
 }

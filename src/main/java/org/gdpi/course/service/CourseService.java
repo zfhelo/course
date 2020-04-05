@@ -2,7 +2,6 @@ package org.gdpi.course.service;
 
 import org.gdpi.course.entity.Course;
 import org.gdpi.course.exception.CourseAlreadyExistedException;
-import org.gdpi.course.exception.CourseNotFoundException;
 
 import java.util.List;
 
@@ -33,9 +32,25 @@ public interface CourseService {
     List<Course> findByTeaId(Integer teaId);
 
     /**
-     * 通过 课程id删除课程
+     * 通过教师id查找课程
+     * @param teaId
      * @param id
      * @return
      */
-    Integer deleteById(Integer id) throws CourseNotFoundException;
+    Course findByIdAndTeaId(Integer id, Integer teaId);
+
+    /**
+     * 通过 课程id删除课程
+     * @param id 课程id
+     * @param teaId 教师id
+     * @return
+     */
+    Integer deleteByIdAndTeaId(Integer id, Integer teaId);
+
+    /**
+     * 修改课程
+     * @param course
+     * @return
+     */
+    Integer updateCourse(Course course);
 }

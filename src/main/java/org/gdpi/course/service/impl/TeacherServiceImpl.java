@@ -1,8 +1,10 @@
 package org.gdpi.course.service.impl;
 
 import org.gdpi.course.entity.Teacher;
+import org.gdpi.course.exception.UserAlreadyExistedException;
 import org.gdpi.course.mapper.TeacherMapper;
 import org.gdpi.course.service.TeacherService;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -19,14 +21,18 @@ public class TeacherServiceImpl implements TeacherService {
     private PasswordEncoder passwordEncoder;
 
     @Override
+    @Cacheable(cacheNames = "tea", key = "#root.args[0]")
     public Teacher findByUsername(String username) {
         return teacherMapper.findByUsername(username);
     }
 
 
     @Override
-    public void addTeacher(Teacher teacher) {
+    public void addTeacher(Teacher teacher) throws UserAlreadyExistedException {
 
+        if (findByUsername(teacher.getUsername()) != null) {
+            throw new UserAlreadyExistedException("该账户已被注册");
+        }
         // 加密
         String encode = passwordEncoder.encode(teacher.getPassword());
         teacher.setPassword(encode);

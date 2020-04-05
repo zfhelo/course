@@ -54,30 +54,30 @@
         <input type="hidden" value="/stu" id="_id">
     </div>
     <form action="#" class="ui form my-patted-3" method="post">
-        <div class="feild my-patted-3">
+        <div class="my-patted-3">
             <div class="ui left icon input fluid">
                 <i class="user icon"></i>
                 <input type="text" name="username" placeholder="账号"/>
             </div>
         </div>
-        <div class="feild my-patted-3">
+        <div class="my-patted-3">
             <div class="ui left icon input fluid">
                 <i class="lock icon"></i>
                 <input type="password" name="password" id="password" placeholder="密码"/>
             </div>
         </div>
-        <div class="feild my-patted-3">
+        <div class="my-patted-3">
             <div class="ui left icon input fluid">
                 <i class="lock icon"></i>
                 <input type="password" name="password2" placeholder="密码"/>
             </div>
         </div>
-        <div class="ui feild grid">
+        <div class="ui grid">
             <div class="ui column right aligned">
                 <a href="login.html">登录账号</a>
             </div>
         </div>
-        <div class="feild my-patted-5">
+        <div class="my-patted-5">
             <button class="ui button green transparent fluid transparent-8">
                 注册
             </button>
@@ -111,7 +111,6 @@
         if (value.trim() === '') {
             return true;
         }
-
         $.ajax({
             method: 'get',
             url: getContextPath()+'public'+$('#_id').val()+'/' + value,
@@ -124,7 +123,7 @@
             }
         });
         return true;
-    }
+    };
 
     $(".ui.form").form({
         on: 'blur',

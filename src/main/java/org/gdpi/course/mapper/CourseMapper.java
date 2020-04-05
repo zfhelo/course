@@ -1,6 +1,7 @@
 package org.gdpi.course.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.gdpi.course.entity.Course;
 
 import java.util.List;
@@ -32,8 +33,23 @@ public interface CourseMapper {
     List<Course> findByTeaId(Integer teaId);
 
     /**
+     * 通过教师id和课程id查找课程
+     * @param teaId 教师id
+     * @param id 课程id
+     * @return 该教师的所有课程
+     */
+    Course findByIdAndTeaId(@Param("id") Integer id, @Param("teaId") Integer teaId);
+
+    /**
      * 通过id删除课程
      * @return 影响条数
      */
-    Integer deleteById(Integer id);
+    Integer deleteByIdAndTeaId(@Param("id") Integer id, @Param("teaId") Integer teaId);
+
+    /**
+     * 修改课程信息
+     * @param course
+     * @return
+     */
+    Integer updateCourse(Course course);
 }

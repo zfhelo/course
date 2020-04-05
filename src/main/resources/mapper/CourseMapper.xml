@@ -4,8 +4,8 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.gdpi.course.mapper.CourseMapper">
 
-    <delete id="deleteById" parameterType="integer">
-        DELETE course  WHERE id = #{id}
+    <delete id="deleteByIdAndTeaId" parameterType="integer">
+        DELETE FROM course  WHERE id = #{id} AND tea_id = #{teaId}
     </delete>
 
     <insert id="addCourse" parameterType="course" useGeneratedKeys="true" keyColumn="id">
@@ -14,11 +14,21 @@
     </insert>
 
     <select id="findByTeaId" parameterType="integer" resultType="course">
-        SELECT * FROM course WHERE tea_id = #{teaId}
+        SELECT c.*, COUNT(s.id) stu_num
+        FROM course c LEFT JOIN stu_course_map s
+        ON c.tea_id = #{teaId} and c.id = s.course_id GROUP BY c.id
     </select>
 
     <select id="findByNumber" resultType="course">
         SELECT * FROM course WHERE number = #{number}
     </select>
 
+    <select id="findByIdAndTeaId" resultType="course">
+        SELECT * FROM course WHERE ID = #{id} AND tea_id = #{teaId}
+    </select>
+
+    <update id="updateCourse" parameterType="course">
+        UPDATE course SET `name` = #{name}, `number` = #{number}, cover = #{cover},description = #{description}
+        WHERE id = #{id} AND tea_id = #{teaId}
+    </update>
 </mapper>

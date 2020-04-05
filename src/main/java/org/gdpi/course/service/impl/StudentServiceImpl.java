@@ -1,6 +1,7 @@
 package org.gdpi.course.service.impl;
 
 import org.gdpi.course.entity.Student;
+import org.gdpi.course.exception.UserAlreadyExistedException;
 import org.gdpi.course.mapper.StudentMapper;
 import org.gdpi.course.service.StudentService;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -26,7 +27,11 @@ public class StudentServiceImpl implements StudentService {
 
 
     @Override
-    public void addStudent(Student student) {
+    public void addStudent(Student student) throws UserAlreadyExistedException {
+        if (findByUsername(student.getUsername()) != null) {
+            throw new UserAlreadyExistedException("该账号已被注册");
+        }
+
         // 密码加密
         String encode = passwordEncoder.encode(student.getPassword());
         student.setPassword(encode);

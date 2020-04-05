@@ -1,180 +1,307 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-    <head>
-        <base id="base" href="/course/">
-        <meta charset="utf-8"/>
-        <meta name="viewport" content="width=device-width, initial-scale=1"/>
-        <meta http-equiv="x-ua-compatible" content="ie=edge"/>
-        <script>
-            function getContextPath() {
-                var pathName = document.location.pathname;
-                var index = pathName.substr(1).indexOf("/");
-                var result = pathName.substr(0, index + 1);
-                return result + '/';
-            }
-            document.getElementById('base').href = getContextPath();
-        </script>
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css" />
-        <link href="https://cdn.bootcss.com/animate.css/3.7.2/animate.css" rel="stylesheet" />
-        <link rel="stylesheet" href="css/my-style.css" />
-    </head>
-    <body>
-        <div class="ui container my-padding-top-2">
-            <div class="ui stackable">
-                <div class="ui horizontal divider"><h1>课程列表</h1></div>
-                <div class="animated bounceInDown">
-                    <table class="ui celled table">
-                        <thead>
-                            <tr>
-                                <th>课程号</th>
-                                <th>课程名</th>
-                                <th>描述</th>
-                                <th width="70">学员</th>
-                                <th>创建时间</th>
-                                <th>操作</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>数据结构</td>
-                                <td>100</td>
-                                <td>99</td>
-                                <td>1</td>
-                                <td>1</td>
-                                <td width="190">
-                                    <button onclick="showEditDialog()" class="ui mini primary button"><i class="icon edit"></i> 编辑</button>
-                                    <button class="ui mini red button"><i class="archive icon"></i>删除</button>
-                                </td>
-                            </tr>
-                        </tbody>
-                        <tfoot>
-                            <tr>
-                                <th colspan="6">
-                                    <div class="ui mini pagination menu">
-                                        <div class="item">1</div>
-                                        <div class="item active">2</div>
-                                    </div>
-                                </th>
-                            </tr>
-                        </tfoot>
-                    </table>
-                </div>
+<head>
+    <base id="base" href="/course/">
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta http-equiv="x-ua-compatible" content="ie=edge"/>
+    <script>
+        function getContextPath() {
+            var pathName = document.location.pathname;
+            var index = pathName.substr(1).indexOf("/");
+            var result = pathName.substr(0, index + 1);
+            return result + '/';
+        }
+
+        document.getElementById('base').href = getContextPath();
+    </script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css"/>
+    <link href="https://cdn.bootcss.com/animate.css/3.7.2/animate.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="css/my-style.css"/>
+</head>
+<body>
+<div class="ui container my-padding-top-2">
+    <div class="ui stackable">
+        <div class="ui horizontal divider"><h1>课程列表</h1></div>
+        <div class="animated bounceInDown">
+            <table class="ui celled table">
+                <thead>
+                <tr>
+                    <th>课程号</th>
+                    <th>课程名</th>
+                    <th>描述</th>
+                    <th width="70">学员</th>
+                    <th>创建时间</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody id="course-list">
+                <!--课程列表-->
+                </tbody>
+                <tfoot>
+                <tr>
+                    <th colspan="6">
+                        <div class="ui mini teal pagination menu" id="page-nav">
+                            <!--页码-->
+                        </div>
+                    </th>
+                </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+
+    <!-- 弹出编辑框 -->
+    <div class="ui modal">
+        <i class="close icon"></i>
+        <div class="header">
+            修改课程
+        </div>
+        <div class="ui grid my-patted-5 my-padding-left-2">
+            <div class="ui  nine wide column">
+                <form class="ui form">
+                    <div class="field">
+                        <div class="ui labeled input">
+                            <div class="ui label">课程名</div>
+                            <input type="text" name="name" id="course-name"/>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="ui labeled input">
+                            <div class="ui label">课程号</div>
+                            <input type="text" name="number" id="course-number"/>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="ui labeled input">
+                            <div class="ui label">描述</div>
+                            <input type="text" name="description" id="course-description"/>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label for="uploadFile" class="ui button mini">选择封面</label>
+                        <input type="file" id="uploadFile" name="last-name" style="display: none;"/>
+                    </div>
+                    <input type="hidden" id="course-id">
+                    <div id="clear" class="clear" style="display: none;"></div>
+                    <button id="submit" style="display: none;"></button>
+                </form>
             </div>
+            <div class="ui four wide column my-padding-left-2">
+                <h3>封面</h3>
 
-            <!-- 弹出编辑框 -->
-            <div class="ui modal">
-                <i class="close icon"></i>
-                <div class="header">
-                    修改课程
-                </div>
-                <div class="ui grid my-patted-5 my-padding-left-2">
-                    <div class="ui  nine wide column">
-                        <form class="ui form">
-                            <div class="field">
-                                <div class="ui labeled input">
-                                    <div class="ui label">课程名</div>
-                                    <input type="text" />
-                                </div>
-                            </div>
-                            <div class="field">
-                                <div class="ui labeled input">
-                                    <div class="ui label">课程号</div>
-                                    <input type="text" />
-                                </div>
-                            </div>
-                            <div class="field">
-                                <div class="ui labeled input">
-                                    <div class="ui label">描述</div>
-                                    <input type="text" />
-                                </div>
-                            </div>
-                            <div class="field">
-                                <label for="cover" class="ui button mini">选择封面</label>
-                                <input type="file" id="cover" name="last-name" style="display: none;" />
-                            </div>
-                            <div class="ui button reset" id="clear" style="display: none;"></div>
-                        </form>
-                    </div>
-                    <div class="ui four wide column my-padding-left-2">
-                        <h3>封面</h3>
-
-                        <img class="ui medium rounded image" id="image-show" src="https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=2462524992,179895772&fm=26&gp=0.jpg" />
-                    </div>
-                </div>
-                <div class="actions">
-                    <div class="ui black deny reset button small" onclick="javascrip:$('#clear').click();">
-                        取消
-                    </div>
-                    <div class="ui green right labeled icon button small">
-                        确认
-                        <i class="checkmark icon"></i>
-                    </div>
+                <img class="ui medium rounded image" id="uploaded-img"
+                     src="https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=2462524992,179895772&fm=26&gp=0.jpg"/>
+                <div id="wait" style="display: none">
+                    <div class="ui active inline loader black"></div>
+                    上传中...
                 </div>
             </div>
         </div>
-    </body>
-    <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
-    <script>
-        var showEditDialog = function() {
-            $(".ui.modal").modal("show");
-        };
+        <div class="actions">
+            <div class="ui black deny reset button small" onclick="$('#clear').click();" id="close">
+                取消
+            </div>
+            <div class="ui green right labeled icon button small" onclick="$('#submit').click();" id="confirm">
+                确认
+                <i class="checkmark icon"></i>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+<script src="https://cdn.bootcss.com/axios/0.19.2/axios.min.js"></script>
 
-        //在input file内容改变的时候触发事件
-        $("#cover").change(function() {
-            //获取input file的files文件数组;
-            //$('#filed')获取的是jQuery对象，.get(0)转为原生对象;
-            //这边默认只能选一个，但是存放形式仍然是数组，所以取第一个元素使用[0];
-            var file = $("#cover").get(0).files[0];
-            //创建用来读取此文件的对象
-            var reader = new FileReader();
-            //使用该对象读取file文件
-            reader.readAsDataURL(file);
-            //读取文件成功后执行的方法函数
-            reader.onload = function(e) {
-                //读取成功后返回的一个参数e，整个的一个进度事件
-                console.log(e);
-                //选择所要显示图片的img，要赋值给img的src就是e中target下result里面
-                //的base64编码格式的地址
-                $("#image-show").get(0).src = e.target.result;
-            };
-        });
-        var f = function() {
-            $(".button.reset").click();
-        };
-        $(".ui.form").form({
-            inline: true,
-            revalidate: true,
-            transition: "slide down",
-            on: "blur",
-            fields: {
-                name: {
-                    identifier: "name",
-                    rules: [
-                        {
-                            type: "empty",
-                            prompt: "请输入账号!"
-                        },
-                        {
-                            type: "minLength[6]",
-                            prompt: "账号不少于6位"
-                        }
-                    ]
-                },
-                password: {
-                    identifier: "password",
-                    rules: [
-                        {
-                            type: "empty",
-                            prompt: "请输入密码!"
-                        },
-                        {
-                            type: "minLength[6]",
-                            prompt: "密码不少于6位"
-                        }
-                    ]
+<script>
+    // 打开编辑框
+    var showEditDialog = function (id) {
+        // 获取课程信息
+        axios.get(getContextPath() + 'tea/course/' + id)
+            .then(rep => {
+                console.log(rep);
+                if (rep.data.code === 200) {
+                    // 回显数据
+                    $('#course-name').val(rep.data.data.name);
+                    $('#course-number').val(rep.data.data.number);
+                    $('#course-description').val(rep.data.data.description);
+                    $('#uploaded-img').attr('src', rep.data.data.cover);
+                    $('#course-id').val(id);
                 }
-            }
+            })
+            .catch();
+
+        $(".ui.modal").modal("show");
+    };
+
+    // 图片上传
+    $("#uploadFile").change(function () {
+        var f = this.files[0];
+        var formData = new FormData();
+        formData.append("image", f);
+        formData.append("key", "715e5e4b15e91404a657c818c3ad82a9");
+        $('#wait').css("display", "block");
+        $('#confirm').addClass('disabled');
+        $.ajax({
+            url: "https://api.imgbb.com/1/upload",
+            type: "POST",
+            success: function (rep) {
+                $('#wait').css("display", "none");
+                $('#uploaded-img').attr('src', rep.data.url);
+                $('#confirm').removeClass('disabled');
+            },
+            error: function () {
+                alert("上传失败");
+                $('#wait').css("display", "none");
+            },
+            data: formData,
+            cache: false,
+            contentType: false,
+            processData: false,
         });
-    </script>
+    });
+
+    // 表单校验及提交数据
+    $(".ui.form").form({
+        inline: true,
+        revalidate: true,
+        transition: "slide down",
+        on: "blur",
+        fields: {
+            name: {
+                identifier: "name",
+                rules: [
+                    {
+                        type: "empty",
+                        prompt: "请输入名称!"
+                    },
+                    {
+                        type: "maxLength[30]",
+                        prompt: "名称不可超过30个字符"
+                    }
+                ]
+            },
+            description: {
+                identifier: "description",
+                rules: [
+                    {
+                        type: "maxLength[50]",
+                        prompt: "描述信息不可超过50个字符"
+                    }
+                ]
+            },
+            number: {
+                identifier: "number",
+                rules: [
+                    {
+                        type: "empty",
+                        prompt: "课程号不可以为空"
+                    },
+                    {
+                        type: "regExp",
+                        value: /^[A-Za-z0-9]{6,12}$/,
+                        prompt: "课程号6~12位字母数字组成"
+                    }
+                ]
+            }
+        },
+        onSuccess: function (event, fields) {
+            event.preventDefault();
+            var data = {
+                id:$('#course-id').val(),
+                name: fields.name,
+                number: fields.number,
+                description: fields.description,
+                cover: $('#uploaded-img').attr('src')
+            };
+            axios.put(getContextPath() + 'tea/course',data)
+            .then(rep => {
+                if (rep.data.code === 200) {
+                    alert('修改成功');
+                    $('#close').click();
+                    var id = rep.data.data.id;
+                    $('#item-'+id+'name').text(rep.data.data.name);
+                    $('#item-'+id+'number').text(rep.data.data.number);
+                    $('#item-'+id+'description').text(rep.data.data.description);
+                } else {
+                    alert(rep.data.data);
+                }
+            })
+            .catch(() => alert("修改失败"))
+        }
+    });
+
+
+    // 分页查询课程数据
+    function listPage(page) {
+        axios
+            .get(getContextPath() + 'tea/course?page=' + page)
+            .then(rep => {
+                if (rep.data.code === 200) {
+                    createCourseNode(rep.data.data.list);
+                    createNavigatePageNums(rep.data.data);
+                } else {
+                    alert("加载数据失败")
+                }
+            })
+            .catch(rep => console.log(rep))
+    }
+
+    // 创建课程节点
+    function createCourseNode(list) {
+        // 清空
+        $('#course-list').empty();
+        list.forEach(item => {
+            var node = $(
+                ' <tr id="course-' + item.id + '" class="animated">' +
+                '     <td id="item-'+item.id+'number">' + item.number + '</td>' +
+                '     <td id="item-'+item.id+'name">' + item.name + '</td>' +
+                '     <td id="item-'+item.id+'description">' + item.description + '</td>' +
+                '     <td>' + item.stuNum + '</td>' +
+                '     <td>' + item.time.replace('T', ' ') + '</td>' +
+                '     <td width="190">' +
+                '           <button onclick="showEditDialog(' + item.id + ')" class="ui mini primary button"><i class="icon edit"></i> 编辑</button>' +
+                '           <button class="ui mini red button" onclick="deleteCourse(' + item.id + ')"><i class="archive icon"></i>删除</button>' +
+                '     </td>' +
+                ' </tr>'
+            );
+            $('#course-list').append(node);
+        });
+    }
+
+    // 创建页码
+    function createNavigatePageNums(list) {
+        $('#page-nav').empty();
+        list.navigatepageNums.forEach((item) => {
+            $('#page-nav').append(
+                $('<button class="item" id="nav-' + item + '" onclick="listPage(' + item + ')">' + item + '</button>')
+            )
+            // 激活当前页码
+            var currentPage = list.prePage + 1;
+            $('#nav-' + currentPage).addClass('active');
+
+        });
+    }
+
+    // 删除课程
+    function deleteCourse(id) {
+        if (!confirm("你确认要删除吗?!!")) {
+            return;
+        }
+        axios.delete(getContextPath() + 'tea/course/' + id)
+            .then(rep => {
+                if (rep.data.code === 200) {
+                    $('#course-' + id).addClass('fadeOutLeft');
+                    setTimeout(() => {
+                        $('#course-' + id).remove();
+                    }, 800);
+                }
+            })
+            .catch(() => alert(删除失败));
+    }
+
+    // 查询第一页
+    listPage(1);
+</script>
 </html>
