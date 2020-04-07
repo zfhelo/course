@@ -63,9 +63,6 @@
                 <h3>封面</h3>
                 <img class="ui medium rounded image" id="uploaded-img"
                      src="https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=2462524992,179895772&fm=26&gp=0.jpg"/>
-                <div id="wait" style="display: none">
-                    <div class="ui active inline loader"></div>上传中...
-                </div>
             </div>
         </div>
     </div>
@@ -147,8 +144,8 @@
         var formData = new FormData();
         formData.append("image", f);
         formData.append("key", "715e5e4b15e91404a657c818c3ad82a9");
-        $('#wait').css("display","block");
         $('#confirm').addClass('disabled');
+        $('#confirm').addClass('loading');
         $.ajax({
             url: "https://api.imgbb.com/1/upload",
             type: "POST",
@@ -156,6 +153,7 @@
                 $('#wait').css("display","none");
                 $('#uploaded-img').attr('src', rep.data.url)
                 $('#confirm').removeClass('disabled');
+                $('#confirm').removeClass('loading');
             },
             error: function (rep) {
                 alert("上传失败");

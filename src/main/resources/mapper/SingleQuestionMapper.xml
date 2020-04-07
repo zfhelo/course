@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.gdpi.course.mapper.SingleQuestionMapper">
+
+    <insert id="addSingleQue" parameterType="singleQuestion">
+        INSERT INTO single_question(course_id, title, choose1, choose2, choose3, choose4, grade)
+        VALUES(#{courseId}, #{title}, #{choose1}, #{choose2}, #{choose3}, #{choose4}, #{grade})
+    </insert>
+
+    <select id="findByIdAndCourseId" resultType="singleQuestion">
+        SELECT * FROM single_question WHERE id = #{id} AND course_id = #{cid}
+    </select>
+
+    <select id="findByCourseId" resultType="singleQuestion">
+        SELECT * FROM single_question WHERE course_id = #{cid}
+    </select>
+
+    <select id="findById" resultType="singleQuestion">
+        SELECT * FROM single_question WHERE id = #{id}
+    </select>
+
+    <delete id="deleteById" parameterType="Integer">
+        DELETE FROM single_question WHERE id = #{id}
+    </delete>
+
+    <update id="updateSingleQuestion" parameterType="singleQuestion">
+        UPDATE single_question SET title = #{title}, choose1 = #{choose1}, choose2 = #{choose2}, choose3 = #{choose3}, choose4 = #{choose4}
+        WHERE id = #{id}
+    </update>
+</mapper>

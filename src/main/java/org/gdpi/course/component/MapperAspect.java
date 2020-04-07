@@ -3,15 +3,13 @@ package org.gdpi.course.component;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
-import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
-import org.springframework.stereotype.Component;
 
 /**
  * @author zhf
  */
-@Component
-@Aspect
+//@Component
+//@Aspect
 @Slf4j
 public class MapperAspect {
     @Pointcut("execution(* org.gdpi.course.mapper.*.*(..))")

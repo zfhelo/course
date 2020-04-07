@@ -127,11 +127,17 @@ public class UserController {
         }
     }
 
+    /**
+     * 初始化首页数据
+     * @param userDetails
+     * @return
+     */
     @GetMapping("/tea/index")
     public String indexTea(@AuthenticationPrincipal UserDetails userDetails) {
         userDetails.getUsername();
         return "tea/index";
     }
+
 
     @GetMapping("/stu/index")
     public String indexStu(@AuthenticationPrincipal UserDetails userDetails) {

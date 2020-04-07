@@ -28,6 +28,13 @@ public class CourseController {
     @Resource
     private TeacherService teacherService;
 
+    /**
+     * 添加课程
+     * @param course
+     * @param result
+     * @param userDetails
+     * @return
+     */
     @PostMapping("/course")
     public SimpleResponse addCourse(@RequestBody @Valid Course course,
                                     BindingResult result,
@@ -44,6 +51,12 @@ public class CourseController {
         return SimpleResponse.success("创建成功");
     }
 
+    /**
+     * 分页查找课程
+     * @param page
+     * @param userDetails
+     * @return
+     */
     @GetMapping("/course")
     public SimpleResponse listCourse(@RequestParam(defaultValue = "1") Integer page,
                                      @AuthenticationPrincipal UserDetails userDetails) {
@@ -57,7 +70,7 @@ public class CourseController {
     }
 
     /**
-     * 分页查询
+     * 查找课程
      * @param id
      * @param userDetails
      * @return
@@ -77,21 +90,36 @@ public class CourseController {
         return SimpleResponse.success(course);
     }
 
+    /**
+     * 删除课程
+     * @param id
+     * @param userDetails
+     * @return
+     */
     @DeleteMapping("/course/{id:\\d+}")
     public SimpleResponse deleteCourse(@PathVariable Integer id,
                                        @AuthenticationPrincipal UserDetails userDetails) {
 
         Teacher tea = teacherService.findByUsername(userDetails.getUsername());
-        courseService.deleteByIdAndTeaId(id, tea.getId());
+        Integer num = courseService.deleteByIdAndTeaId(id, tea.getId());
+        if (num == 0) {
+            return SimpleResponse.success("你没有该课程");
+        }
 
         return SimpleResponse.success("删除成功");
     }
 
+    /**
+     * 修改课程
+     * @param course
+     * @param result
+     * @param userDetails
+     * @return
+     */
     @PutMapping("/course")
     public SimpleResponse updateCourse(@RequestBody @Valid Course course,
                                        BindingResult result,
                                        @AuthenticationPrincipal UserDetails userDetails) {
-
 
         if (result.hasErrors()) {
             return SimpleResponse.error("修改不合法");

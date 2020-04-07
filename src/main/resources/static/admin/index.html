@@ -21,7 +21,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     </script>
     <link rel="icon" href="favicon.ico" type="image/x-icon">
 
-    <title>AdminLTE 3 | Starter</title>
+    <title>课程管理后台</title>
 
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css"/>
@@ -32,6 +32,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
             href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700"
             rel="stylesheet"
     />
+    <style>
+        li {
+            list-style-type:none;
+        }
+    </style>
 </head>
 <body class="hold-transition sidebar-mini">
 <div class="wrapper">
@@ -51,14 +56,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!-- Main Sidebar Container -->
     <aside class="main-sidebar sidebar-dark-primary elevation-4">
         <!-- Brand Logo -->
-        <a href="index3.html" class="brand-link">
+        <a href="javascript:void(0)" class="brand-link">
             <img
-                    src="img/AdminLTELogo.png"
-                    alt="AdminLTE Logo"
+                    src="http://s9.rr.itc.cn/r/wapChange/20173_22_10/a4j8hr1496179249690.jpg"
                     class="brand-image img-circle elevation-3"
                     style="opacity: 0.8;"
             />
-            <span class="brand-text font-weight-light">AdminLTE 3</span>
+            <span class="brand-text font-weight-light">课程管理</span>
         </a>
 
         <!-- Sidebar -->
@@ -67,13 +71,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
             <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                 <div class="image">
                     <img
-                            src="img/user2-160x160.jpg"
+                            src=""
                             class="img-circle elevation-2"
                             alt="User Image"
+                            id="head-img"
                     />
                 </div>
                 <div class="info">
-                    <a href="#" class="d-block">Alexander Pierce</a>
+                    <a href="javascript:void(0)" class="d-block" id="nickname"></a>
                 </div>
             </div>
 
@@ -85,35 +90,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         role="menu"
                         data-accordion="false"
                 >
-                    <!-- Add icons to the links using the .nav-icon class
-                     with font-awesome or any other icon font library -->
-                    <li class="nav-item has-treeview">
-                        <a href="#" class="nav-link active">
-                            <i class="nav-icon fas fa-tachometer-alt"></i>
-                            <p>
-                                Starter Pages
-                                <i class="right fas fa-angle-left"></i>
-                            </p>
-                        </a>
-                        <ul class="nav nav-treeview">
-                            <li class="nav-item">
-                                <a href="#" class="nav-link active">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Active Page</p>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="#" class="nav-link">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Inactive Page</p>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-
                     <!-- 课程公告 -->
                     <li class="nav-item has-treeview">
-                        <a href="#" class="nav-link">
+                        <a href="#" class="nav-link menu1" onclick="menuActive(1)">
                             <i class="fas fa-bullhorn nav-icon"></i>
                             <p>
                                 课程公告
@@ -122,9 +101,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         </a>
                         <ul class="nav nav-treeview">
                             <li class="nav-item">
-                                <a
-                                        href="https://www.sogou.com/"
-                                        class="nav-link"
+                                <a href="https://www.sogou.com/"
+                                        class="nav-link myitem"
                                         target="menuFrame"
                                 >
                                     <i class="far fa-circle nav-icon"></i>
@@ -136,7 +114,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
                     <!-- 课程管理 -->
                     <li class="nav-item has-treeview">
-                        <a href="#" class="nav-link">
+                        <a href="#" class="nav-link menu2" onclick="menuActive(2)">
                             <i class="nav-icon fas fa-book"></i>
                             <p>
                                 课程管理
@@ -145,13 +123,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         </a>
                         <ul class="nav nav-treeview">
                             <li class="nav-item">
-                                <a href="admin/course-list.html" target="menuFrame" class="nav-link">
+                                <a href="admin/course-list.html" target="menuFrame" class="nav-link menu2-1 myitem" onclick="itemActive('2-1')">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>课程列表</p>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="admin/course-add.html" target="menuFrame" class="nav-link">
+                                <a href="admin/course-add.html" target="menuFrame" class="nav-link menu2-2 myitem" onclick="itemActive('2-2')">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>创建课程</p>
                                 </a>
@@ -161,7 +139,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
                     <!-- 学员管理 -->
                     <li class="nav-item has-treeview">
-                        <a href="#" class="nav-link">
+                        <a href="#" class="nav-link menu3" onclick="menuActive(3)">
                             <i class="nav-icon fas fa-users"></i>
                             <p>
                                 学员管理
@@ -170,7 +148,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         </a>
                         <ul class="nav nav-treeview">
                             <li class="nav-item">
-                                <a href="#" class="nav-link">
+                                <a href="#" class="nav-link myitem">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>学员列表</p>
                                 </a>
@@ -179,7 +157,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     </li>
                     <!-- 题库管理 -->
                     <li class="nav-item has-treeview">
-                        <a href="#" class="nav-link">
+                        <a href="#" class="nav-link menu4" onclick="menuActive(4)">
                             <i class="nav-icon fas fa-server"></i>
                             <p>
                                 题库管理
@@ -188,25 +166,25 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         </a>
                         <ul class="nav nav-treeview">
                             <li class="nav-item">
-                                <a href="#" class="nav-link">
+                                <a href="admin/single-question-list.html" target="menuFrame" class="nav-link myitem">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>选择题</p>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="#" class="nav-link">
+                                <a href="#" class="nav-link myitem">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>填空题</p>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="#" class="nav-link">
+                                <a href="#" class="nav-link myitem">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>判断题</p>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="#" class="nav-link">
+                                <a href="#" class="nav-link myitem">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>解答题</p>
                                 </a>
@@ -216,7 +194,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
                     <!-- 测验管理 -->
                     <li class="nav-item has-treeview">
-                        <a href="#" class="nav-link">
+                        <a href="#" class="nav-link menu5" onclick="menuActive(5)">
                             <i class="nav-icon fas fa-pencil-alt"></i>
                             <p>
                                 测验管理
@@ -225,13 +203,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         </a>
                         <ul class="nav nav-treeview">
                             <li class="nav-item">
-                                <a href="#" class="nav-link">
+                                <a href="#" class="nav-link myitem">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>测验列表</p>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="#" class="nav-link">
+                                <a href="#" class="nav-link myitem">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>发布测验</p>
                                 </a>
@@ -240,8 +218,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     </li>
 
                     <!-- 作业管理 -->
-                    <li class="nav-item has-treeview">
-                        <a href="#" class="nav-link">
+                    <li class="nav-item has-treeview ">
+                        <a href="#" class="nav-link menu6" onclick="menuActive(6)">
                             <i class="nav-icon fas fa-stream"></i>
                             <p>
                                 作业管理
@@ -250,13 +228,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         </a>
                         <ul class="nav nav-treeview">
                             <li class="nav-item">
-                                <a href="#" class="nav-link">
+                                <a href="#" class="nav-link myitem">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>作业列表</p>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="#" class="nav-link">
+                                <a href="#" class="nav-link myitem">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>发布作业</p>
                                 </a>
@@ -336,9 +314,28 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- AdminLTE App -->
 <script src="js/adminlte.min.js"></script>
+<script src="https://cdn.bootcss.com/axios/0.19.2/axios.min.js"></script>
 </body>
 
 <script>
     $("#menuFrame").height(window.innerHeight - 90);
+
+    function menuActive(id) {
+        $('.menu'+id).toggleClass('active');
+    }
+    function itemActive(id) {
+        $('.myitem').removeClass('active');
+        $('.menu'+id).addClass('active');
+    }
+
+    axios.get(getContextPath()+'tea/admin')
+        .then(rep => {
+            if (rep.data.code === 200) {
+                $('#head-img').attr('src',rep.data.data.photo);
+                $('#nickname').text(rep.data.data.nickname);
+            } else {
+                console.log('查询失败');
+            }
+        })
 </script>
 </html>

@@ -1,0 +1,49 @@
+package org.gdpi.course.service.impl;
+
+import org.gdpi.course.entity.SingleQuestion;
+import org.gdpi.course.mapper.SingleQuestionMapper;
+import org.gdpi.course.service.SingleQuestionService;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.util.List;
+
+/**
+ * @author zhf
+ */
+@Service
+public class SingleQuestionServiceImpl implements SingleQuestionService {
+
+    @Resource
+    private SingleQuestionMapper singleQuestionMapper;
+
+    @Override
+    public Integer addSingleQue(SingleQuestion singleQuestion) {
+        return singleQuestionMapper.addSingleQue(singleQuestion);
+    }
+
+    @Override
+    public SingleQuestion findByIdAndCourseId(Integer id, Integer cid) {
+       return singleQuestionMapper.findByIdAndCourseId(id, cid);
+    }
+
+    @Override
+    public List<SingleQuestion> findByCourseId(Integer cid) {
+        return singleQuestionMapper.findByCourseId(cid);
+    }
+
+    @Override
+    public SingleQuestion findById(Integer id) {
+        return singleQuestionMapper.findById(id);
+    }
+
+    @Override
+    public Integer deleteById(Integer id) {
+        return singleQuestionMapper.deleteById(id);
+    }
+
+    @Override
+    public Integer updateSingleQuestion(SingleQuestion singleQuestion) {
+        return singleQuestionMapper.updateSingleQuestion(singleQuestion);
+    }
+}

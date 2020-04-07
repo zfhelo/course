@@ -1,7 +1,9 @@
 package org.gdpi.course;
 
 import org.gdpi.course.entity.Course;
+import org.gdpi.course.entity.SingleQuestion;
 import org.gdpi.course.mapper.CourseMapper;
+import org.gdpi.course.mapper.SingleQuestionMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -32,7 +34,7 @@ class CourseApplicationTests {
     @Resource
     private CourseMapper courseMapper;
     @Test
-    public void f() {
+    public void addCourse() {
         for (int i = 101; i <= 2000; i++) {
 
             Course course = new Course();
@@ -41,6 +43,23 @@ class CourseApplicationTests {
             course.setName("数据结构");
             course.setNumber(i+"");
             courseMapper.addCourse(course);
+        }
+    }
+
+    @Resource
+    private SingleQuestionMapper singleQuestionMapper;
+    @Test
+    public void addSingleQue() {
+        for (int i = 1; i < 2000; i++) {
+            SingleQuestion singleQuestion = new SingleQuestion();
+            singleQuestion.setCourseId(3);
+            singleQuestion.setChoose1("a" + i);
+            singleQuestion.setChoose2("b" + i);
+            singleQuestion.setChoose3("c" + i);
+            singleQuestion.setChoose4("d" + i);
+            singleQuestion.setTitle("xxxxxxxxxxxxxx" + i);
+            singleQuestion.setGrade(10);
+            singleQuestionMapper.addSingleQue(singleQuestion);
         }
     }
 
