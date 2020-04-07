@@ -136,7 +136,7 @@ public class SingleQuestionController {
         SingleQuestion question = singleQuestionService.findById(id);
 
         if (question == null) {
-            return SimpleResponse.error("没有改题目");
+            return SimpleResponse.error("未知题目");
         }
 
         if (question.getReference() > 0) {

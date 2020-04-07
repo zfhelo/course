@@ -44,7 +44,7 @@
                             <button class="ui button" onclick="listPage1(1)">搜索</button>
                         </div>
 
-                        <button class="ui icon green button disabled" id="addSingle" onclick="jump()"><i class="plus icon"></i>添加题目</button>
+                        <button class="ui icon green button disabled right floated" id="addSingle" onclick="jump()"><i class="plus icon"></i>添加题目</button>
                     </div>
 
                     <table class="ui celled table">
@@ -153,7 +153,6 @@
         function deleteSingleQue(id) {
             axios.delete(getContextPath()+'tea/single/'+id)
                 .then(rep => {
-                    console.log(rep);
                     if (rep.data.code === 200) {
                         $('#single-tr-' + id).addClass('fadeOutLeft');
                         setTimeout(() => {

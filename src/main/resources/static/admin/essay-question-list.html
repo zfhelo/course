@@ -1,0 +1,333 @@
+<html lang="zh-CN">
+<head>
+    <base id="base" href="/course/">
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta http-equiv="x-ua-compatible" content="ie=edge"/>
+    <script>
+        function getContextPath() {
+            var pathName = document.location.pathname;
+            var index = pathName.substr(1).indexOf("/");
+            var result = pathName.substr(0, index + 1);
+            return result + '/';
+        }
+
+        document.getElementById('base').href = getContextPath();
+    </script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css" />
+        <link href="https://cdn.bootcss.com/animate.css/3.7.2/animate.css" rel="stylesheet" />
+        <link rel="stylesheet" href="css/my-style.css" />
+        <title>首页</title>
+    </head>
+    <body>
+        <div class="ui container my-padding-top-2">
+            <div class="ui stackable">
+                <div class="ui horizontal divider"><h1>问答题</h1></div>
+                <div class="animated bounceInDown">
+                    <div class="ui search">
+                        <div class="ui label large black basic icon my-font-weight">
+                            当前课程
+                            <i class="angle right icon"></i>
+                            <span id="tips">未选择</span>
+                            <!-- 保存课程号 -->
+                            <input type="hidden" id="course-id"/>
+                        </div>
+                        <div class="ui action input">
+                            <input type="text" placeholder="搜索..." id="course_num"/>
+                            <select class="ui compact selection dropdown">
+                                <option value="all">课程号</option>
+                                <option value="articles" disabled>题干</option>
+                            </select>
+                            <div class="ui button" onclick="listPage(1)">搜索</div>
+                        </div>
+
+                        <button class="ui icon green button right floated disabled" onclick="showAddDialog()" id="add-btn"><i class="plus icon"></i>添加题目</button>
+                    </div>
+
+                    <table class="ui celled table">
+                        <thead>
+                            <tr>
+                                <th>题目</th>
+
+                                <th width="70">分值</th>
+                                <th>
+                                    操作
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th colspan="8">
+                                    <div class="ui mini teal pagination menu" id="page-nav">
+
+                                    </div>
+                                </th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                    <span class="my-font-tips">定位到对应课程在进行本页其他操作</span>
+                </div>
+            </div>
+
+            <!-- 弹出编辑框 -->
+            <div class="ui modal">
+                <i class="close icon"></i>
+                <div class="header" id="header">
+
+                </div>
+                <div class="content">
+                    <form class="ui form">
+                        <input type="hidden" id="essay-id">
+                        <div class="field">
+                            <h3>题干</h3>
+                            <div id="div1" style="z-index: 9999999"></div>
+                        </div>
+
+                        <div class="field">
+                            <div class="ui labeled input" id="grade-label">
+                                <div class="ui label">分值</div>
+                                <input type="text" name="grade" id="input-grade"/>
+                            </div>
+                        </div>
+
+                        <div class="ui button reset" style="display: none" id="clear"></div>
+                        <button id="submit" style="display: none"></button>
+                    </form>
+                </div>
+                <div class="actions">
+                    <button class="ui black deny button small" onclick="ff()">
+                        取消
+                    </button>
+                    <button class="ui green right labeled icon button small" id="upload-btn" onclick="$('#submit').click()">
+                        确认
+                        <i class="checkmark icon"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </body>
+
+    <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+    <script src="https://cdn.bootcss.com/wangEditor/10.0.13/wangEditor.min.js"></script>
+    <script src="https://cdn.bootcss.com/axios/0.19.2/axios.min.js"></script>
+    <script src="js/my.js"></script>
+
+    <script>
+        let isEdit = false;
+        function showEditDialog(id) {
+            isEdit = true;
+            echoQue(id);
+            $('#header').text('编辑题目');
+            // 禁止修改分值
+            $('#grade-label').addClass('disabled');
+            $(".ui.modal").modal("show");
+        };
+        function showAddDialog() {
+            isEdit = false;
+            $('#grade-label').removeClass('disabled');
+            $('#header').text('添加题目');
+            $(".ui.modal").modal("show");
+
+        };
+
+        // 回显数据
+        function echoQue(id) {
+            axios.get(getContextPath() + 'tea/essay/'+id)
+                .then((rep) => {
+                    if (rep.data.code === 200) {
+                        $('#input-grade').val(rep.data.data.grade);
+                        editor.txt.html(rep.data.data.title);
+                        $('#essay-id').val(rep.data.data.id);
+                    } else {
+                        alert(rep.data.data);
+                    }
+                })
+                .catch(() => alert('查询失败'));
+        }
+
+
+        $(".ui.form").form({
+            inline: true,
+            revalidate: true,
+            transition: "slide down",
+            on: "blur",
+            fields: {
+                grade: {
+                    identifier: "grade",
+                    rules: [
+                        {
+                            type: "empty",
+                            prompt: "请输入成绩!"
+                        },
+                        {
+                            type: "number",
+                            prompt: "请输入一个数字!"
+                        }
+                    ]
+                }
+            },
+            onSuccess: function (event, fields) {
+                event.preventDefault();
+                var method;
+                if (isEdit) {
+                    method = 'PUT';
+                } else {
+                    method = 'POST';
+                }
+                axios({
+                    url: getContextPath() + 'tea/essay',
+                    method: method,
+                    data : {
+                        title:editor.txt.html(),
+                        grade:fields.grade,
+                        id:$('#essay-id').val(),
+                        courseId:$('#course-id').val(),
+
+                    }
+                })
+                    .then(rep => {
+                        if (rep.data.code === 200) {
+                            ff();
+                            if (method === 'PUT') {
+                                $('#essay-title' + rep.data.data.id).text(getSimpleText(rep.data.data.title).substring(0,30)+'...');
+                                $('#essay-grade' + rep.data.data.id).text(rep.data.data.grade);
+                            }
+                        } else {
+                            alert(rep.data.data);
+                        }
+                    })
+                    .catch(() => alert("请求失败"));
+            }
+        });
+
+        function ff() {
+            editor.txt.html('');
+            $("#clear").click();
+        };
+        function listPage(page) {
+            var courseNumber = $('#course_num').val();
+            if (courseNumber.length < 6) {
+                alert("请输入正确的课程号")
+                return;
+            }
+            var url = getContextPath() + 'tea/essay?page=' + page + '&number=' + courseNumber;
+            axios.get(url)
+                .then(rep => {
+                    if (rep.data.code !== 200) {
+                        alert(rep.data.data);
+                        return;
+                    }
+                    // 开始添加题目功能
+                    $('#add-btn').removeClass('disabled');
+                    // 显示当前课程
+                    $('#course-id').val(rep.data.data.course.id);
+                    $('#tips').text(rep.data.data.course.name);
+                    // 创建课程节点
+                    createQueNode(rep.data.data.page.list);
+                    // 创建页码
+                    createPageNav(rep.data.data.page)
+                })
+                .catch(() => alert('请求失败'));
+        }
+
+        function createQueNode(list) {
+            $('tbody').empty();
+            list.forEach(item => {
+                var node = $(
+                    '<tr class="animated" id="essay-tr-'+item.id+'">' +
+                    '     <td id="essay-title'+item.id+'">'+getSimpleText(item.title).substring(0,30)+'...</td>' +
+                    '     <td id="essay-grade'+item.id+'">'+item.grade+'</td>' +
+                    '     <td width="190">' +
+                    '         <button onclick="showEditDialog('+item.id+')" class="ui mini primary button"><i class="icon edit"></i> 编辑</button>' +
+                    '         <button class="ui mini red button" onclick="deleteSingleQue('+item.id+')"><i class="archive icon"></i>删除</button>' +
+                    '     </td>' +
+                    '</tr>'
+                );
+                $('tbody').append(node);
+            })
+        }
+
+        function createPageNav(page) {
+            $('#page-nav').empty();
+            page.navigatepageNums.forEach(item => {
+                var node = $('<button class="item" id="nav-' + item + '" onclick="listPage(' + item + ')">' + item + '</button>');
+                $('#page-nav').append(node);
+            });
+
+            $('#nav-'+page.pageNum).addClass('active');
+        }
+
+        // 删除题目
+        function deleteSingleQue(id) {
+            axios.delete(getContextPath()+'tea/essay/'+id)
+                .then(rep => {
+                    console.log(rep);
+                    if (rep.data.code === 200) {
+                        $('#essay-tr-' + id).addClass('fadeOutLeft');
+                        setTimeout(() => {
+                            $('#essay-tr-' + id).remove();
+                        }, 800);
+                    } else {
+                        alert(rep.data.data);
+                    }
+                })
+                .catch(() => alert('请求失败'));
+        }
+        var E = window.wangEditor;
+        var editor = new E("#div1");
+        editor.customConfig.menus = [
+            'head',  // 标题
+            'bold',  // 粗体
+            'fontSize',  // 字号
+            'fontName',  // 字体
+            'italic',  // 斜体
+            'underline',  // 下划线
+            'strikeThrough',  // 删除线
+            'foreColor',  // 文字颜色
+            'link',  // 插入链接
+            'list',  // 列表
+            'justify',  // 对齐方式
+            'quote',  // 引用
+            'image',  // 插入图片
+            'table',  // 表格
+            'code',  // 插入代码
+            'undo',  // 撤销
+            'redo'  // 重复
+        ];
+        editor.customConfig.customUploadImg = function (files, insert) {
+            var f = files[0];
+            var formData = new FormData();
+            formData.append("image", f);
+            formData.append("key", "9f44a7c9879610d03afb08ed5631446e");
+            $('#upload-btn').addClass('loading');
+            $('#upload-btn').addClass('disabled');
+            $('#upload-btn').removeClass('green');
+            $.ajax({
+                url: "https://api.imgbb.com/1/upload",
+                type: "POST",
+                success: function (rep) {
+                    insert(rep.data.url);
+                    $('#upload-btn').removeClass('loading');
+                    $('#upload-btn').addClass('green');
+                    $('#upload-btn').removeClass('disabled');
+                },
+                error: function (rep) {
+                    alert("上传失败");
+                    console.log(rep);
+                    $('#upload-btn').removeClass('loading');
+                    $('#upload-btn').addClass('green');
+                    $('#upload-btn').removeClass('disabled');
+                },
+                data: formData,
+                cache: false,
+                contentType: false,
+                processData: false,
+            });
+        };
+        editor.create();
+    </script>
+</html>

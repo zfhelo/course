@@ -1,8 +1,10 @@
 package org.gdpi.course;
 
 import org.gdpi.course.entity.Course;
+import org.gdpi.course.entity.EssayQuestion;
 import org.gdpi.course.entity.SingleQuestion;
 import org.gdpi.course.mapper.CourseMapper;
+import org.gdpi.course.mapper.EssayQuestionMapper;
 import org.gdpi.course.mapper.SingleQuestionMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,12 +21,13 @@ class CourseApplicationTests {
 
     @Autowired
     JavaMailSenderImpl javaMailSender;
+
     @Test
     void contextLoads() throws MessagingException {
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         MimeMessageHelper m = new MimeMessageHelper(mimeMessage);
         m.setFrom(javaMailSender.getUsername());
-        String[] s = {"zfhelo@gmail.com","1623602510@qq.com"};
+        String[] s = {"zfhelo@gmail.com", "1623602510@qq.com"};
         m.setTo(s);
         m.setSubject("测试");
         m.setText("<h1>aaa</h1>b");
@@ -33,6 +36,7 @@ class CourseApplicationTests {
 
     @Resource
     private CourseMapper courseMapper;
+
     @Test
     public void addCourse() {
         for (int i = 101; i <= 2000; i++) {
@@ -41,13 +45,14 @@ class CourseApplicationTests {
             course.setTeaId(1);
             course.setCover("xx");
             course.setName("数据结构");
-            course.setNumber(i+"");
+            course.setNumber(i + "");
             courseMapper.addCourse(course);
         }
     }
 
     @Resource
     private SingleQuestionMapper singleQuestionMapper;
+
     @Test
     public void addSingleQue() {
         for (int i = 1; i < 2000; i++) {
@@ -63,4 +68,16 @@ class CourseApplicationTests {
         }
     }
 
+    @Resource
+    private EssayQuestionMapper essayQuestionMapper;
+    @Test
+    public void addEssayQue() {
+        for (int i = 1; i < 100; i++) {
+            EssayQuestion que = new EssayQuestion();
+            que.setCourseId(3907);
+            que.setGrade(99);
+            que.setTitle("xxxxxxxxxx");
+            essayQuestionMapper.addEssayQuestion(que);
+        }
+    }
 }

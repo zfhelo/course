@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.gdpi.course.mapper.EssayQuestionMapper">
+    <select id="findById" parameterType="Integer" resultType="essayQuestion">
+        SELECT * FROM essay_question WHERE id = #{id}
+    </select>
+
+    <select id="findByCourseId" parameterType="Integer" resultType="essayQuestion">
+        SELECT * FROM essay_question WHERE course_id = #{cid}
+    </select>
+
+    <select id="findByIdAndCourseId" resultType="essayQuestion">
+        SELECT * FROM essay_question WHERE course_id = #{cid} AND id = #{id}
+    </select>
+
+    <update id="updateById" parameterType="essayQuestion">
+        UPDATE essay_question SET title = #{title} WHERE id = #{id}
+    </update>
+
+    <delete id="deleteById" parameterType="Integer">
+        DELETE FROM essay_question WHERE id = #{id}
+    </delete>
+
+    <insert id="addEssayQuestion" parameterType="essayQuestion">
+        INSERT INTO essay_question(course_id, title, grade) VALUES(#{courseId}, #{title}, #{grade})
+    </insert>
+</mapper>
