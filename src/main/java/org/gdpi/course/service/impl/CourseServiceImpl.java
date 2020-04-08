@@ -7,6 +7,7 @@ import org.gdpi.course.mapper.CourseMapper;
 import org.gdpi.course.mapper.TeacherMapper;
 import org.gdpi.course.service.CourseService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -15,6 +16,7 @@ import java.util.List;
  * @author zhf
  */
 @Service("courseService")
+@Transactional
 public class CourseServiceImpl implements CourseService {
 
 

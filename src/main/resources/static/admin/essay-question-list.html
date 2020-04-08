@@ -17,7 +17,6 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css" />
         <link href="https://cdn.bootcss.com/animate.css/3.7.2/animate.css" rel="stylesheet" />
         <link rel="stylesheet" href="css/my-style.css" />
-        <title>首页</title>
     </head>
     <body>
         <div class="ui container my-padding-top-2">
@@ -113,7 +112,7 @@
     <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
     <script src="https://cdn.bootcss.com/wangEditor/10.0.13/wangEditor.min.js"></script>
-    <script src="https://cdn.bootcss.com/axios/0.19.2/axios.min.js"></script>
+    <script src="js/axios.min.js"></script>
     <script src="js/my.js"></script>
 
     <script>
@@ -172,6 +171,10 @@
             },
             onSuccess: function (event, fields) {
                 event.preventDefault();
+                if (editor.txt.html().length < 20) {
+                    alert("请输入完整题目");
+                    return;
+                }
                 var method;
                 if (isEdit) {
                     method = 'PUT';
@@ -229,7 +232,7 @@
                     // 创建课程节点
                     createQueNode(rep.data.data.page.list);
                     // 创建页码
-                    createPageNav(rep.data.data.page)
+                    createPageNav(rep.data.data.page);
                 })
                 .catch(() => alert('请求失败'));
         }
@@ -265,7 +268,6 @@
         function deleteSingleQue(id) {
             axios.delete(getContextPath()+'tea/essay/'+id)
                 .then(rep => {
-                    console.log(rep);
                     if (rep.data.code === 200) {
                         $('#essay-tr-' + id).addClass('fadeOutLeft');
                         setTimeout(() => {

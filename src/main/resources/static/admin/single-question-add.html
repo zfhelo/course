@@ -27,9 +27,7 @@
                     <div class="ui segment grid big margin-bottom-0">
                         <div class="ui eight wide column">题干</div>
                         <div class="ui four wide right floated column ">
-
                             添加单选题
-
                         </div>
                     </div>
                     <div id="div1"></div>
@@ -87,7 +85,7 @@
 <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
 <script src="https://cdn.bootcss.com/wangEditor/10.0.13/wangEditor.min.js"></script>
-<script src="https://cdn.bootcss.com/axios/0.19.2/axios.min.js"></script>
+<script src="js/axios.min.js"></script>
 <script src="js/my.js"></script>
 <script>
     // 表单校验
@@ -145,6 +143,10 @@
         },
         onSuccess: function (event, fields) {
             event.preventDefault();
+            if (editor.txt.html().length < 20) {
+                alert("请输入完整题目");
+                return;
+            }
             var data = {
                 courseId: getUrlParam('courseId'),
                 title: editor.txt.html(),

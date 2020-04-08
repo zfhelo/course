@@ -3,7 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.gdpi.course.mapper.TeacherMapper">
-    <insert id="addTeacher" parameterType="teacher" useGeneratedKeys="true" keyColumn="id">
+    <insert id="addTeacher" parameterType="teacher" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO teacher(username, nickname, password, photo)
         VALUES(#{username}, #{nickname}, #{password}, #{photo})
     </insert>

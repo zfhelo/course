@@ -8,6 +8,7 @@ import org.gdpi.course.exception.CourseAlreadyExistedException;
 import org.gdpi.course.reponse.SimpleResponse;
 import org.gdpi.course.service.CourseService;
 import org.gdpi.course.service.TeacherService;
+import org.gdpi.course.util.BeanUtils;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.BindingResult;
@@ -39,6 +40,7 @@ public class CourseController {
     public SimpleResponse addCourse(@RequestBody @Valid Course course,
                                     BindingResult result,
                                     @AuthenticationPrincipal UserDetails userDetails) {
+        BeanUtils.trim(course);
         if (result.hasErrors()) {
             return SimpleResponse.error("创建失败");
         }
@@ -120,7 +122,7 @@ public class CourseController {
     public SimpleResponse updateCourse(@RequestBody @Valid Course course,
                                        BindingResult result,
                                        @AuthenticationPrincipal UserDetails userDetails) {
-
+        BeanUtils.trim(course);
         if (result.hasErrors()) {
             return SimpleResponse.error("修改不合法");
         }

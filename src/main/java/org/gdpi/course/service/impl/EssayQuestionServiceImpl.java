@@ -4,6 +4,7 @@ import org.gdpi.course.entity.EssayQuestion;
 import org.gdpi.course.mapper.EssayQuestionMapper;
 import org.gdpi.course.service.EssayQuestionService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -12,6 +13,7 @@ import java.util.List;
  * @author zhf
  */
 @Service
+@Transactional
 public class EssayQuestionServiceImpl implements EssayQuestionService {
 
     @Resource

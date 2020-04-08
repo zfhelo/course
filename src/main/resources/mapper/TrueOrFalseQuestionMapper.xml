@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.gdpi.course.mapper.TrueOrFalseQuestionMapper">
+    <select id="findById" parameterType="Integer" resultType="trueOrFalseQuestion">
+        SELECT * FROM true_or_false_question WHERE id = #{id}
+    </select>
+
+    <select id="findByCourseId" parameterType="Integer" resultType="trueOrFalseQuestion">
+        SELECT * FROM true_or_false_question WHERE course_id = #{courseId}
+    </select>
+
+    <select id="findByIdAndCourseId" resultType="trueOrFalseQuestion">
+        SELECT * FROM true_or_false_question WHERE course_id = #{cid} AND id = {id}
+    </select>
+
+    <insert id="addTrueOrFalseQuestion" parameterType="trueOrFalseQuestion" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO true_or_false_question(course_id, title, answer, grade)
+        VALUES(#{courseId}, #{title}, #{answer}, #{grade})
+    </insert>
+
+    <delete id="deleteById" parameterType="Integer">
+        DELETE FROM true_or_false_question WHERE id = #{id}
+    </delete>
+
+    <update id="updateById" parameterType="trueOrFalseQuestion">
+        UPDATE true_or_false_question SET title = #{title}, answer = #{answer} WHERE id = #{id}
+    </update>
+</mapper>

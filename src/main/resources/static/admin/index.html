@@ -28,10 +28,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!-- Theme style -->
     <link rel="stylesheet" href="css/adminlte.min.css"/>
     <!-- Google Font: Source Sans Pro -->
-    <link
-            href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700"
-            rel="stylesheet"
-    />
+    <!--<link-->
+    <!--        href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700"-->
+    <!--        rel="stylesheet"-->
+    <!--/>-->
     <style>
         li {
             list-style-type:none;
@@ -166,25 +166,25 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         </a>
                         <ul class="nav nav-treeview">
                             <li class="nav-item">
-                                <a href="admin/single-question-list.html" target="menuFrame" class="nav-link myitem">
+                                <a href="admin/single-question-list.html" target="menuFrame" class="nav-link menu4-1 myitem" onclick="itemActive('4-1')">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>选择题</p>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="#" class="nav-link myitem">
+                                <a href="admin/gap-filling-list.html"  target="menuFrame" class="nav-link menu4-2 myitem" onclick="itemActive('4-2')">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>填空题</p>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="#" class="nav-link myitem">
+                                <a href="admin/true-of-false-list.html" target="menuFrame" class="nav-link menu4-3 myitem" onclick="itemActive('4-3')">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>判断题</p>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="admin/essay-question-list.html" target="menuFrame" class="nav-link myitem">
+                                <a href="admin/essay-question-list.html" target="menuFrame" class="nav-link menu4-4 myitem" onclick="itemActive('4-4')">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>问答题</p>
                                 </a>
@@ -314,8 +314,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- AdminLTE App -->
 <script src="js/adminlte.min.js"></script>
-<script src="https://cdn.bootcss.com/axios/0.19.2/axios.min.js"></script>
-</body>
+<script src="js/axios.min.js"></script></body>
 
 <script>
     $("#menuFrame").height(window.innerHeight - 90);

@@ -9,6 +9,7 @@ import org.gdpi.course.reponse.SimpleResponse;
 import org.gdpi.course.service.CourseService;
 import org.gdpi.course.service.EssayQuestionService;
 import org.gdpi.course.service.TeacherService;
+import org.gdpi.course.util.BeanUtils;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.BindingResult;
@@ -43,7 +44,8 @@ public class EssayQuestionController {
     public SimpleResponse addEssayQuestion(@RequestBody @Valid EssayQuestion essayQuestion,
                                            BindingResult result,
                                            @AuthenticationPrincipal UserDetails userDetails) {
-        if (result.hasErrors()) {
+        BeanUtils.trim(essayQuestion);
+        if (result.hasErrors() || essayQuestion.getCourseId() == null) {
             return SimpleResponse.error("数据不合法");
         }
 
@@ -60,7 +62,7 @@ public class EssayQuestionController {
             return SimpleResponse.error("添加失败");
         }
 
-        return SimpleResponse.success();
+        return SimpleResponse.success(essayQuestion);
     }
 
     /**
@@ -127,10 +129,11 @@ public class EssayQuestionController {
      */
     @PutMapping("/essay")
     public SimpleResponse updateEssayQuestion(@RequestBody @Valid EssayQuestion essayQuestion,
+                                              BindingResult result,
                                               @AuthenticationPrincipal UserDetails userDetails) {
-
-        if (essayQuestion.getId() == null) {
-            return SimpleResponse.error("未知题目");
+        BeanUtils.trim(essayQuestion);
+        if (result.hasErrors() || essayQuestion.getId() == null) {
+            return SimpleResponse.error("数据不合法");
         }
 
         EssayQuestion que = essayQuestionService.findById(essayQuestion.getId());
@@ -161,7 +164,7 @@ public class EssayQuestionController {
         EssayQuestion que = essayQuestionService.findById(id);
 
         if (que == null) {
-            SimpleResponse.error("未知题目");
+            return SimpleResponse.error("未知题目");
         }
 
         if (que.getReference() > 0) {

@@ -6,6 +6,7 @@ import org.gdpi.course.exception.UserAlreadyExistedException;
 import org.gdpi.course.reponse.SimpleResponse;
 import org.gdpi.course.service.StudentService;
 import org.gdpi.course.service.TeacherService;
+import org.gdpi.course.util.BeanUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -46,6 +47,7 @@ public class UserController {
     @ResponseBody
     public SimpleResponse createTea(@Valid Teacher teacher, BindingResult result,
                                     @Value("${default.tea.head-url}") String headImage) {
+        BeanUtils.trim(teacher);
         if (result.hasErrors()) {
             result.getAllErrors().forEach(objectError -> {
                 System.out.println(objectError.getDefaultMessage());
@@ -75,6 +77,7 @@ public class UserController {
     @ResponseBody
     public SimpleResponse createStu(@Valid Student student, BindingResult result,
                                     @Value("${default.stu.head-url}") String headImage) {
+        BeanUtils.trim(student);
         if (result.hasErrors()) {
             result.getAllErrors().forEach(objectError -> {
                 System.out.println(objectError.getDefaultMessage());

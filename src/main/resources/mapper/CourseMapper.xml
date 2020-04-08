@@ -8,7 +8,7 @@
         DELETE FROM course  WHERE id = #{id} AND tea_id = #{teaId}
     </delete>
 
-    <insert id="addCourse" parameterType="course" useGeneratedKeys="true" keyColumn="id">
+    <insert id="addCourse" parameterType="course" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO course(tea_id, `name`, `number`, cover, description)
         VALUES(#{teaId}, #{name}, #{number}, #{cover}, #{description})
     </insert>

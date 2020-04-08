@@ -7,6 +7,7 @@ import org.gdpi.course.service.TeacherService;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 
@@ -14,6 +15,7 @@ import javax.annotation.Resource;
  * @author zhf
  */
 @Service("teacherService")
+@Transactional
 public class TeacherServiceImpl implements TeacherService {
     @Resource
     private TeacherMapper teacherMapper;

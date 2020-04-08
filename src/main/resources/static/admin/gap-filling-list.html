@@ -1,8 +1,19 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<html lang="zh-CN">
+<head>
+    <base id="base" href="/course/">
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta http-equiv="x-ua-compatible" content="ie=edge"/>
+    <script>
+        function getContextPath() {
+            var pathName = document.location.pathname;
+            var index = pathName.substr(1).indexOf("/");
+            var result = pathName.substr(0, index + 1);
+            return result + '/';
+        }
+
+        document.getElementById('base').href = getContextPath();
+    </script>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css" />
         <link href="https://cdn.bootcss.com/animate.css/3.7.2/animate.css" rel="stylesheet" />
         <link rel="stylesheet" href="css/my-style.css" />
@@ -16,33 +27,26 @@
                         <div class="ui label large black basic icon my-font-weight">
                             当前课程
                             <i class="angle right icon"></i>
-                            <span>未选择</span>
+                            <span id="course_name">未选择</span>
                             <!-- 保存课程号 -->
-                            <input type="hidden" />
+                            <input type="hidden" id="course_id"/>
                         </div>
                         <div class="ui action input">
-                            <input type="text" placeholder="搜索..." />
+                            <input type="text" placeholder="搜索..." id="course_num"/>
                             <select class="ui compact selection dropdown">
                                 <option value="all">课程号</option>
                                 <option value="articles" disabled>题干</option>
                                 <option value="products" disabled>选项</option>
                             </select>
-                            <div class="ui button">搜索</div>
+                            <div class="ui button" onclick="listPage(1)">搜索</div>
                         </div>
 
-                        <button class="ui icon green button" onclick="showEditDialog()"><i class="plus icon"></i>添加题目</button>
-                        <div class="ui button red mini right floated">删除已选题目</div>
+                        <button class="ui icon green button right floated disabled" id="addQue" onclick="showAddDialog()"><i class="plus icon"></i>添加题目</button>
                     </div>
 
                     <table class="ui celled table">
                         <thead>
                             <tr>
-                                <th width="1">
-                                    <div class="ui mini checkbox">
-                                        <input type="checkbox" />
-                                        <label></label>
-                                    </div>
-                                </th>
                                 <th>题目</th>
                                 <th>答案</th>
                                 <th>分值</th>
@@ -53,12 +57,6 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <td>
-                                    <div class="ui mini checkbox">
-                                        <input type="checkbox" />
-                                        <label></label>
-                                    </div>
-                                </td>
                                 <td>数据结构</td>
                                 <td>1</td>
                                 <td>1</td>
@@ -71,9 +69,7 @@
                         <tfoot>
                             <tr>
                                 <th colspan="8">
-                                    <div class="ui mini pagination menu">
-                                        <div class="item">1</div>
-                                        <div class="item active">2</div>
+                                    <div class="ui mini pagination menu teal" id="page-nav">
                                     </div>
                                 </th>
                             </tr>
@@ -84,14 +80,15 @@
             </div>
 
             <!-- 弹出编辑框 -->
-            <!-- 弹出编辑框 -->
+
             <div class="ui modal">
                 <i class="close icon"></i>
-                <div class="header">
-                    添加题目
+                <div class="header" id="header">
+
                 </div>
                 <div class="content">
                     <form class="ui form">
+                        <input type="hidden" id="gap-id">
                         <div class="field">
                             <h3>题干</h3>
                             <div id="div1"></div>
@@ -102,25 +99,26 @@
                             <div class="field">
                                 <div class="ui labeled input">
                                     <div class="ui label">答案</div>
-                                    <input type="text" />
+                                    <input type="text" name="answer" id="input-answer"/>
                                 </div>
                             </div>
                             <div class="field">
-                                <div class="ui labeled input">
+                                <div class="ui labeled input" id="grade-label">
                                     <div class="ui label">分值</div>
-                                    <input type="text" />
+                                    <input type="text" name="grade" id="input-grade"/>
                                 </div>
                             </div>
                         </div>
 
                         <div class="ui button reset" style="display: none;"></div>
+                        <button id="submit" style="display: none"></button>
                     </form>
                 </div>
                 <div class="actions">
-                    <div class="ui black deny button small" onclick="f()">
+                    <div class="ui black deny button small" onclick="ff()">
                         取消
                     </div>
-                    <div class="ui green right labeled icon button small">
+                    <div class="ui green right labeled icon button small" id="upload-btn" onclick="$('#submit').click()">
                         确认
                         <i class="checkmark icon"></i>
                     </div>
@@ -131,35 +129,239 @@
     <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
     <script src="https://cdn.bootcss.com/wangEditor/10.0.13/wangEditor.min.js"></script>
+    <script src="js/axios.min.js"></script>
+    <script src="js/my.js"></script>
     <script>
-        var showEditDialog = function() {
+
+        let isEdit = false;
+        function showEditDialog(id) {
+            isEdit = true;
+            echoQue(id);
+            $('#grade-label').addClass('disabled');
+            $('#header').text('编辑题目');
+            $(".ui.modal").modal("show");
+
+        };
+        function showAddDialog() {
+            isEdit = false;
+            $('#grade-label').removeClass('disabled');
+            $('#header').text('添加题目');
             $(".ui.modal").modal("show");
         };
-        //在input file内容改变的时候触发事件
-        $("#cover").change(function() {
-            //获取input file的files文件数组;
-            //$('#filed')获取的是jQuery对象，.get(0)转为原生对象;
-            //这边默认只能选一个，但是存放形式仍然是数组，所以取第一个元素使用[0];
-            var file = $("#cover").get(0).files[0];
-            //创建用来读取此文件的对象
-            var reader = new FileReader();
-            //使用该对象读取file文件
-            reader.readAsDataURL(file);
-            //读取文件成功后执行的方法函数
-            reader.onload = function(e) {
-                //读取成功后返回的一个参数e，整个的一个进度事件
-                console.log(e);
-                //选择所要显示图片的img，要赋值给img的src就是e中target下result里面
-                //的base64编码格式的地址
-                $("#image-show").get(0).src = e.target.result;
-            };
-        });
-        var f = function() {
+
+
+        // 回显数据
+        function echoQue(id) {
+            axios.get(getContextPath() + 'tea/gap/' + id)
+                .then((rep) => {
+                    if (rep.data.code === 200) {
+                        console.log(rep);
+                        $('#input-grade').val(rep.data.data.grade);
+                        editor.txt.html(rep.data.data.title);
+                        $('#gap-id').val(rep.data.data.id);
+                        $('#input-answer').val(rep.data.data.answer);
+                    } else {
+                        alert(rep.data.data);
+                    }
+                })
+                .catch(() => alert('查询失败'));
+        }
+
+        // 清空数据
+        function  ff(){
             $(".button.reset").click();
+            editor.txt.html('');
         };
+
+        function listPage(page) {
+            var courseNumber = $('#course_num').val();
+
+            if (courseNumber.length < 6) {
+                alert("请输入正确的课程号")
+                return;
+            }
+            var url = getContextPath() + 'tea/gap?page=' + page + '&number=' + courseNumber;
+            axios.get(url)
+                .then(rep => {
+
+                    // 激活添加题目功能
+                    $('#addQue').removeClass('disabled');
+                    $('#course_id').val(rep.data.data.course.id);
+                    $('#course_name').text(rep.data.data.course.name);
+                    // 创建课程节点
+                    createQueNode(rep.data.data.page.list);
+                    // 创建页码
+                    createPageNav(rep.data.data.page);
+
+                })
+                .catch(() => alert("查询失败"));
+        }
+
+
+        function createQueNode(list) {
+            $('tbody').empty();
+            list.forEach(item => {
+                var node = $(
+                    '<tr class="animated" id="que-tr-' + item.id + '">' +
+                    '    <td id="gap-title'+item.id+'">'+getSimpleText(item.title).substring(0, 30)+'...</td>' +
+                    '    <td id="gap-answer'+item.id+'">'+getSimpleText(item.answer).substring(0, 20)+'</td>' +
+                    '    <td id="gap-grade'+item.id+'">'+item.grade+'</td>' +
+                    '    <td width="190">' +
+                    '        <button onclick="showEditDialog('+item.id+')" class="ui mini primary button"><i class="icon edit"></i> 编辑</button>' +
+                    '        <button class="ui mini red button" onclick="deleteSingleQue('+item.id+')"><i class="archive icon"></i>删除</button>' +
+                    '    </td>' +
+                    '</tr>'
+                );
+                $('tbody').append(node);
+            })
+        }
+
+        function createPageNav(page) {
+            $('#page-nav').empty();
+            page.navigatepageNums.forEach(item => {
+                var node = $('<button class="item" id="nav-' + item + '" onclick="listPage(' + item + ')">' + item + '</button>');
+                $('#page-nav').append(node);
+            });
+
+            $('#nav-' + page.pageNum).addClass('active');
+        }
+        // 删除题目
+        function deleteSingleQue(id) {
+            axios.delete(getContextPath()+'tea/gap/'+id)
+                .then(rep => {
+                    if (rep.data.code === 200) {
+                        $('#que-tr-' + id).addClass('fadeOutLeft');
+                        setTimeout(() => {
+                            $('#que-tr-' + id).remove();
+                        }, 800);
+                    } else {
+                        alert(rep.data.data);
+                    }
+                })
+                .catch(() => alert('请求失败'));
+        }
+
+        $(".ui.form").form({
+            inline: true,
+            revalidate: true,
+            transition: "slide down",
+            on: "blur",
+            fields: {
+                grade: {
+                    identifier: "grade",
+                    rules: [
+                        {
+                            type: "empty",
+                            prompt: "请输入分值!"
+                        },
+                        {
+                            type: "number",
+                            prompt: "请输入数字"
+                        }
+                    ]
+                },
+                answer: {
+                    identifier: "answer",
+                    rules: [
+                        {
+                            type: "empty",
+                            prompt: "请输入答案!"
+                        }
+                    ]
+                }
+            },
+            onSuccess: function (event, fields) {
+                event.preventDefault();
+                if (editor.txt.html().length < 20) {
+                    alert("请输入完整题目");
+                    return;
+                }
+
+                var method;
+                if (isEdit) {
+                    method = 'PUT';
+                } else {
+                    method = 'POST';
+                }
+
+                axios({
+                    url: getContextPath() + 'tea/gap',
+                    method: method,
+                    data: {
+                        id: $('#gap-id').val(),
+                        courseId: $('#course_id').val(),
+                        title: editor.txt.html(),
+                        answer: fields.answer,
+                        grade: fields.grade
+                    }
+                }).then(rep => {
+                    if (rep.data.code === 200) {
+                        ff();
+                        if (method === 'PUT') {
+                            $('#gap-title'+rep.data.data.id).text(getSimpleText(rep.data.data.title).substring(0, 30) + '...');
+                            $('#gap-answer'+rep.data.data.id).text(rep.data.data.answer);
+                            $('#gap-grade'+rep.data.data.id).text(rep.data.data.grade);
+                        }
+                    } else {
+                        alert(rep.data.data);
+                    }
+                }).catch(() => alert("请求失败"));
+            }
+        });
+
+
 
         var E = window.wangEditor;
         var editor = new E("#div1");
+        editor.customConfig.menus = [
+            'head',  // 标题
+            'bold',  // 粗体
+            'fontSize',  // 字号
+            'fontName',  // 字体
+            'italic',  // 斜体
+            'underline',  // 下划线
+            'strikeThrough',  // 删除线
+            'foreColor',  // 文字颜色
+            'link',  // 插入链接
+            'list',  // 列表
+            'justify',  // 对齐方式
+            'quote',  // 引用
+            'image',  // 插入图片
+            'table',  // 表格
+            'code',  // 插入代码
+            'undo',  // 撤销
+            'redo'  // 重复
+        ];
+        editor.customConfig.customUploadImg = function (files, insert) {
+            var f = files[0];
+            var formData = new FormData();
+            formData.append("image", f);
+            formData.append("key", "9f44a7c9879610d03afb08ed5631446e");
+            $('#upload-btn').addClass('loading');
+            $('#upload-btn').addClass('disabled');
+            $('#upload-btn').removeClass('green');
+            $.ajax({
+                url: "https://api.imgbb.com/1/upload",
+                type: "POST",
+                success: function (rep) {
+                    insert(rep.data.url);
+                    $('#upload-btn').removeClass('loading');
+                    $('#upload-btn').addClass('green');
+                    $('#upload-btn').removeClass('disabled');
+                },
+                error: function (rep) {
+                    alert("上传失败");
+                    console.log(rep);
+                    $('#upload-btn').removeClass('loading');
+                    $('#upload-btn').addClass('green');
+                    $('#upload-btn').removeClass('disabled');
+                },
+                data: formData,
+                cache: false,
+                contentType: false,
+                processData: false,
+            });
+        };
         editor.create();
     </script>
 </html>

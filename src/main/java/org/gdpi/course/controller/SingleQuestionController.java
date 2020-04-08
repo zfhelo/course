@@ -9,6 +9,7 @@ import org.gdpi.course.reponse.SimpleResponse;
 import org.gdpi.course.service.CourseService;
 import org.gdpi.course.service.SingleQuestionService;
 import org.gdpi.course.service.TeacherService;
+import org.gdpi.course.util.BeanUtils;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.BindingResult;
@@ -43,8 +44,9 @@ public class SingleQuestionController {
     public SimpleResponse addSingleQuestion(@RequestBody @Valid SingleQuestion singleQuestion,
                                             BindingResult result, @AuthenticationPrincipal UserDetails userDetails) {
 
+        BeanUtils.trim(singleQuestion);
         // 数据校验
-        if (result.hasErrors()) {
+        if (result.hasErrors() || singleQuestion.getCourseId() == null) {
             return SimpleResponse.error("数据不合法");
         }
 
@@ -58,10 +60,13 @@ public class SingleQuestionController {
             return SimpleResponse.error("您没有该课程");
         }
 
-        singleQuestion.setCourseId(course.getId());
-        singleQuestionService.addSingleQue(singleQuestion);
+        Integer num = singleQuestionService.addSingleQue(singleQuestion);
 
-        return SimpleResponse.success();
+        if (num == 0) {
+            return SimpleResponse.error("添加失败");
+        }
+
+        return SimpleResponse.success(singleQuestion);
     }
 
     /**
@@ -136,7 +141,7 @@ public class SingleQuestionController {
         SingleQuestion question = singleQuestionService.findById(id);
 
         if (question == null) {
-            return SimpleResponse.error("未知题目");
+            return SimpleResponse.error("没有该题目");
         }
 
         if (question.getReference() > 0) {
@@ -153,9 +158,12 @@ public class SingleQuestionController {
             return SimpleResponse.error("你没有该题目");
         }
 
-        singleQuestionService.deleteById(id);
+        Integer num = singleQuestionService.deleteById(id);
+        if (num == 0) {
+            return SimpleResponse.error("删除失败");
+        }
 
-        return SimpleResponse.success();
+        return SimpleResponse.success(question);
     }
 
     /**
@@ -169,8 +177,9 @@ public class SingleQuestionController {
     public SimpleResponse updateSingleQuestion(@RequestBody @Valid SingleQuestion singleQuestion,
                                                BindingResult result,
                                                @AuthenticationPrincipal UserDetails userDetails) {
-        if (result.hasErrors()) {
-            return SimpleResponse.error("非法输入");
+        BeanUtils.trim(singleQuestion);
+        if (result.hasErrors() || singleQuestion.getId() == null) {
+            return SimpleResponse.error("数据不合法");
         }
 
         SingleQuestion question = singleQuestionService.findById(singleQuestion.getId());
@@ -190,6 +199,6 @@ public class SingleQuestionController {
         if (num == 0) {
             return SimpleResponse.error("修改失败");
         }
-        return SimpleResponse.success();
+        return SimpleResponse.success(singleQuestion);
     }
 }

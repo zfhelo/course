@@ -4,6 +4,7 @@ import org.gdpi.course.entity.SingleQuestion;
 import org.gdpi.course.mapper.SingleQuestionMapper;
 import org.gdpi.course.service.SingleQuestionService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -12,6 +13,7 @@ import java.util.List;
  * @author zhf
  */
 @Service
+@Transactional
 public class SingleQuestionServiceImpl implements SingleQuestionService {
 
     @Resource

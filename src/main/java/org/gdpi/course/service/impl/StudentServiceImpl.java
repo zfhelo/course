@@ -6,6 +6,7 @@ import org.gdpi.course.mapper.StudentMapper;
 import org.gdpi.course.service.StudentService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 
@@ -13,6 +14,7 @@ import javax.annotation.Resource;
  * @author zhf
  */
 @Service("studentService")
+@Transactional
 public class StudentServiceImpl implements StudentService {
     @Resource
     private StudentMapper studentMapper;

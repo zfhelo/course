@@ -2,9 +2,11 @@ package org.gdpi.course;
 
 import org.gdpi.course.entity.Course;
 import org.gdpi.course.entity.EssayQuestion;
+import org.gdpi.course.entity.GapFillingQuestion;
 import org.gdpi.course.entity.SingleQuestion;
 import org.gdpi.course.mapper.CourseMapper;
 import org.gdpi.course.mapper.EssayQuestionMapper;
+import org.gdpi.course.mapper.GapFillingQuestionMapper;
 import org.gdpi.course.mapper.SingleQuestionMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,6 +80,19 @@ class CourseApplicationTests {
             que.setGrade(99);
             que.setTitle("xxxxxxxxxx");
             essayQuestionMapper.addEssayQuestion(que);
+        }
+    }
+    @Resource
+    private GapFillingQuestionMapper gapFillingQuestionMapper;
+    @Test
+    public void addGapQue() {
+        for (int i = 1; i < 100; i++) {
+            GapFillingQuestion que = new GapFillingQuestion();
+            que.setCourseId(3);
+            que.setGrade(99);
+            que.setAnswer("3223");
+            que.setTitle("xxxxxxxxxx");
+            gapFillingQuestionMapper.addGapFillingQuestion(que);
         }
     }
 }

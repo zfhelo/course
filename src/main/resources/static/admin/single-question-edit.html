@@ -88,7 +88,7 @@
 <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
 <script src="https://cdn.bootcss.com/wangEditor/10.0.13/wangEditor.min.js"></script>
-<script src="https://cdn.bootcss.com/axios/0.19.2/axios.min.js"></script>
+<script src="js/axios.min.js"></script>
 <script src="js/my.js"></script>
 <script>
     // 表单校验
@@ -146,6 +146,10 @@
         },
         onSuccess: function (event, fields) {
             event.preventDefault();
+            if (editor.txt.html().length < 20) {
+                alert("请输入完整题目");
+                return;
+            }
             var data = {
                 id: $('#singleId').val(),
                 title: editor.txt.html(),
@@ -161,6 +165,7 @@
                     if (rep.data.code === 200) {
                         $('#clear').click();
                         editor.txt.html('')
+                        history.back();
                     } else {
                         alert(rep.data.data);
                     }

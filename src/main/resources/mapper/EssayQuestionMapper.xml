@@ -23,7 +23,7 @@
         DELETE FROM essay_question WHERE id = #{id}
     </delete>
 
-    <insert id="addEssayQuestion" parameterType="essayQuestion">
+    <insert id="addEssayQuestion" parameterType="essayQuestion" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO essay_question(course_id, title, grade) VALUES(#{courseId}, #{title}, #{grade})
     </insert>
 </mapper>
