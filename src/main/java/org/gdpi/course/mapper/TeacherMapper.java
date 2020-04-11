@@ -28,4 +28,11 @@ public interface TeacherMapper {
      * @return null or user
      */
     Teacher findByUsername(String username);
+
+    /**
+     * 通过id查找
+     * @param id
+     * @return
+     */
+    Teacher findById(Integer id);
 }

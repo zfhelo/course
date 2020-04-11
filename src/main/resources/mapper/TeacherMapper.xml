@@ -3,6 +3,11 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.gdpi.course.mapper.TeacherMapper">
+
+    <resultMap id="courseAndTea" type="course">
+
+    </resultMap>
+
     <insert id="addTeacher" parameterType="teacher" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO teacher(username, nickname, password, photo)
         VALUES(#{username}, #{nickname}, #{password}, #{photo})
@@ -10,5 +15,8 @@
 
     <select id="findByUsername" parameterType="string" resultType="teacher">
         SELECT * FROM teacher WHERE username = #{username}
+    </select>
+    <select id="findById" parameterType="integer" resultType="teacher">
+        SELECT * FROM teacher WHERE id = #{id}
     </select>
 </mapper>

@@ -1,12 +1,21 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<html lang="zh-CN">
+<head>
+    <base id="base" href="/course/">
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta http-equiv="x-ua-compatible" content="ie=edge"/>
+    <script>
+        function getContextPath() {
+            var pathName = document.location.pathname;
+            var index = pathName.substr(1).indexOf("/");
+            var result = pathName.substr(0, index + 1);
+            return result + '/';
+        }
+        document.getElementById('base').href = getContextPath();
+    </script>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css" />
         <link href="https://cdn.bootcss.com/animate.css/3.7.2/animate.css" rel="stylesheet" />
         <link rel="stylesheet" href="css/my-style.css" />
-        <title>首页</title>
     </head>
     <body>
         <div class="ui container my-padding-top-2">
@@ -37,53 +46,65 @@
                         <tfoot>
                             <tr>
                                 <th colspan="4">
-                                    <div class="ui mini pagination menu">
-                                        <div class="item">1</div>
-                                        <div class="item active">2</div>
+                                    <div class="ui mini pagination menu teal" id="page-nav">
                                     </div>
-                                    <div class="ui button right floated" onclick="myback()">返回</div>
+                                    <div class="ui button right floated" onclick="history.back()">返回</div>
                                 </th>
                             </tr>
                         </tfoot>
                     </table>
-                    <span class="my-font-tips">定位到对应课程在进行本页其他操作</span>
                 </div>
             </div>
         </div>
     </body>
     <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
-    <script src="https://cdn.bootcss.com/wangEditor/10.0.13/wangEditor.min.js"></script>
     <script src="js/my.js"></script>
+    <script src="js/axios.min.js"></script>
     <script>
-        var showEditDialog = function() {
-            $(".ui.modal").modal("show");
-        };
-        //在input file内容改变的时候触发事件
-        $("#cover").change(function() {
-            //获取input file的files文件数组;
-            //$('#filed')获取的是jQuery对象，.get(0)转为原生对象;
-            //这边默认只能选一个，但是存放形式仍然是数组，所以取第一个元素使用[0];
-            var file = $("#cover").get(0).files[0];
-            //创建用来读取此文件的对象
-            var reader = new FileReader();
-            //使用该对象读取file文件
-            reader.readAsDataURL(file);
-            //读取文件成功后执行的方法函数
-            reader.onload = function(e) {
-                //读取成功后返回的一个参数e，整个的一个进度事件
-                console.log(e);
-                //选择所要显示图片的img，要赋值给img的src就是e中target下result里面
-                //的base64编码格式的地址
-                $("#image-show").get(0).src = e.target.result;
-            };
-        });
-        var f = function() {
-            $(".button.reset").click();
-        };
+        const modelId = getUrlParam('id');
+        function listPage(page) {
+            axios.get(getContextPath() + 'tea/paper?modelId='+modelId+'&page='+page)
+                .then(rep => {
+                    console.log(rep);
+                    if (rep.data.code === 200) {
+                        createPaperNode(rep.data.data.list);
+                        createPageNav(rep.data.data);
+                    } else {
+                        alert(rep.data.data);
+                    }
+                })
+                .catch(() => alert("请求失败"));
+        }
 
-        var E = window.wangEditor;
-        var editor = new E("#div1");
-        editor.create();
+        function createPaperNode(list) {
+            $('tbody').empty();
+            list.forEach(item => {
+                var node = $(
+                    '<tr class="animated" id="paper-tr-' + item.id + '">' +
+                    '    <td>'+item.student.nickname+'</td>' +
+                    '    <td>'+(item.updateTime === null ? '未提交':item.updateTime)+'</td>' +
+                    '    <td>'+item.grade+'</td>' +
+                    '    <td width="190">' +
+                    '         <a href="subsequent_add_..." class="ui mini primary button"><i class="icon edit"></i> 批阅</a>' +
+                    '    </td>' +
+                    '</tr>'
+                );
+                $('tbody').append(node);
+            })
+        }
+
+        function createPageNav(page) {
+            $('#page-nav').empty();
+            page.navigatepageNums.forEach(item => {
+                var node = $('<button class="item" id="nav-' + item + '" onclick="listPage(' + item + ')">' + item + '</button>');
+                $('#page-nav').append(node);
+            });
+
+            $('#nav-' + page.pageNum).addClass('active');
+        }
+        $(function () {
+            listPage(1);
+        })
     </script>
 </html>

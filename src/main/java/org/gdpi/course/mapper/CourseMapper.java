@@ -52,4 +52,26 @@ public interface CourseMapper {
      * @return
      */
     Integer updateCourse(Course course);
+
+    /**
+     * 通过课程号查找有多少学员
+     * @param cid
+     * @return
+     */
+    Integer findStudentCount(Integer cid);
+
+    /**
+     * 通过id查找
+     * @param id
+     * @return
+     */
+    Course findById(Integer id);
+
+    /**
+     * 查找所有学员id
+     * @param cid
+     * @return
+     */
+    List<Integer> findStudentId(Integer cid);
+
 }

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.gdpi.course.mapper.ExamMapper">
+    <insert id="addExamModel" parameterType="examModel" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO exam_model(title, course_id, is_hide, start_time, end_time, grade)
+        VALUES(#{title}, #{courseId}, #{isHide}, #{startTime}, #{endTime}, #{grade})
+    </insert>
+
+    <insert id="addExamPaper" parameterType="examPaper">
+        INSERT INTO exam_paper(stu_id, model_id, rule) VALUES(#{stuId}, #{modelId}, #{rule})
+    </insert>
+
+    <select id="findByModelId" resultType="examPaper">
+        SELECT * FROM exam_paper WHERE model_id = #{mid}
+    </select>
+
+
+    <select id="addSingleQue">
+        INSERT INTO paper_single_map(paper_id, single_id) VALUES(#{pid}, #{qid})
+    </select>
+
+    <select id="addGapQue">
+        INSERT INTO paper_gap_map(paper_id, gap_id) VALUES(#{pid}, #{qid})
+    </select>
+
+    <select id="addTorfQue">
+        INSERT INTO paper_torf_map(paper_id, torf_id) VALUES(#{pid}, #{qid})
+    </select>
+
+    <select id="addEssayQue">
+        INSERT INTO paper_essay_map(paper_id, essay_id) VALUES(#{pid}, #{qid})
+    </select>
+
+    <select id="findByCourseId" resultMap="#.modelAndSubmitNum" parameterType="Integer">
+        SELECT * FROM exam_model WHERE course_id = #{cid}
+    </select>
+
+    <select id="findSubmitNum" resultType="Integer" parameterType="Integer">
+        SELECT count(*) FROM exam_paper WHERE model_id = #{modelId} AND status = true
+    </select>
+
+    <select id="findById" resultType="examModel" parameterType="Integer">
+        SELECT * FROM exam_model WHERE id = #{id}
+    </select>
+
+    <update id="updateExamModel" parameterType="examModel">
+        UPDATE exam_model SET
+        start_time = #{startTime}, end_time = #{endTime}, title = #{title}, is_hide = #{isHide}
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteById" parameterType="Integer">
+        DELETE FROM exam_model WHERE id = #{id}
+    </delete>
+
+</mapper>

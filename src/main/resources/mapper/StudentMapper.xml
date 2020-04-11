@@ -11,4 +11,25 @@
     <select id="findByUsername" parameterType="string" resultType="student">
         SELECT * FROM student WHERE username = #{username}
     </select>
+
+    <select id="findCourseBySId" parameterType="Integer" resultMap="#.courseWithTeacher">
+        SELECT c.* FROM course c JOIN stu_course_map s ON c.id = s.course_id AND stu_id = #{stuId}
+    </select>
+
+    <select id="findCourse" resultMap="#.courseWithTeacher">
+        SELECT * from course WHERE id NOT IN(select course_id from stu_course_map where #{sid} = stu_id) AND (`name` LIKE #{key} OR `number` LIKE #{key})
+    </select>
+
+    <select id="findBySidAndCourseId" resultType="Integer">
+        SELECT count(*) FROM stu_course_map WHERE stu_id = #{sid} AND course_id = #{cid}
+    </select>
+
+    <insert id="insertJoinCourse">
+        INSERT INTO stu_course_map(stu_id, course_id) VALUES(#{sid}, #{cid})
+    </insert>
+
+    <select id="findById" resultType="student" parameterType="integer">
+        SELECT * FROM student WHERE id = #{id}
+    </select>
+
 </mapper>

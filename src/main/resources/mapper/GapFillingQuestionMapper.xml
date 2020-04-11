@@ -27,4 +27,12 @@
     <update id="updateById" parameterType="gapFillingQuestion">
         UPDATE gap_filling_question SET title = #{title}, answer = #{answer} WHERE id = #{id}
     </update>
+
+    <select id="findGradeLessThan" resultType="gapFillingQuestion">
+        SELECT * FROM gap_filling_question WHERE grade &lt;= #{grade} AND course_id = #{cid}
+    </select>
+
+    <select id="findReferenceNum" parameterType="Integer">
+        SELECT count(*) FROM paper_gap_map  WHERE essay_id = #{gap_id}
+    </select>
 </mapper>

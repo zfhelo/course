@@ -46,6 +46,12 @@ public class GapFillingQuestionServiceImpl implements GapFillingQuestionService 
 
     @Override
     public Integer deleteById(Integer id) {
+
         return gapFillingQuestionMapper.deleteById(id);
+    }
+
+    @Override
+    public Integer findReferenceNum(Integer id) {
+        return gapFillingQuestionMapper.findReferenceNum(id);
     }
 }

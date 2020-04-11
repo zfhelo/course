@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="icon" th:href="@{/favicon.ico}" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css"/>
+    <link href="https://cdn.bootcss.com/animate.css/3.7.2/animate.css" rel="stylesheet"/>
+    <link rel="stylesheet" th:href="@{/css/my-style.css}"/>
+    <title>课程</title>
+</head>
+
+<body style="background-image: url('https://i.loli.net/2020/04/08/X1y2R4pHI5d6qNn.png')">
+<!--导航-->
+<nav class="ui attached segment my-padded-tb-mini" th:replace="~{stu/_fragment :: menu('course')}">
+    <div class="ui container">
+        <div class="ui  secondary stackable menu">
+            <h2 class="ui teal header item">Course</h2>
+            <a href="#" class="item"><i class="home icon"></i>首页</a>
+            <a href="#" class="active item"><i class="book icon"></i>课程</a>
+            <a href="#" class="item"><i class="sticky note outline icon"></i>作业</a>
+            <a href="#" class="item"><i class="pen square icon"></i>考试</a>
+            <a href="#" class="item"><i class="comment alternate outline icon"></i>讨论区</a>
+            <a href="#" class="item"><i class="user icon"></i>个人中心</a>
+
+            <!--搜索-->
+            <div class="right item">
+                <div class="ui icon input ">
+                    <input type="text" placeholder="搜索..."/>
+                    <i class="search icon link"></i>
+                </div>
+            </div>
+            <a href="#" class="item"><i class="motorcycle icon"></i>登出</a>
+        </div>
+    </div>
+</nav>
+
+<div class="ui container margin-top-2">
+    <div class="ui segments">
+        <div class="animated fadeInRight ui segment">
+            <div class="ui icon input ">
+                <input type="text" placeholder="课程号or名称" id="search" onblur="toggle()">
+                <i class="search icon"></i>
+            </div>
+            <div class="ui basic button right floated hide" id="back" onclick="location.reload()  ">返回</div>
+        </div>
+        <div class="animated fadeInLeft ui segment" id="me">
+            <div class="ui horizontal divider header my-patted-3"><h1>我的课程</h1></div>
+            <div style="text-align: center" class="segment" th:if="${course.size()} == 0">
+                <div class="header"><h3>你还没有加入任何课程</h3></div>
+            </div>
+            <div class="ui five stackable link cards">
+
+                <div class="ui card" th:each="course : ${course}">
+                    <div class="image">
+                        <img th:attr="src=@{${course.cover}}"
+                             src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1585301424819&di=a090af7a21526f19521195d1b581b181&imgtype=0&src=http%3A%2F%2Fimg.name2012.com%2Fuploads%2Fallimg%2F2015-06%2F06-023958_197.jpg"/>
+                    </div>
+                    <div class="content">
+                        <a href="#" class="header" th:text="${course.name}"></a>
+                        <div class="meta">
+                            <span th:text="${course.teacher.nickname}">zfhelo</span>
+                            <span th:text="${course.number}">zfhelo</span>
+                            <a class="right floated" href="#">
+                                <div class="ui icon" th:onclick="'javascript:exitCourse('+${course.id}+')'">
+                                    <i class="trash alternate icon"></i>
+                                    删除
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--搜索结果-->
+        <div class="animated fadeInRight ui segment hide" id="result">
+            <div class="ui horizontal divider header my-patted-3"><h1>搜索结果</h1></div>
+            <div class="ui five stackable link cards" id="searchResult">
+            </div>
+        </div>
+        <!--页码-->
+        <div class="ui borderless menu attached teal hide" id="nav">
+        </div>
+        <div class="ui segment hide animated fadeInRight" id="tips">
+            <div style="text-align: center">
+                <div class="header"><h3>未查询到</h3></div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+<script th:attr="src=@{/js/axios.min.js}"></script>
+
+<script>
+    $(".ui.dropdown").dropdown({
+        on: "hover"
+    });
+
+    function exitCourse(id) {
+        console.log('删除课程' + id);
+    }
+
+    function joinCourse(id) {
+        if (!confirm('你确定要加入吗')) {
+            return;
+        }
+
+        var url = getContextPath() + 'stu/joinCourse/' + id;
+        axios.get(url)
+            .then((rep) => {
+                if (rep.data.code === 200) {
+                   $('#join-'+id).remove();
+                }
+
+            })
+            .catch(() => alert("请求失败"));
+    }
+
+    function getContextPath() {
+        var pathName = document.location.pathname;
+        var index = pathName.substr(1).indexOf("/");
+        var result = pathName.substr(0, index + 1);
+        return result + '/';
+    }
+
+    function toggle() {
+
+
+        listPage(1);
+
+        $('#me').addClass("hide");
+        $('#result').removeClass("hide");
+        $('#back').removeClass("hide");
+    }
+
+    // function myback() {
+    //     $('#me').removeClass("hide");
+    //     $('#result').addClass("hide");
+    //     $('#back').addClass("hide");
+    //     $('#tips').addClass('hide');
+    //     $('#nav').addClass('hide');
+    // }
+
+    function listPage(page) {
+        var url = getContextPath() + 'stu/searchCourse?page=' + page + '&key=' + $('#search').val();
+        axios.get(url)
+            .then(rep => {
+                var page = rep.data.data.list;
+                if (page.length === 0) {
+                    $('#searchResult').empty();
+                    $('#tips').removeClass('hide');
+                    $('#nav').addClass('hide');
+                } else {
+                    $('#tips').addClass('hide');
+                    $('#nav').removeClass('hide');
+                    createCourseNode(page);
+                    createPageNav(rep.data.data);
+                }
+            })
+            .catch(rep => alert('查询失败'))
+    }
+
+    function createCourseNode(list) {
+        $('#searchResult').empty();
+        list.forEach(item => {
+            var node = $(
+                '<div class="ui card">' +
+                '      <div class="image">' +
+                '           <img src="'+item.cover+'"/>' +
+                '      </div>' +
+                '      <div class="content">' +
+                '           <a href="#" class="header">'+item.name+'</a>' +
+                '           <div class="meta">' +
+                '           <span>'+item.teacher.nickname+'</span>' +
+                '            <span>'+item.number+'</span>' +
+                '           <a class="right floated" href="#" id="join-'+item.id+'">' +
+                '               <div class="ui icon" onclick="joinCourse('+item.id+')">' +
+                '                   <i class="plus icon"></i>加入' +
+                '               </div>' +
+                '           </a>' +
+                '      </div>' +
+                '     </div>' +
+                '</div>'
+            );
+
+            $('#searchResult').append(node);
+        });
+    }
+
+    function createPageNav(page) {
+        $('#nav').empty();
+        page.navigatepageNums.forEach(item => {
+            $('#nav').append($('<a class="item" href="javascript:listPage('+item+')" id="c-'+item+'">'+item+'</a>'));
+        });
+
+        $('#c-'+page.pageNum).addClass('active');
+    }
+
+</script>
+</html>

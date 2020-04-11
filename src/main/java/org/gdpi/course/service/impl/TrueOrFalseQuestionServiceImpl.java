@@ -45,7 +45,14 @@ public class TrueOrFalseQuestionServiceImpl implements TrueOrFalseQuestionServic
     }
 
     @Override
+    public Integer findReferenceNum(Integer id) {
+        return trueOrFalseQuestionMapper.findReferenceNum(id);
+    }
+
+    @Override
     public Integer deleteById(Integer id) {
+
+
         return trueOrFalseQuestionMapper.deleteById(id);
     }
 }

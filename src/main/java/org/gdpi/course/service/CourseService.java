@@ -53,4 +53,11 @@ public interface CourseService {
      * @return
      */
     Integer updateCourse(Course course);
+
+    /**
+     * 通过id查找
+     * @param id
+     * @return
+     */
+    Course findById(Integer id);
 }

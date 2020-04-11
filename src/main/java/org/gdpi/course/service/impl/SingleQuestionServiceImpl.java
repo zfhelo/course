@@ -48,4 +48,9 @@ public class SingleQuestionServiceImpl implements SingleQuestionService {
     public Integer updateSingleQuestion(SingleQuestion singleQuestion) {
         return singleQuestionMapper.updateSingleQuestion(singleQuestion);
     }
+
+    @Override
+    public Integer findReferenceNum(Integer id) {
+        return singleQuestionMapper.findReferenceNum(id);
+    }
 }

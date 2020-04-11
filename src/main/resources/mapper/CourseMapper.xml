@@ -13,10 +13,8 @@
         VALUES(#{teaId}, #{name}, #{number}, #{cover}, #{description})
     </insert>
 
-    <select id="findByTeaId" parameterType="integer" resultType="course">
-        SELECT c.*, COUNT(s.id) stu_num
-        FROM course c LEFT JOIN stu_course_map s
-        ON c.tea_id = #{teaId} and c.id = s.course_id GROUP BY c.id
+    <select id="findByTeaId" parameterType="integer" resultMap="#.courseWithStuCount">
+        SELECT * FROM course WHERE tea_id = #{teaId}
     </select>
 
     <select id="findByNumber" resultType="course">
@@ -27,8 +25,20 @@
         SELECT * FROM course WHERE ID = #{id} AND tea_id = #{teaId}
     </select>
 
+    <select id="findStudentCount" parameterType="Integer" resultType="Integer">
+        SELECT count(*) stu_num FROM stu_course_map WHERE course_id = #{cid};
+    </select>
+
     <update id="updateCourse" parameterType="course">
         UPDATE course SET `name` = #{name}, `number` = #{number}, cover = #{cover},description = #{description}
         WHERE id = #{id} AND tea_id = #{teaId}
     </update>
+
+    <select id="findById" resultType="course">
+        SELECT * FROM course WHERE id = #{id}
+    </select>
+
+    <select id="findStudentId" parameterType="integer" resultType="Integer">
+        SELECT stu_id FROM stu_course_map WHERE course_id = #{cid}
+    </select>
 </mapper>

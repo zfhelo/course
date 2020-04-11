@@ -32,12 +32,8 @@
                             <input type="hidden" id="course_id"/>
                         </div>
                         <div class="ui action input">
-                            <input type="text" placeholder="搜索..." id="course_num"/>
-                            <select class="ui compact selection dropdown">
-                                <option value="all">课程号</option>
-                                <option value="articles" disabled>题干</option>
-                                <option value="products" disabled>选项</option>
-                            </select>
+                            <input type="text" placeholder="课程号..." id="course_num"/>
+
                             <div class="ui button" onclick="listPage(1)">搜索</div>
                         </div>
 
@@ -56,15 +52,6 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>数据结构</td>
-                                <td>1</td>
-                                <td>1</td>
-                                <td width="190">
-                                    <button onclick="showEditDialog()" class="ui mini primary button"><i class="icon edit"></i> 编辑</button>
-                                    <button class="ui mini red button"><i class="archive icon"></i>删除</button>
-                                </td>
-                            </tr>
                         </tbody>
                         <tfoot>
                             <tr>

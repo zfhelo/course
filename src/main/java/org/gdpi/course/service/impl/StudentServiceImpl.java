@@ -1,5 +1,6 @@
 package org.gdpi.course.service.impl;
 
+import org.gdpi.course.entity.Course;
 import org.gdpi.course.entity.Student;
 import org.gdpi.course.exception.UserAlreadyExistedException;
 import org.gdpi.course.mapper.StudentMapper;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * @author zhf
@@ -39,5 +41,30 @@ public class StudentServiceImpl implements StudentService {
         student.setPassword(encode);
 
         studentMapper.addStudent(student);
+    }
+
+    @Override
+    public List<Course> findCourseById(Integer id) {
+        return studentMapper.findCourseBySId(id);
+    }
+
+    @Override
+    public List<Course> findCourse(String key, Integer sid) {
+        return studentMapper.findCourse(key, sid);
+    }
+
+    @Override
+    public Integer findBySidAndCourseId(Integer sid, Integer cid) {
+        return studentMapper.findBySidAndCourseId(sid, cid);
+    }
+
+    @Override
+    public Integer insertJoinCourse(Integer sid, Integer cid) {
+        return studentMapper.insertJoinCourse(sid, cid);
+    }
+
+    @Override
+    public Student findById(Integer id) {
+        return studentMapper.findById(id);
     }
 }

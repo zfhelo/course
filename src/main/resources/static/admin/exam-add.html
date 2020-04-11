@@ -1,141 +1,346 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css" />
-        <link href="https://cdn.bootcss.com/animate.css/3.7.2/animate.css" rel="stylesheet" />
-        <link rel="stylesheet" href="css/my-style.css" />
-        <title>首页</title>
-    </head>
-    <body>
-        <div class="ui container my-padding-top-2">
-            <div class="ui horizontal divider"><h1>生成试卷</h1></div>
+<html lang="zh-CN">
+<head>
+    <base id="base" href="/course/">
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta http-equiv="x-ua-compatible" content="ie=edge"/>
+    <script>
+        function getContextPath() {
+            var pathName = document.location.pathname;
+            var index = pathName.substr(1).indexOf("/");
+            var result = pathName.substr(0, index + 1);
+            return result + '/';
+        }
 
-            <div class="animated bounceInDown  my-patted-5 my-padding-left-2">
-                <div class="ui grid stackable">
-                    <div class="row my-padded-tb-mini">
-                        <div class="ui eight wide column segments">
-                            <div class="ui segment"><h3>单选题</h3></div>
-                            <div class="ui segment">
-                                <div class="ui labeled input">
-                                    <div class="ui label">数量</div>
-                                    <input type="text" name="" id="" value="0" />
-                                </div>
-                                <div class="ui labeled input">
-                                    <div class="ui label">总分值</div>
-                                    <input type="text" name="" id="" value="0" />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="ui eight wide column segments">
-                            <div class="ui segment"><h3>填空题</h3></div>
-                            <div class="ui segment">
-                                <div class="ui labeled input">
-                                    <div class="ui label">数量</div>
-                                    <input type="text" name="" id="" value="0" />
-                                </div>
-                                <div class="ui labeled input">
-                                    <div class="ui label">总分值</div>
-                                    <input type="text" name="" id="" value="0" />
-                                </div>
-                            </div>
-                        </div>
+        document.getElementById('base').href = getContextPath();
+    </script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css"/>
+    <link href="https://cdn.bootcss.com/animate.css/3.7.2/animate.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="css/my-style.css"/>
+    <title>首页</title>
+</head>
+<body>
+<div class="ui container my-padding-top-2">
+    <div class="ui horizontal divider"><h1>生成试卷</h1></div>
+    <div class="ui segments">
+        <div class="ui segment">
+            <form class="ui form">
+                <div class="four fields">
+                    <div class="field">
+                        <label>单选题数量</label>
+                        <input type="text" name="singleNum" value="0">
                     </div>
-                    <div class="row my-padded-tb-mini">
-                        <div class="ui eight wide column segments">
-                            <div class="ui segment"><h3>判断题</h3></div>
-                            <div class="ui segment">
-                                <div class="ui labeled input">
-                                    <div class="ui label">数量</div>
-                                    <input type="text" name="" id="" value="0" />
-                                </div>
-                                <div class="ui labeled input">
-                                    <div class="ui label">总分值</div>
-                                    <input type="text" name="" id="" value="0" />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="ui eight wide column segments">
-                            <div class="ui segment"><h3>解答题</h3></div>
-                            <div class="ui segment">
-                                <div class="ui labeled input">
-                                    <div class="ui label">数量</div>
-                                    <input type="text" name="" id="" value="0" />
-                                </div>
-                                <div class="ui labeled input">
-                                    <div class="ui label">总分值</div>
-                                    <input type="text" name="" id="" value="0" />
-                                </div>
-                            </div>
-                        </div>
+                    <div class="field">
+                        <label>单选题总分</label>
+                        <input type="text"  name="singleGrade" value="0">
                     </div>
-                    <div class="ui segment attached right aligned">
-                        <div class="ui animated fade green mini button">
-                            <div class="visible content">生成试卷</div>
-                            <div class="hidden content"><i class="arrow right icon"></i></div>
-                        </div>
+                    <div class="field">
+                        <label>判断题数量</label>
+                        <input type="text" name="torfNum" value="0">
+                    </div>
+                    <div class="field">
+                        <label>判断题总分</label>
+                        <input type="text"  name="torfGrade" value="0">
                     </div>
                 </div>
-            </div>
-        </div>
-    </body>
-    <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
-    <script>
-        //在input file内容改变的时候触发事件
-        $("#cover").change(function() {
-            //获取input file的files文件数组;
-            //$('#filed')获取的是jQuery对象，.get(0)转为原生对象;
-            //这边默认只能选一个，但是存放形式仍然是数组，所以取第一个元素使用[0];
-            var file = $("#cover").get(0).files[0];
-            //创建用来读取此文件的对象
-            var reader = new FileReader();
-            //使用该对象读取file文件
-            reader.readAsDataURL(file);
-            //读取文件成功后执行的方法函数
-            reader.onload = function(e) {
-                //读取成功后返回的一个参数e，整个的一个进度事件
-                console.log(e);
-                //选择所要显示图片的img，要赋值给img的src就是e中target下result里面
-                //的base64编码格式的地址
-                $("#image-show").get(0).src = e.target.result;
-            };
-        });
+                <div class="four fields">
+                    <div class="field">
+                        <label>填空题数量</label>
+                        <input type="text"  name="gapNum" value="0">
+                    </div>
+                    <div class="field">
+                        <label>填空题分数</label>
+                        <input type="text"  name="gapGrade" value="0">
+                    </div>
+                    <div class="field">
+                        <label>问答题数量</label>
+                        <input type="text"  name="essayNum" value="0">
+                    </div>
+                    <div class="field">
+                        <label>问答题总分</label>
+                        <input type="text" name="essayGrade" value="0">
+                    </div>
+                </div>
+                <div class="four fields">
+                    <div class="field">
+                        <label>课程号</label>
+                        <input type="text" name="courseNum" placeholder="课程号">
+                    </div>
+                    <div class="field">
+                        <label>标题</label>
+                        <input type="text" name="title" placeholder="标题">
+                    </div>
+                <div class="ui calendar start_time field">
+                    <label>发布时间：</label>
+                    <div class="ui input right icon">
+                        <i class="calendar icon"></i>
+                        <input type="text" placeholder="选择开始时间" value="" name="startTime" />
+                    </div>
+                </div>
 
-        $(".ui.form").form({
-            inline: true,
-            revalidate: true,
-            transition: "slide down",
-            on: "blur",
-            fields: {
-                name: {
-                    identifier: "name",
-                    rules: [
-                        {
-                            type: "empty",
-                            prompt: "请输入账号!"
-                        },
-                        {
-                            type: "minLength[6]",
-                            prompt: "账号不少于6位"
-                        }
-                    ]
-                },
-                password: {
-                    identifier: "password",
-                    rules: [
-                        {
-                            type: "empty",
-                            prompt: "请输入密码!"
-                        },
-                        {
-                            type: "minLength[6]",
-                            prompt: "密码不少于6位"
-                        }
-                    ]
-                }
+                <div class="ui calendar end_time field">
+                    <label>结束时间：</label>
+                    <div class="ui input right icon">
+                        <i class="calendar icon"></i>
+                        <input type="text" placeholder="选择结束时间" value="" name="endTime" />
+                    </div>
+                </div>
+                </div>
+                <div class="ui animated fade green button mini right floated" onclick="$('#submit').click()">
+                    <div class="visible content">生成试卷</div>
+                    <div class="hidden content"><i class="arrow right icon"></i></div>
+                </div>
+                <button style="display: none" id="submit"></button>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+<script src="js/axios.min.js"></script>
+<script src="https://cdn.bootcss.com/semantic-ui-calendar/0.0.8/calendar.min.js"></script>
+<script src="js/my.js"></script>
+<script>
+    $(".ui.form").form({
+        inline: true,
+        revalidate: true,
+        transition: "slide down",
+        on: "blur",
+        fields: {
+            singleNum: {
+                identifier: "singleNum",
+                rules: [
+                    {
+                        type: "empty",
+                        prompt: "不可为空"
+                    },
+                    {
+                        type: "number",
+                        prompt: "请输入一个数字"
+                    }
+                ]
+            },
+            singleGrade: {
+                identifier: "singleGrade",
+                rules: [
+                    {
+                        type: "empty",
+                        prompt: "不可为空"
+                    },
+                    {
+                        type: "number",
+                        prompt: "请输入一个数字"
+                    }
+                ]
+            },
+            torfNum: {
+                identifier: "torfNum",
+                rules: [
+                    {
+                        type: "empty",
+                        prompt: "不可为空"
+                    },
+                    {
+                        type: "number",
+                        prompt: "请输入一个数字"
+                    }
+                ]
+            },
+            torfGrade: {
+                identifier: "torfGrade",
+                rules: [
+                    {
+                        type: "empty",
+                        prompt: "不可为空"
+                    },
+                    {
+                        type: "number",
+                        prompt: "请输入一个数字"
+                    }
+                ]
+            },
+            gapGrade: {
+                identifier: "gapGrade",
+                rules: [
+                    {
+                        type: "empty",
+                        prompt: "不可为空"
+                    },
+                    {
+                        type: "number",
+                        prompt: "请输入一个数字"
+                    }
+                ]
+            },
+            gapNum: {
+                identifier: "gapNum",
+                rules: [
+                    {
+                        type: "empty",
+                        prompt: "不可为空"
+                    },
+                    {
+                        type: "number",
+                        prompt: "请输入一个数字"
+                    }
+                ]
+            },
+            essayNum: {
+                identifier: "essayNum",
+                rules: [
+                    {
+                        type: "empty",
+                        prompt: "不可为空"
+                    },
+                    {
+                        type: "number",
+                        prompt: "请输入一个数字"
+                    }
+                ]
+            },
+            essayGrade: {
+                identifier: "essayGrade",
+                rules: [
+                    {
+                        type: "empty",
+                        prompt: "不可为空"
+                    },
+                    {
+                        type: "number",
+                        prompt: "请输入一个数字"
+                    }
+                ]
+            },
+            startTime: {
+                identifier: "startTime",
+                rules: [
+                    {
+                        type: "empty",
+                        prompt: "不可为空"
+                    }
+                ]
+            },
+            endTime: {
+                identifier: "endTime",
+                rules: [
+                    {
+                        type: "empty",
+                        prompt: "不可为空"
+                    }
+                ]
+            },
+            title: {
+                identifier: "title",
+                rules: [
+                    {
+                        type: "empty",
+                        prompt: "不可为空"
+                    },
+                    {
+                        type: "maxLength[30]",
+                        prompt: "限制30个字符"
+                    }
+                ]
+            },
+            courseNum: {
+                identifier: "courseNum",
+                rules: [
+                    {
+                        type: "empty",
+                        prompt: "不可为空"
+                    }
+                ]
+            },
+
+        },
+        onSuccess: function (event, fields) {
+            event.preventDefault();
+            console.log(fields);
+
+            if (!confirm("你确定要创建吗?")) {
+                return;
             }
-        });
-    </script>
+            var data = {
+                singleNum: fields.singleNum,
+                singleGrade: fields.singleGrade,
+                torfNum: fields.torfNum,
+                torfGrade: fields.torfGrade,
+                gapNum: fields.gapNum,
+                gapGrade: fields.gapGrade,
+                essayNum: fields.essayNum,
+                essayGrade: fields.essayGrade,
+                startTime: fields.startTime,
+                endTime: fields.endTime,
+                title: fields.title,
+                courseNum: fields.courseNum
+            };
+            axios.post(getContextPath() + 'tea/exam', data)
+                .then(rep => {
+                    console.log(rep);
+                    if (rep.data.code === 200) {
+
+                    } else {
+                        alert(rep.data.data);
+                    }
+                })
+                .catch(() => alert("请求失败!"));
+
+        }
+    });
+
+
+    $(".start_time").calendar({
+        type: "datetime", //datatime年月日时分  data就是年月日
+        ampm: false, //默认会有 上午，下午，或者AM PM，false就会没有默认的PM AM上午下午；文档写的是中文要在text里设置，但是我写的时候本地好好的是英文，但是一上线就成了中文，如 9:00 上午，所以该处设置成了false
+        endCalendar: $(".end_time"), //开始时间选好后，会调起结束时间，而且结束时间不会大于开始时间
+        formatter: {
+            // 自定义日期的格式
+            date: function (date, settings) {
+                if (!date) return "";
+                var year = date.getFullYear();
+                var month = date.getMonth() + 1;
+                var day = date.getDate();
+                month = month < 10 ? "0" + month : month;
+                day = day < 10 ? "0" + day : day;
+                return year + "-" + month + "-" + day; //不写时分hours minute也会返回
+            },
+            time: function (date, settings, forCalendar) {
+                if (!date) return "";
+                var hour = date.getHours();
+                var minute = date.getMinutes();
+                hour = hour < 10 ? "0" + hour : hour;
+                minute = minute < 10 ? "0" + minute : minute;
+                return hour + ":" + minute;
+            },
+        },
+    });
+    $(".end_time").calendar({
+        type: "datetime",
+        ampm: false,
+        startCalendar: $(".start_time"),
+        formatter: {
+            // 自定义日期的格式
+            date: function (date, settings) {
+                if (!date) return "";
+                var year = date.getFullYear();
+                var month = date.getMonth() + 1;
+                var day = date.getDate();
+                month = month < 10 ? "0" + month : month;
+                day = day < 10 ? "0" + day : day;
+                return year + "-" + month + "-" + day;
+            },
+            time: function (date, settings, forCalendar) {
+                if (!date) return "";
+                var hour = date.getHours();
+                var minute = date.getMinutes();
+                hour = hour < 10 ? "0" + hour : hour;
+                minute = minute < 10 ? "0" + minute : minute;
+                return hour + ":" + minute;
+            },
+        },
+    });
+
+
+</script>
 </html>

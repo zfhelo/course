@@ -1,22 +1,16 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Document</title>
+        <title>个人详情</title>
     </head>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css" />
     <link href="https://cdn.bootcss.com/animate.css/3.7.2/animate.css" rel="stylesheet" />
-
-    <link rel="stylesheet" href="../static/css/my-style.css" />
-    <style>
-        .hide {
-            display: none !important;
-        }
-    </style>
+    <link rel="stylesheet" th:href="@{/css/my-style.css}" />
     <body style="background-image: url(https://i.loli.net/2020/03/27/7zpgTsbHovPuJm6.png);">
         <!--导航-->
-        <nav class="ui  attached segment my-padded-tb-mini">
+        <nav class="ui  attached segment my-padded-tb-mini" th:replace="~{stu/_fragment :: menu('profile')}">
             <div class="ui container">
                 <div class="ui  secondary stackable menu">
                     <h2 class="ui teal header item">Course</h2>

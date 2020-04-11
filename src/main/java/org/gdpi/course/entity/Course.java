@@ -31,4 +31,7 @@ public class Course {
     private LocalDateTime time;
     // 学员数
     private Integer stuNum;
+
+
+    private Teacher teacher;
 }

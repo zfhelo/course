@@ -144,7 +144,8 @@ public class SingleQuestionController {
             return SimpleResponse.error("没有该题目");
         }
 
-        if (question.getReference() > 0) {
+        Integer referenceNum = singleQuestionService.findReferenceNum(question.getId());
+        if (referenceNum > 0) {
             return SimpleResponse.error("改题目被试卷使用无法删除");
         }
 

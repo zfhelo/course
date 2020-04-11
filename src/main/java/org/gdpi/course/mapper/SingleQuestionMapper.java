@@ -49,4 +49,20 @@ public interface SingleQuestionMapper {
      * @return
      */
     Integer updateSingleQuestion(SingleQuestion singleQuestion);
+
+
+    /**
+     * 查找<=指定分数的题目
+     * @param grade
+     * @return
+     */
+    List<SingleQuestion> findGradeLessThan(@Param("grade") Integer grade, @Param("cid") Integer cid);
+
+    /**
+     * 查找题目被试卷使用的情况
+     * @param id
+     * @return
+     */
+    Integer findReferenceNum(Integer id);
+
 }

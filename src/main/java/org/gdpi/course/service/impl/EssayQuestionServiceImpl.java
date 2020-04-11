@@ -48,4 +48,9 @@ public class EssayQuestionServiceImpl implements EssayQuestionService {
     public Integer deleteById(Integer id) {
         return essayQuestionMapper.deleteById(id);
     }
+
+    @Override
+    public Integer findReferenceNum(Integer id) {
+        return essayQuestionMapper.findReferenceNum(id);
+    }
 }

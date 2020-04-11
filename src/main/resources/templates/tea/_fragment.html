@@ -1,6 +1,6 @@
 <div xmlns:th="http://www.thymeleaf.org">
     <!--导航-->
-    <nav th:fragment="menu(active,dropdown)" class="ui  attached segment my-padded-tb-mini">
+    <nav th:fragment="menu(active)" class="ui  attached segment my-padded-tb-mini">
         <div class="ui container">
             <div class="ui  secondary stackable menu">
                 <h2 class="ui teal header item">Course</h2>
@@ -23,9 +23,9 @@
                             zfhelo
                         </div>
                         <i class="dropdown icon"></i>
-                        <div th:replace="${dropdown}" class="menu">
-                            <div class="item">注销</div>
-                            <a class="item" href="edit-detial.html">修改资料</a>
+                        <div class="menu">
+                            <a th:href="@{/logout}" class="item">注销</a>
+                            <a class="item" href="edit-detial.html" th:unless="${active} == 'edit'">修改资料</a>
                         </div>
                     </div>
                 </div>

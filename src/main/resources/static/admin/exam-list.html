@@ -1,8 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<html lang="zh-CN">
+<head>
+    <base id="base" href="/course/">
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta http-equiv="x-ua-compatible" content="ie=edge"/>
+    <script>
+        function getContextPath() {
+            var pathName = document.location.pathname;
+            var index = pathName.substr(1).indexOf("/");
+            var result = pathName.substr(0, index + 1);
+            return result + '/';
+        }
+        document.getElementById('base').href = getContextPath();
+    </script>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css" />
         <link href="https://cdn.bootcss.com/animate.css/3.7.2/animate.css" rel="stylesheet" />
         <link href="https://cdn.bootcss.com/semantic-ui-calendar/0.0.8/calendar.min.css" rel="stylesheet" />
@@ -17,18 +27,13 @@
                         <div class="ui label large black basic icon my-font-weight">
                             当前课程
                             <i class="angle right icon"></i>
-                            <span>未选择</span>
+                            <span id="courseName">未选择</span>
                             <!-- 保存课程号 -->
-                            <input type="hidden" />
+                            <input type="hidden" id="courseId"/>
                         </div>
                         <div class="ui action input">
-                            <input type="text" placeholder="搜索..." />
-                            <select class="ui compact selection dropdown">
-                                <option value="all">课程号</option>
-                                <option value="articles" disabled>题干</option>
-                                <option value="products" disabled>选项</option>
-                            </select>
-                            <div class="ui button">搜索</div>
+                            <input type="text" placeholder="课程号" id="course_num" />
+                            <div class="ui button" onclick="listPage(1)">搜索</div>
                         </div>
                     </div>
 
@@ -40,37 +45,18 @@
                                 <th>结束时间</th>
                                 <th>提交人数</th>
                                 <th>状态</th>
-                                <th width="70">分值</th>
+                                <th width="70">满分</th>
                                 <th width="300">
                                     操作
                                 </th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>数据结构</td>
-                                <td>
-                                    2020
-                                </td>
-                                <td>
-                                    2020
-                                </td>
-                                <td>1</td>
-                                <td>1</td>
-                                <td>1</td>
-                                <td>
-                                    <a class="ui mini primary button" href="exam-detail-edit.html"><i class="icon edit"></i> 编辑</a>
-                                    <a class="ui mini teal button" href="exam-detail-list.html"><i class="icon users"></i> 完成情况</a>
-                                    <button class="ui mini red button"><i class="archive icon"></i>删除</button>
-                                </td>
-                            </tr>
                         </tbody>
                         <tfoot>
                             <tr>
                                 <th colspan="8">
-                                    <div class="ui mini pagination menu">
-                                        <div class="item">1</div>
-                                        <div class="item active">2</div>
+                                    <div class="ui mini pagination menu teal" id="page-nav">
                                     </div>
                                 </th>
                             </tr>
@@ -84,10 +70,105 @@
     <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
     <script src="https://cdn.bootcss.com/semantic-ui-calendar/0.0.8/calendar.min.js"></script>
+    <script src="js/axios.min.js"></script>
 
     <script>
         var f = function() {
             $(".button.reset").click();
         };
+
+        // 查询课程
+        function listPage(page) {
+            var courseNum = $('#course_num').val();
+            if (courseNum.length < 6) {
+                alert("请输入正确的课程号");
+            }
+            var url = getContextPath() + 'tea/exam?page=' + page + '&courseNumber='+courseNum;
+            axios.get(url)
+                .then(rep => {
+
+                    if (rep.data.code === 200) {
+                        $('#courseName').text(rep.data.data.course.name);
+                        $('#courseId').val(rep.data.data.course.id);
+                        createNode(rep.data.data.page.list);
+                        createPageNav(rep.data.data.page);
+                    } else {
+                        alert(rep.data.data);
+                    }
+                })
+                .catch(() => alert("请求失败"));
+        }
+
+        function createNode(list) {
+            $('tbody').empty();
+            list.forEach(item => {
+                var node = $(
+                    '<tr class="animated" id="exam-tr-' + item.id + '">' +
+                    '    <td>'+item.title+'</td>' +
+                    '    <td>'+item.startTime+'</td>' +
+                    '    <td>'+item.endTime+'</td>' +
+                    '    <td>'+item.submitNum+'</td>' +
+                    '    <td>'+(item.isHide === true ? '隐藏':'显示')+'</td>' +
+                    '    <td>'+item.grade+'</td>' +
+                    '    <td>' +
+                    '        <button onclick="jump('+item.id+')" class="ui mini primary button"><i class="icon edit"></i> 编辑</button>' +
+                    '        <button class="ui mini teal button" onclick="jump2('+item.id+')"><i class="icon users"></i> 完成情况</button>' +
+                    '        <button class="ui mini red button" onclick="deleteSingleQue('+item.id+')"><i class="archive icon"></i>删除</button>' +
+                    '    </td>' +
+                    '</tr>'
+                );
+
+                $('tbody').append(node);
+            })
+
+        }
+
+        function createPageNav(page) {
+            $('#page-nav').empty();
+            page.navigatepageNums.forEach(item => {
+                var node = $('<button class="item" id="nav-' + item + '" onclick="listPage(' + item + ')">' + item + '</button>');
+                $('#page-nav').append(node);
+            });
+
+            $('#nav-' + page.pageNum).addClass('active');
+        }
+
+        function deleteSingleQue(id) {
+            if (!confirm("你确定要删除吗!")) {
+                return;
+            }
+            axios.delete(getContextPath()+'tea/exam/'+id)
+                .then(rep => {
+                    if (rep.data.code === 200) {
+                        $('#exam-tr-' + id).addClass('fadeOutLeft');
+                        setTimeout(() => {
+                            $('#exam-tr-' + id).remove();
+                        }, 800);
+                    } else {
+                        alert(rep.data.data);
+                    }
+                })
+                .catch(() => alert('请求失败'));
+        }
+
+        function jump(id) {
+            sessionStorage.setItem("courseNum", $('#course_num').val());
+            location.href='admin/exam-edit.html?id='+id;
+        }
+        function jump2(id) {
+            sessionStorage.setItem("courseNum", $('#course_num').val());
+            location.href='admin/exam-detail-list.html?id='+id;
+        }
+
+        $(function () {
+            var courseNum = sessionStorage.getItem("courseNum");
+            if (courseNum === null) {
+                return;
+            }
+            sessionStorage.removeItem("courseNum");
+
+            $('#course_num').val(courseNum);
+            listPage(1);
+        })
     </script>
 </html>

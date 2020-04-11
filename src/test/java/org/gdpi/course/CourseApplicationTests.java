@@ -1,22 +1,19 @@
 package org.gdpi.course;
 
 import org.gdpi.course.entity.Course;
-import org.gdpi.course.entity.EssayQuestion;
-import org.gdpi.course.entity.GapFillingQuestion;
-import org.gdpi.course.entity.SingleQuestion;
 import org.gdpi.course.mapper.CourseMapper;
-import org.gdpi.course.mapper.EssayQuestionMapper;
-import org.gdpi.course.mapper.GapFillingQuestionMapper;
-import org.gdpi.course.mapper.SingleQuestionMapper;
+import org.gdpi.course.service.TeacherService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.annotation.Resource;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import java.util.Random;
 
 @SpringBootTest
 class CourseApplicationTests {
@@ -38,61 +35,38 @@ class CourseApplicationTests {
 
     @Resource
     private CourseMapper courseMapper;
-
+    @Resource
+    private TeacherService teacherService;
     @Test
-    public void addCourse() {
-        for (int i = 101; i <= 2000; i++) {
-
-            Course course = new Course();
-            course.setTeaId(1);
-            course.setCover("xx");
-            course.setName("数据结构");
-            course.setNumber(i + "");
-            courseMapper.addCourse(course);
+    public void addClass() {
+        for (int j = 1; j < 11; j++) {
+            for (int i = 0; i < 18; i++) {
+                Course c = new Course();
+                c.setName("课程"+i);
+                c.setTeaId(j);
+                c.setNumber("cccccc"+j+i);
+                c.setCover("https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=2462524992,179895772&fm=26&gp=0.jpg");
+                c.setDescription("这是一门课程");
+                courseMapper.addCourse(c);
+            }
         }
+
     }
 
     @Resource
-    private SingleQuestionMapper singleQuestionMapper;
-
+    PasswordEncoder passwordEncoder;
     @Test
-    public void addSingleQue() {
-        for (int i = 1; i < 2000; i++) {
-            SingleQuestion singleQuestion = new SingleQuestion();
-            singleQuestion.setCourseId(3);
-            singleQuestion.setChoose1("a" + i);
-            singleQuestion.setChoose2("b" + i);
-            singleQuestion.setChoose3("c" + i);
-            singleQuestion.setChoose4("d" + i);
-            singleQuestion.setTitle("xxxxxxxxxxxxxx" + i);
-            singleQuestion.setGrade(10);
-            singleQuestionMapper.addSingleQue(singleQuestion);
+    public void addSingle() {
+        for (int i = 0; i < 10; i++) {
+            System.out.print( i+ "----->       ");
+            System.out.println(passwordEncoder.encode("" + i + i + i + i + i + i));
         }
     }
-
-    @Resource
-    private EssayQuestionMapper essayQuestionMapper;
     @Test
-    public void addEssayQue() {
-        for (int i = 1; i < 100; i++) {
-            EssayQuestion que = new EssayQuestion();
-            que.setCourseId(3907);
-            que.setGrade(99);
-            que.setTitle("xxxxxxxxxx");
-            essayQuestionMapper.addEssayQuestion(que);
-        }
-    }
-    @Resource
-    private GapFillingQuestionMapper gapFillingQuestionMapper;
-    @Test
-    public void addGapQue() {
-        for (int i = 1; i < 100; i++) {
-            GapFillingQuestion que = new GapFillingQuestion();
-            que.setCourseId(3);
-            que.setGrade(99);
-            que.setAnswer("3223");
-            que.setTitle("xxxxxxxxxx");
-            gapFillingQuestionMapper.addGapFillingQuestion(que);
+    public void f() {
+        Random random = new Random();
+        for (int i = 0; i < 100; i++) {
+            System.out.println(random.nextInt());
         }
     }
 }

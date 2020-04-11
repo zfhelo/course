@@ -61,4 +61,10 @@ public class CourseServiceImpl implements CourseService {
     public Integer updateCourse(Course course) {
         return courseMapper.updateCourse(course);
     }
+
+    @Override
+    public Course findById(Integer id) {
+        return courseMapper.findById(id);
+    }
+
 }

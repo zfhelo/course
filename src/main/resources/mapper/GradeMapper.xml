@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.gdpi.course.mapper.GradeMapper">
+    <select id="findGradeTable" resultMap="#.gradeWithStudent">
+        SELECT * FROM stu_course_map WHERE stu_id = #{sid} AND course_id = #{cid}
+    </select>
+
+    <update id="updateGradeTable" parameterType="gradeTable">
+        UPDATE stu_course_map SET grade = #{grade}, regular_grade = #{regularGrade} WHERE id = #{id};
+    </update>
+
+    <select id="findByCourseId" parameterType="integer" resultMap="#.gradeWithStudent">
+        SELECT * FROM stu_course_map WHERE course_id = #{cid}
+    </select>
+
+    <select id="findById" resultType="gradeTable" parameterType="Integer">
+        SELECT * FROM stu_course_map WHERE id = #{id}
+    </select>
+
+    <delete id="deleteById" parameterType="Integer">
+        DELETE FROM stu_course_map WHERE id = #{id}
+    </delete>
+</mapper>

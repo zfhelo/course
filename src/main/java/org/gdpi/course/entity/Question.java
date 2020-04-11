@@ -25,7 +25,6 @@ public class Question {
     @Range(min = 0, message = "分值不能小于零")
     private Integer grade;
 
-    private Integer reference;
 
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)

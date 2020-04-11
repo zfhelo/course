@@ -53,4 +53,18 @@ public interface EssayQuestionMapper {
      * @return
      */
     Integer deleteById(Integer id);
+
+    /**
+     * 查找<=指定分数的题目
+     * @param grade
+     * @return
+     */
+    List<EssayQuestion> findGradeLessThan(@Param("grade") Integer grade, @Param("cid") Integer cid);
+
+    /**
+     * 查找题目被试卷使用的情况
+     * @param id
+     * @return
+     */
+    Integer findReferenceNum(Integer id);
 }

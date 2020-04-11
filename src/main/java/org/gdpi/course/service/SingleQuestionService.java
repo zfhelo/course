@@ -50,4 +50,11 @@ public interface SingleQuestionService {
      * @return
      */
     Integer updateSingleQuestion(SingleQuestion singleQuestion);
+
+    /**
+     * 查找题目被试卷使用的情况
+     * @param id
+     * @return
+     */
+    Integer findReferenceNum(Integer id);
 }

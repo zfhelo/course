@@ -167,7 +167,8 @@ public class EssayQuestionController {
             return SimpleResponse.error("未知题目");
         }
 
-        if (que.getReference() > 0) {
+        Integer referenceNum = essayQuestionService.findReferenceNum(que.getId());
+        if (referenceNum > 0) {
             return SimpleResponse.error("该题目被其他试题引用无法删除");
         }
 

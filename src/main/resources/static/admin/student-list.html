@@ -1,130 +1,267 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css" />
-        <link href="https://cdn.bootcss.com/animate.css/3.7.2/animate.css" rel="stylesheet" />
-        <link rel="stylesheet" href="css/my-style.css" />
-        <title>首页</title>
-    </head>
-    <body>
-        <div class="ui container my-padding-top-2">
-            <div class="ui stackable">
-                <div class="ui horizontal divider"><h1>学员管理</h1></div>
-                <div class="animated bounceInDown">
-                    <div class="ui search">
-                        <div class="ui label large black basic icon my-font-weight">
-                            当前课程
-                            <i class="angle right icon"></i>
-                            <span>未选择</span>
-                            <!-- 保存课程号 -->
-                            <input type="hidden" />
-                        </div>
-                        <div class="ui action input">
-                            <input type="text" placeholder="搜索..." />
-                            <select class="ui compact selection dropdown">
-                                <option value="all">课程号</option>
-                                <option value="articles" disabled>题干</option>
-                                <option value="products" disabled>选项</option>
-                            </select>
-                            <div class="ui button">搜索</div>
-                        </div>
+<html lang="zh-CN">
+<head>
+    <base id="base" href="/course/">
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta http-equiv="x-ua-compatible" content="ie=edge"/>
+    <script>
+        function getContextPath() {
+            var pathName = document.location.pathname;
+            var index = pathName.substr(1).indexOf("/");
+            var result = pathName.substr(0, index + 1);
+            return result + '/';
+        }
 
-                        <div class="ui button red mini right floated">删除已选题目</div>
-                    </div>
-
-                    <table class="ui celled table">
-                        <thead>
-                            <tr>
-                                <th width="1">
-                                    <div class="ui mini checkbox">
-                                        <input type="checkbox" />
-                                        <label></label>
-                                    </div>
-                                </th>
-                                <th>姓名</th>
-                                <th>加入时间</th>
-                                <th>平时分</th>
-                                <th>成绩</th>
-                                <th>
-                                    操作
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>
-                                    <div class="ui mini checkbox">
-                                        <input type="checkbox" />
-                                        <label></label>
-                                    </div>
-                                </td>
-                                <td>数据结构</td>
-                                <td>100</td>
-                                <td>99</td>
-                                <td>1</td>
-                                <td width="190">
-                                    <button class="ui mini primary button" onclick="showEditDialog()"><i class="icon edit"></i> 编辑</button>
-                                    <button class="ui mini red button"><i class="archive icon"></i>删除</button>
-                                </td>
-                            </tr>
-                        </tbody>
-                        <tfoot>
-                            <tr>
-                                <th colspan="8">
-                                    <div class="ui mini pagination menu">
-                                        <div class="item">1</div>
-                                        <div class="item active">2</div>
-                                    </div>
-                                </th>
-                            </tr>
-                        </tfoot>
-                    </table>
-                    <span class="my-font-tips">定位到对应课程在进行本页其他操作</span>
+        document.getElementById('base').href = getContextPath();
+    </script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css"/>
+    <link href="https://cdn.bootcss.com/animate.css/3.7.2/animate.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="css/my-style.css"/>
+</head>
+<body>
+<div class="ui container my-padding-top-2">
+    <div class="ui stackable">
+        <div class="ui horizontal divider"><h1>学员管理</h1></div>
+        <div class="animated bounceInDown">
+            <div class="ui search">
+                <div class="ui label large black basic icon my-font-weight">
+                    当前课程
+                    <i class="angle right icon"></i>
+                    <span id="course_name">未选择</span>
+                    <!-- 保存课程号 -->
+                    <input type="hidden" id="course_id"/>
+                </div>
+                <div class="ui action input">
+                    <input type="text" placeholder="课程号..." id="course_num"/>
+                    <div class="ui button right floated" onclick="listPage(1)">搜索</div>
                 </div>
             </div>
-            <div class="ui tiny modal">
-                <div class="header">修改成绩</div>
-                <div class="input content">
+
+            <table class="ui celled table">
+                <thead>
+                <tr>
+                    <th>姓名</th>
+                    <th>加入时间</th>
+                    <th>平时分</th>
+                    <th>成绩</th>
+                    <th>
+                        操作
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+
+                </tbody>
+                <tfoot>
+                <tr>
+                    <th colspan="8">
+                        <div class="ui mini pagination menu teal" id="page-nav">
+                        </div>
+                    </th>
+                </tr>
+                </tfoot>
+            </table>
+            <span class="my-font-tips">定位到对应课程在进行本页其他操作</span>
+        </div>
+    </div>
+    <div class="ui tiny modal">
+        <div class="header">修改成绩</div>
+        <div class="input content inline">
+            <form action="#" class="ui form">
+                <div class="field">
+                    <input type="hidden" id="grade-id">
                     <div class="ui labeled input">
                         <div class="ui label">
                             平时分
                         </div>
-                        <input type="text" />
+                        <input type="text" name="regularGrade" id="regularGrade"/>
                     </div>
+                </div>
+
+                <div class="field">
                     <div class="ui labeled input">
-                        <div class="ui label">
+                        <div class="ui label" >
                             总成绩
                         </div>
-                        <input type="text" />
+                        <input type="text" name="grade" id="grade"/>
                     </div>
                 </div>
-                <div class="actions">
-                    <div class="ui black deny mini button">
-                        取消
-                    </div>
-                    <div class="ui right icon green mini button">
-                        更新
-                        <i class="icon check"></i>
-                    </div>
-                </div>
+                <button style="display: none" id="submit"></button>
+                <button type="button" style="display: none" id="clear" class="button reset"></button>
+            </form>
+        </div>
+
+        <div class="actions">
+            <div class="ui black deny mini button" onclick="f()">
+                取消
+            </div>
+            <div class="ui right icon green mini button" onclick="$('#submit').click()">
+                更新
+                <i class="icon check"></i>
             </div>
         </div>
-    </body>
-    <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
-    <script src="https://cdn.bootcss.com/wangEditor/10.0.13/wangEditor.min.js"></script>
-    <script>
-        var showEditDialog = function() {
-            $(".ui.modal").modal("show");
-        };
-        var f = function() {
-            $(".button.reset").click();
-        };
+    </div>
+</div>
+</body>
+<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+<script src="js/axios.min.js"></script>
+<script>
+    function showEditDialog(id) {
+        var url = getContextPath() + 'tea/grade/' + id;
+        axios.get(url)
+            .then(rep => {
 
-        var E = window.wangEditor;
-        var editor = new E("#div1");
-        editor.create();
-    </script>
+                if (rep.data.code === 200) {
+                    $('#grade').val(rep.data.data.grade);
+                    $('#regularGrade').val(rep.data.data.regularGrade);
+                    $('#grade-id').val(rep.data.data.id);
+                } else {
+                    alert(rep.data.data);
+                }
+            })
+            .catch(() => alert("请求失败"));
+
+
+        $(".ui.modal").modal("show");
+
+
+    };
+    var f = function () {
+        $(".button.reset").click();
+    };
+
+    function listPage(page) {
+        var courseNumber = $('#course_num').val();
+
+        if (courseNumber.length < 6) {
+            alert("请输入正确的课程号");
+            return;
+        }
+        var url = getContextPath() + 'tea/grade?page=' + page + '&courseNumber=' + courseNumber;
+        axios.get(url)
+            .then(rep => {
+
+                if (rep.data.code === 200) {
+                    $('#course_id').val(rep.data.data.course.id);
+                    $('#course_name').text(rep.data.data.course.name);
+                    // 创建课程节点
+                    createQueNode(rep.data.data.page.list);
+                    // 创建页码
+                    createPageNav(rep.data.data.page);
+                } else {
+                    alert(rep.data.data);
+                }
+
+            })
+            .catch(() => alert("查询失败"));
+    }
+
+
+    function createQueNode(list) {
+        $('tbody').empty();
+        list.forEach(item => {
+            var node = $(
+                '<tr class="animated" id="que-tr-' + item.id + '">' +
+                '    <td>' + item.student.nickname + '</td>' +
+                '    <td>' + item.time.replace('T', ' ') + '</td>' +
+                '    <td id="regularGrade-'+item.id+'">' + item.regularGrade + '</td>' +
+                '    <td id="grade-'+item.id+'">' + item.grade + '</td>' +
+                '    <td width="190">' +
+                '        <button class="ui mini primary button" onclick="showEditDialog(' + item.id + ')"><i class="icon edit"></i> 编辑</button>' +
+                '        <button class="ui mini red button" onclick="deleteSingleQue('+item.id+')"><i class="archive icon"></i>删除</button>' +
+                '    </td>' +
+                '</tr>'
+            );
+            $('tbody').append(node);
+        })
+    }
+
+    function createPageNav(page) {
+        $('#page-nav').empty();
+        page.navigatepageNums.forEach(item => {
+            var node = $('<button class="item" id="nav-' + item + '" onclick="listPage(' + item + ')">' + item + '</button>');
+            $('#page-nav').append(node);
+        });
+
+        $('#nav-' + page.pageNum).addClass('active');
+    }
+
+
+    // 移除学员
+    function deleteSingleQue(id) {
+        if (!confirm('你确定要确定移除该学员吗! 这将删除该学员在此课程的所有信息')) {
+            return;
+        }
+        axios.delete(getContextPath()+'tea/grade/'+id)
+            .then(rep => {
+                if (rep.data.code === 200) {
+                    $('#que-tr-' + id).addClass('fadeOutLeft');
+                    setTimeout(() => {
+                        $('#que-tr-' + id).remove();
+                    }, 800);
+                } else {
+                    alert(rep.data.data);
+                }
+            })
+            .catch(() => alert('请求失败'));
+    }
+
+
+    $(".ui.form").form({
+        inline: true,
+        revalidate: true,
+        transition: "slide down",
+        on: "blur",
+        fields: {
+            grade: {
+                identifier: "grade",
+                rules: [
+                    {
+                        type: "empty",
+                        prompt: "请输入分值!"
+                    },
+                    {
+                        type: "number",
+                        prompt: "请输入数字"
+                    }
+                ]
+            },
+            regularGrade: {
+                identifier: "regularGrade",
+                rules: [
+                    {
+                        type: "empty",
+                        prompt: "请输入分值!"
+                    },
+                    {
+                        type: "number",
+                        prompt: "请输入数字"
+                    }
+                ]
+            }
+        },
+        onSuccess: function (event, fields) {
+            event.preventDefault();
+
+
+            axios.put(getContextPath() + 'tea/grade', {
+                regularGrade:fields.regularGrade,
+                grade:fields.grade,
+                id:$('#grade-id').val()
+            })
+                .then(rep => {
+                    if (rep.data.code === 200) {
+                        $('#regularGrade-'+rep.data.data.id).text(rep.data.data.regularGrade);
+                        $('#grade-'+rep.data.data.id).text(rep.data.data.grade);
+                        f();
+                    } else {
+                        alert(rep.data.data)
+                    }
+
+                })
+                .catch(() => alert("请求失败"));
+        }
+    });
+</script>
 </html>

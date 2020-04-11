@@ -29,4 +29,12 @@
         UPDATE single_question SET title = #{title}, choose1 = #{choose1}, choose2 = #{choose2}, choose3 = #{choose3}, choose4 = #{choose4}
         WHERE id = #{id}
     </update>
+
+    <select id="findGradeLessThan" resultType="singleQuestion">
+        SELECT * FROM single_question WHERE grade &lt;= #{grade} AND course_id = #{cid}
+    </select>
+
+    <select id="findReferenceNum" parameterType="Integer">
+        SELECT count(*) FROM paper_single_map WHERE single_id = #{id}
+    </select>
 </mapper>
