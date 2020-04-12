@@ -32,7 +32,7 @@
         SELECT * FROM gap_filling_question WHERE grade &lt;= #{grade} AND course_id = #{cid}
     </select>
 
-    <select id="findReferenceNum" parameterType="Integer">
+    <select id="findReferenceNum" parameterType="Integer" resultType="integer">
         SELECT count(*) FROM paper_gap_map  WHERE essay_id = #{gap_id}
     </select>
 </mapper>

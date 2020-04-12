@@ -102,4 +102,14 @@ public interface ExamMapper {
      * @return
      */
     Integer deleteById(Integer id);
+
+    /**
+     * 查找已过期的试卷
+     * @param cid
+     * @return
+     */
+    List<ExamModel> findOverdue(@Param("cid") Integer cid, @Param("nowTime") String nowTime);
+
+
+
 }

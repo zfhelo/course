@@ -23,4 +23,9 @@ public class ExamPaperServiceImpl implements ExamPaperService {
     public List<ExamPaper> findByModelId(Integer modelId) {
         return examPaperMapper.findByModelId(modelId);
     }
+
+    @Override
+    public List<ExamPaper> findAllBySid(Integer sid, Integer cid) {
+        return examPaperMapper.findAllBySid(sid, cid);
+    }
 }

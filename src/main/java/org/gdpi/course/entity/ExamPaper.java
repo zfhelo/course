@@ -25,4 +25,7 @@ public class ExamPaper {
     private LocalDateTime updateTime;
 
     public Student student;
+
+    public ExamModel examModel;
 }
+

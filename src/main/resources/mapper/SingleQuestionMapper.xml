@@ -34,7 +34,7 @@
         SELECT * FROM single_question WHERE grade &lt;= #{grade} AND course_id = #{cid}
     </select>
 
-    <select id="findReferenceNum" parameterType="Integer">
+    <select id="findReferenceNum" parameterType="Integer" resultType="integer">
         SELECT count(*) FROM paper_single_map WHERE single_id = #{id}
     </select>
 </mapper>

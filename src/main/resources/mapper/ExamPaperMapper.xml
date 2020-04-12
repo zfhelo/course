@@ -7,4 +7,11 @@
         SELECT * FROM exam_paper WHERE model_id = #{modelId}
     </select>
 
+    <select id="findSubmitBySid" parameterType="Integer" resultType="examPaper">
+        SELECT * FROM exam_paper WHERE stu_id = #{sid} AND status = true
+    </select>
+
+    <select id="findAllBySid" resultMap="#.paperAndModle">
+        SELECT * FROM exam_paper WHERE stu_id = #{sid} AND model_id IN(SELECT id FROM exam_model WHERE course_id =#{cid})
+    </select>
 </mapper>

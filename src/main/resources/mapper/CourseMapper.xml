@@ -41,4 +41,8 @@
     <select id="findStudentId" parameterType="integer" resultType="Integer">
         SELECT stu_id FROM stu_course_map WHERE course_id = #{cid}
     </select>
+
+    <select id="findCourseBySid" parameterType="int" resultType="course">
+        SELECT * FROM course WHERE id IN(SELECT course_id FROM stu_course_map);
+    </select>
 </mapper>

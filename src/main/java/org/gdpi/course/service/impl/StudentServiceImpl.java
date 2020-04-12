@@ -3,6 +3,9 @@ package org.gdpi.course.service.impl;
 import org.gdpi.course.entity.Course;
 import org.gdpi.course.entity.Student;
 import org.gdpi.course.exception.UserAlreadyExistedException;
+import org.gdpi.course.mapper.CourseMapper;
+import org.gdpi.course.mapper.ExamMapper;
+import org.gdpi.course.mapper.ExamPaperMapper;
 import org.gdpi.course.mapper.StudentMapper;
 import org.gdpi.course.service.StudentService;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -10,6 +13,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -22,6 +27,12 @@ public class StudentServiceImpl implements StudentService {
     private StudentMapper studentMapper;
     @Resource
     private PasswordEncoder passwordEncoder;
+    @Resource
+    private CourseMapper courseMapper;
+    @Resource
+    private ExamMapper examMapper;
+    @Resource
+    private ExamPaperMapper examPaperMapper;
 
 
     @Override
@@ -66,5 +77,25 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public Student findById(Integer id) {
         return studentMapper.findById(id);
+    }
+
+    /**
+     * 瞎写
+     * @param sid
+     * @return
+     */
+    public List<Course> initExamIndex(Integer sid) {
+        List<Course> courses = courseMapper.findCourseBySid(sid);
+
+        for (Course course:courses) {
+            course.setFinished(examPaperMapper.findSubmitBySid(sid).size());
+            Date date = new Date();
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String format = sdf.format(date);
+            course.setOverdue(examMapper.findOverdue(course.getId(), format).size());
+            course.setPublished(examMapper.findByCourseId(course.getId()).size());
+        }
+
+        return courses;
     }
 }

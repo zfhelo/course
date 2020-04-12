@@ -55,4 +55,8 @@
         DELETE FROM exam_model WHERE id = #{id}
     </delete>
 
+    <select id="findOverdue"  resultType="examModel">
+        select * from exam_model where  course_id = #{cid} AND  end_time &lt; #{nowTime};
+    </select>
+
 </mapper>

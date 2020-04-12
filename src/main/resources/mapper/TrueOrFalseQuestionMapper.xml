@@ -32,7 +32,7 @@
         SELECT * FROM true_or_false_question WHERE grade &lt;= #{grade} AND course_id = #{cid}
     </select>
 
-    <select id="findReferenceNum" parameterType="Integer">
+    <select id="findReferenceNum" parameterType="Integer" resultType="integer">
         SELECT count(*) FROM paper_torf_map WHERE torf_id = #{id}
     </select>
 </mapper>

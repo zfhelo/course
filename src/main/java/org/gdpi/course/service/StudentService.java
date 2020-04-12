@@ -64,5 +64,7 @@ public interface StudentService {
      * @return
      */
     Student findById(Integer id);
+
+    List<Course> initExamIndex(Integer sid);
 }
 

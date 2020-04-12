@@ -2,21 +2,14 @@
     <nav class="ui  attached segment my-padded-tb-mini" th:fragment="menu(active)">
         <div class="ui container">
             <div class="ui  secondary stackable menu">
-                <h2 class="ui teal header item">Course</h2>
+                <h2 class="ui green header item">Course</h2>
                 <a th:href="@{/}" class="item" th:classappend="${active == 'index'} ? 'active'"><i class="home icon"></i>首页</a>
                 <a th:href="@{/stu/course}" class="item" th:classappend="${active == 'course'} ? 'active'"><i class="book icon"></i>课程</a>
                 <a href="#" class="item" th:classappend="${active == 'xx2'} ? 'active'"><i class="sticky note outline icon"></i>作业</a>
-                <a href="#" class="item" th:classappend="${active == 'xx3'} ? 'active'"><i class="pen square icon"></i>考试</a>
+                <a th:href="@{/stu/examIndex}" class="item" th:classappend="${active == 'exam'} ? 'active'"><i class="pen square icon"></i>考试</a>
                 <a href="#" class="item" th:classappend="${active == 'xxx4'} ? 'active'"><i class="comment alternate outline icon"></i>讨论区</a>
                 <a href="#" class="item" th:classappend="${active == 'xxx5'} ? 'active'"><i class="box icon"></i>资源</a>
 
-                <!--搜索-->
-                <!--<div class="right item">-->
-                <!--    <div class="ui icon input ">-->
-                <!--        <input type="text" placeholder="搜索..." />-->
-                <!--        <i class="search icon link"></i>-->
-                <!--    </div>-->
-                <!--</div>-->
                 <div class="right menu">
                     <div class="ui dropdown item">
                         <div>

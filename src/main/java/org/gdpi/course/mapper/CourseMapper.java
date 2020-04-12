@@ -74,4 +74,11 @@ public interface CourseMapper {
      */
     List<Integer> findStudentId(Integer cid);
 
+    /**
+     * 查询选课的学生
+      * @param sid
+     * @return
+     */
+    List<Course> findCourseBySid(Integer sid);
+
 }

@@ -91,6 +91,7 @@
                     <div class="hidden content"><i class="arrow right icon"></i></div>
                 </div>
                 <button style="display: none" id="submit"></button>
+                <button type="button" class="ui black clear button small hide" id="clear"></button>
             </form>
         </div>
     </div>
@@ -279,7 +280,7 @@
                 .then(rep => {
                     console.log(rep);
                     if (rep.data.code === 200) {
-
+                        $('#clear').click();
                     } else {
                         alert(rep.data.data);
                     }

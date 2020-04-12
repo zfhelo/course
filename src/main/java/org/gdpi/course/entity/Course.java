@@ -34,4 +34,8 @@ public class Course {
 
 
     private Teacher teacher;
+    // 拓展属性
+    private Integer published;
+    private Integer overdue;
+    private Integer finished;
 }

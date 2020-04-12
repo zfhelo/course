@@ -3,7 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="#">
-    <resultMap id="courseWithTeacher" type="course">
+    <resultMap id="baseCourse" type="course">
         <id column="id" property="id"/>
         <result column="name" property="name"/>
         <result column="cover" property="cover"/>
@@ -11,18 +11,16 @@
         <result column="number" property="number"/>
         <result column="time" property="time"/>
         <result column="description" property="description"/>
+    </resultMap>
+
+    <resultMap id="courseWithTeacher" extends="baseCourse" type="course">
         <association property="teacher" javaType="teacher" column="tea_id" select="org.gdpi.course.mapper.TeacherMapper.findById"/>
     </resultMap>
-    <resultMap id="courseWithStuCount" type="course">
-        <id column="id" property="id"/>
-        <result column="name" property="name"/>
-        <result column="cover" property="cover"/>
-        <result column="tea_id" property="teaId"/>
-        <result column="number" property="number"/>
-        <result column="time" property="time"/>
-        <result column="description" property="description"/>
+
+    <resultMap id="courseWithStuCount" extends="baseCourse" type="course">
         <association property="stuNum" javaType="integer" column="id"  select="org.gdpi.course.mapper.CourseMapper.findStudentCount"/>
     </resultMap>
+
     <resultMap id="gradeWithStudent" type="gradeTable">
         <id column="id" property="id"/>
         <result column="stu_id" property="stuId"/>
@@ -32,6 +30,7 @@
         <result column="time" property="time"/>
         <association property="student" javaType="student" column="stu_id"  select="org.gdpi.course.mapper.StudentMapper.findById"/>
     </resultMap>
+
     <resultMap id="modelAndSubmitNum" type="examModel">
         <id column="id" property="id"/>
         <result column="title" property="title"/>
@@ -42,12 +41,20 @@
         <result column="is_hide" property="isHide"/>
         <association property="submitNum" javaType="integer" column="id"  select="org.gdpi.course.mapper.ExamMapper.findSubmitNum"/>
     </resultMap>
-    <resultMap id="paperAndStu" type="examPaper">
+
+    <resultMap id="basePaper" type="examPaper">
         <id column="id" property="id"/>
         <result column="stu_id" property="stuId"/>
         <result column="model_id" property="modelId"/>
         <result column="grade" property="grade"/>
         <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <resultMap id="paperAndStu" type="examPaper" extends="basePaper">
         <association property="student" javaType="student" column="stu_id"  select="org.gdpi.course.mapper.StudentMapper.findById"/>
+    </resultMap>
+
+    <resultMap id="paperAndModle" type="examPaper" extends="basePaper">
+        <association property="examModel" javaType="examModel" column="model_id"  select="org.gdpi.course.mapper.ExamMapper.findById"/>
     </resultMap>
 </mapper>
