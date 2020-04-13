@@ -2,26 +2,24 @@ package org.gdpi.course.controller;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import org.gdpi.course.entity.Course;
-import org.gdpi.course.entity.ExamModel;
-import org.gdpi.course.entity.Teacher;
+import org.gdpi.course.entity.*;
+import org.gdpi.course.exception.ExamPaperNotFoundException;
 import org.gdpi.course.reponse.SimpleResponse;
-import org.gdpi.course.service.CourseService;
-import org.gdpi.course.service.ExamPaperService;
-import org.gdpi.course.service.ExamService;
-import org.gdpi.course.service.TeacherService;
+import org.gdpi.course.service.*;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
+import java.time.LocalDateTime;
+import java.util.Map;
 
 /**
  * @author zhf
  */
-@RestController
+@Controller
 public class ExamPaperController {
 
     @Resource
@@ -32,6 +30,8 @@ public class ExamPaperController {
     private CourseService courseService;
     @Resource
     private ExamPaperService examPaperService;
+    @Resource
+    private StudentService studentService;
 
     /**
      * 分页查找试卷
@@ -41,6 +41,7 @@ public class ExamPaperController {
      * @return
      */
     @GetMapping("/tea/paper")
+    @ResponseBody
     public SimpleResponse listPaper(@RequestParam Integer modelId,
                                     @RequestParam(defaultValue = "1") Integer page,
                                     @AuthenticationPrincipal UserDetails userDetails) {
@@ -61,5 +62,100 @@ public class ExamPaperController {
                         .doSelectPageInfo(() -> examPaperService.findByModelId(modelId));
 
         return SimpleResponse.success(pageInfo);
+    }
+
+    /**
+     * 考试获取题目
+     * @param id
+     * @param userDetails
+     * @param mv
+     * @return
+     */
+    @GetMapping("/stu/exam/{id:\\d+}")
+    public ModelAndView exam(@PathVariable Integer id,
+                             @AuthenticationPrincipal UserDetails userDetails,
+                             ModelAndView mv) {
+        Student stu = studentService.findByUsername(userDetails.getUsername());
+        ExamPaper paper = examPaperService.findById(id);
+
+        if (paper == null || !stu.getId().equals(paper.getStuId())) {
+            throw new ExamPaperNotFoundException("试卷没有找到");
+        }
+
+        ExamPaper questions = examPaperService.getQuestions(id);
+        mv.addObject("user", stu);
+        mv.addObject("questions", questions);
+        mv.setViewName("stu/exam");
+        return mv;
+
+    }
+
+
+    /**
+     * 提交试卷
+     * @param que 答案
+     * @param id 试卷id
+     * @param userDetails
+     * @return
+     */
+    @PutMapping("/stu/saveExam/{id:\\d+}")
+    @ResponseBody
+    public SimpleResponse saveExam(@RequestBody Map<String, Map<Integer, Object>> que,
+                                     @PathVariable Integer id,
+                                     @AuthenticationPrincipal UserDetails userDetails) {
+
+        ExamPaper paper = examPaperService.findById(id);
+
+        if (paper == null) {
+            return SimpleResponse.error("试卷不存在");
+        }
+        Student stu = studentService.findByUsername(userDetails.getUsername());
+        if (paper.getStuId() != stu.getId()) {
+            return SimpleResponse.error("权限不足");
+        }
+        if (paper.getStatus()) {
+            return SimpleResponse.error("只可以提交一次");
+        }
+        if (paper.getExamModel().getIsHide()) {
+            return SimpleResponse.error("无效操作");
+        }
+        if (paper.getExamModel().getEndTime().compareTo(LocalDateTime.now()) < 0) {
+            return SimpleResponse.error("已结束");
+        }
+        examPaperService.saveUserAnswer(que, id);
+
+
+        return SimpleResponse.success();
+    }
+
+    @PutMapping("/stu/submitExam/{id:\\d+}")
+    @ResponseBody
+    public SimpleResponse submitExam(@RequestBody Map<String, Map<Integer, Object>> que,
+                                   @PathVariable Integer id,
+                                   @AuthenticationPrincipal UserDetails userDetails) {
+
+
+        ExamPaper paper = examPaperService.findById(id);
+
+        if (paper == null) {
+            return SimpleResponse.error("试卷不存在");
+        }
+        Student stu = studentService.findByUsername(userDetails.getUsername());
+        if (paper.getStuId() != stu.getId()) {
+            return SimpleResponse.error("权限不足");
+        }
+        if (paper.getStatus()) {
+            return SimpleResponse.error("只可以提交一次");
+        }
+        if (paper.getExamModel().getIsHide()) {
+            return SimpleResponse.error("无效操作");
+        }
+        if (paper.getExamModel().getEndTime().compareTo(LocalDateTime.now()) < 0) {
+            return SimpleResponse.error("已结束");
+        }
+
+        examPaperService.submitUserAnswer(que, id);
+
+        return SimpleResponse.success();
     }
 }

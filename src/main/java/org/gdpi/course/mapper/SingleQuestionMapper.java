@@ -65,4 +65,13 @@ public interface SingleQuestionMapper {
      */
     Integer findReferenceNum(Integer id);
 
+    /**
+     * 通过试卷id查找所有选择题
+     * @param pid
+     * @return
+     */
+    List<SingleQuestion> findByPid(Integer pid);
+
+
+
 }

@@ -34,4 +34,12 @@
     <select id="findReferenceNum" parameterType="Integer" resultType="integer">
         SELECT count(*) FROM paper_essay_map  WHERE essay_id = #{id}
     </select>
+
+
+    <select id="findByPid" parameterType="Integer" resultType="essayQuestion">
+        SELECT s.*, s2.user_answer FROM essay_question s, paper_essay_map s2
+        WHERE s.id IN(SELECT essay_id FROM paper_essay_map WHERE paper_id = #{pid})
+        AND (s.id = s2.essay_id AND #{pid} = s2.paper_id)
+    </select>
+
 </mapper>

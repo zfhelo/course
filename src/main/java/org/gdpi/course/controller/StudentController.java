@@ -46,7 +46,7 @@ public class StudentController {
         List<Course> course = studentService.findCourseById(stu.getId());
 
         mv.addObject("course", course);
-
+        mv.addObject("user", stu);
         mv.setViewName("stu/course");
 
         return mv;
@@ -106,6 +106,12 @@ public class StudentController {
 
     }
 
+    /**
+     * 初始化
+     * @param userDetails
+     * @param mv
+     * @return
+     */
     @GetMapping("/examIndex")
     public ModelAndView examIndex(@AuthenticationPrincipal UserDetails userDetails,
                                   ModelAndView mv) {
@@ -114,10 +120,18 @@ public class StudentController {
 
         List<Course> courses = studentService.initExamIndex(stu.getId());
         mv.addObject("course", courses);
+        mv.addObject("user", stu);
        mv.setViewName("stu/exam_index");
        return mv;
     }
 
+    /**
+     * 初始化
+     * @param courseId
+     * @param userDetails
+     * @param mv
+     * @return
+     */
     @GetMapping("/examList")
     public ModelAndView examList(@RequestParam Integer courseId,
                                  @AuthenticationPrincipal UserDetails userDetails,
@@ -126,10 +140,11 @@ public class StudentController {
         Student stu = studentService.findByUsername(userDetails.getUsername());
 
         List<ExamPaper> paper = examPaperService.findAllBySid(stu.getId(), courseId);
-
+        mv.addObject("user", stu);
         mv.addObject("paper", paper);
         mv.setViewName("stu/exam_list");
         return mv;
     }
+
 
 }

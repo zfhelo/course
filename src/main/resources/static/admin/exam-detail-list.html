@@ -83,10 +83,10 @@
                 var node = $(
                     '<tr class="animated" id="paper-tr-' + item.id + '">' +
                     '    <td>'+item.student.nickname+'</td>' +
-                    '    <td>'+(item.updateTime === null ? '未提交':item.updateTime)+'</td>' +
+                    '    <td>'+(item.updateTime === null ? '未提交':item.updateTime.replace('T', ' '))+'</td>' +
                     '    <td>'+item.grade+'</td>' +
                     '    <td width="190">' +
-                    '         <a href="subsequent_add_..." class="ui mini primary button"><i class="icon edit"></i> 批阅</a>' +
+                    '         <a href="admin/exam-paper.html?id='+item.id+'" class="ui mini primary button"><i class="icon edit"></i> 批阅</a>' +
                     '    </td>' +
                     '</tr>'
                 );

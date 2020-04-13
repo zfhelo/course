@@ -69,4 +69,11 @@ public interface TrueOrFalseQuestionMapper {
      */
     Integer findReferenceNum(Integer id);
 
+    /**
+     * 通过试卷id查找所有选择题
+     * @param pid
+     * @return
+     */
+    List<TrueOrFalseQuestion> findByPid(Integer pid);
+
 }

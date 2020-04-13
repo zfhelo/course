@@ -15,4 +15,7 @@ public class GapFillingQuestion extends Question {
     @NotBlank(message = "答案不能为空")
     @Length(max = 500)
     private String answer;
+
+    private String userAnswer;
+
 }

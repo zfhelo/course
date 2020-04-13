@@ -13,4 +13,5 @@ import javax.validation.constraints.NotNull;
 public class TrueOrFalseQuestion extends Question {
     @NotNull
     private Boolean answer;
+    private Boolean userAnswer;
 }

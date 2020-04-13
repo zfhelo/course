@@ -11,7 +11,7 @@
     </head>
     <body style="background-image: url('https://i.loli.net/2020/04/08/X1y2R4pHI5d6qNn.png')">
         <!--导航-->
-        <nav class="ui  attached segment my-padded-tb-mini" th:replace="~{stu/_fragment :: menu('exam')}">
+        <nav class="ui  attached segment my-padded-tb-mini" th:replace="~{stu/_fragment :: menu('exam', ${user.getPhoto()}, ${user.getNickname()})}">
             <div class="ui container">
                 <div class="ui  secondary stackable menu">
                     <h2 class="ui teal header item">Course</h2>

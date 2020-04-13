@@ -57,4 +57,21 @@
     <resultMap id="paperAndModle" type="examPaper" extends="basePaper">
         <association property="examModel" javaType="examModel" column="model_id"  select="org.gdpi.course.mapper.ExamMapper.findById"/>
     </resultMap>
+    <!--查询试卷及用户答案-->
+    <resultMap id="paperAndQue" extends="basePaper" type="examPaper">
+        <collection property="singleQues" ofType="singleQuestion" column="id" select="org.gdpi.course.mapper.SingleQuestionMapper.findByPid"/>
+        <collection property="torfQues" ofType="trueOrFalseQuestion" column="id" select="org.gdpi.course.mapper.TrueOrFalseQuestionMapper.findByPid"/>
+        <collection property="gapQues" ofType="gapFillingQuestion" column="id" select="org.gdpi.course.mapper.GapFillingQuestionMapper.findByPid"/>
+        <collection property="essayQues" ofType="essayQuestion" column="id" select="org.gdpi.course.mapper.EssayQuestionMapper.findByPid"/>
+    </resultMap>
+
+    <resultMap id="baseQue" type="question">
+        <id column="id" property="id"/>
+        <result column="title" property="title"/>
+        <result column="grade" property="grade"/>
+        <result column="time" property="time"/>
+        <result column="course_id" property="course_id"/>
+    </resultMap>
+
+
 </mapper>

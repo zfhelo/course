@@ -1,5 +1,5 @@
 <div xmlns:th="http://www.thymeleaf.org">
-    <nav class="ui  attached segment my-padded-tb-mini" th:fragment="menu(active)">
+    <nav class="ui  attached segment my-padded-tb-mini" th:fragment="menu(active, headUrl, name)">
         <div class="ui container">
             <div class="ui  secondary stackable menu">
                 <h2 class="ui green header item">Course</h2>
@@ -13,8 +13,8 @@
                 <div class="right menu">
                     <div class="ui dropdown item">
                         <div>
-                            <img class="ui avatar image" src="https://unsplash.it/100/100?image=1005" />
-                            zfhelo
+                            <img class="ui avatar image" th:src="${headUrl}" />
+                            [[${name}]]
                         </div>
                         <i class="dropdown icon"></i>
                         <div class="menu">

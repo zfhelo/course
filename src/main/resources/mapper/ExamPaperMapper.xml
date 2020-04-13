@@ -12,6 +12,34 @@
     </select>
 
     <select id="findAllBySid" resultMap="#.paperAndModle">
-        SELECT * FROM exam_paper WHERE stu_id = #{sid} AND model_id IN(SELECT id FROM exam_model WHERE course_id =#{cid})
+        SELECT * FROM exam_paper WHERE stu_id = #{sid} AND model_id IN(SELECT id FROM exam_model WHERE course_id = #{cid} AND is_hide = false)
     </select>
+
+    <select id="findById" resultMap="#.paperAndModle" parameterType="Integer">
+        SELECT * FROM exam_paper WHERE id = #{id}
+    </select>
+
+    <select id="getQuestion" resultMap="#.paperAndQue" parameterType="int">
+        SELECT * FROM exam_paper WHERE id = #{id}
+    </select>
+
+    <update id="updateSingleUserAnswer">
+        UPDATE paper_single_map SET user_answer = #{answer} WHERE paper_id = #{pid} AND single_id = #{singleId}
+    </update>
+    <update id="updateGapUserAnswer">
+        UPDATE paper_gap_map SET user_answer = #{answer} WHERE paper_id = #{pid} AND gap_id = #{gapId}
+    </update>
+    <update id="updateTorfUserAnswer">
+        UPDATE paper_torf_map SET user_answer = #{answer} WHERE paper_id = #{pid} AND torf_id = #{torfId}
+    </update>
+    <update id="updateEssayUserAnswer">
+        UPDATE paper_essay_map SET user_answer = #{answer} WHERE paper_id = #{pid} AND essay_id = #{essayId}
+    </update>
+
+    <update id="updateStatus" >
+        UPDATE exam_paper SET status = #{status}, update_time = #{time} WHERE id =#{pid}
+    </update>
+    <update id="updateGrade" >
+        UPDATE exam_paper SET grade = #{grade} WHERE id =#{pid}
+    </update>
 </mapper>

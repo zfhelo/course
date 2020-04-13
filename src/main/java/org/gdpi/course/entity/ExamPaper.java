@@ -7,6 +7,7 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * @author zhf
@@ -24,8 +25,13 @@ public class ExamPaper {
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime updateTime;
 
-    public Student student;
+    private Student student;
 
-    public ExamModel examModel;
+    private ExamModel examModel;
+
+    private List<SingleQuestion> singleQues;
+    private List<GapFillingQuestion> gapQues;
+    private List<EssayQuestion> essayQues;
+    private List<TrueOrFalseQuestion> torfQues;
 }
 

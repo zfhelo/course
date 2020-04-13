@@ -26,4 +26,6 @@ public class SingleQuestion extends Question{
     @NotBlank(message = "选项不能为空")
     @Length(max = 500)
     private String choose4;
+
+    private String userAnswer;
 }

@@ -35,4 +35,11 @@
     <select id="findReferenceNum" parameterType="Integer" resultType="integer">
         SELECT count(*) FROM paper_gap_map  WHERE essay_id = #{gap_id}
     </select>
+
+    <select id="findByPid" parameterType="Integer" resultType="gapFillingQuestion">
+        SELECT s.*, s2.user_answer FROM gap_filling_question s, paper_gap_map s2
+        WHERE s.id IN(SELECT gap_id FROM paper_gap_map WHERE paper_id = #{pid})
+        AND (s.id = s2.gap_id AND #{pid} = s2.paper_id)
+    </select>
+
 </mapper>

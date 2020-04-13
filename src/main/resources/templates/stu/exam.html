@@ -1,464 +1,406 @@
 <!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Document</title>
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css" />
-        <link href="https://cdn.bootcss.com/animate.css/3.7.2/animate.css" rel="stylesheet" />
-        <link rel="stylesheet" href="../static/css/my-style.css" />
-    </head>
-    <style>
-        .rightNav {
-            width: 240px;
-            position: fixed !important;
-            z-index: 9999 !important;
-            right: 0px !important;
-            top: 30%;
-        }
-        .question-index {
-            padding: 7px !important;
-            margin-bottom: 5px !important;
-        }
-        img {
-            max-width: 300px !important;
-        }
-        .gap {
-            border-bottom: 1px solid #000;
-            border-top: 0px;
-            border-left: 0px;
-            border-right: 0px;
-            outline: none;
-        }
-    </style>
-    <body style="background-image: url(https://i.loli.net/2020/03/27/7zpgTsbHovPuJm6.png);">
-        <!--导航-->
-        <nav class="ui  attached segment my-padded-tb-mini">
-            <div class="ui container">
-                <div class="ui  secondary stackable menu">
-                    <h2 class="ui teal header item">Course</h2>
-                    <a href="#" class="item"><i class="home icon"></i>首页</a>
-                    <a href="#" class="item"><i class="book icon"></i>课程</a>
-                    <a href="#" class="item"><i class="sticky note outline icon"></i>作业</a>
-                    <a href="#" class="item active"><i class="pen square icon"></i>考试</a>
-                    <a href="#" class="item"><i class="comment alternate outline icon"></i>讨论区</a>
-                    <a href="#" class="item"><i class="user icon"></i>个人中心</a>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>测验</title>
+    <link rel="icon" th:href="@{/favicon.ico}" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css"/>
+    <link href="https://cdn.bootcss.com/animate.css/3.7.2/animate.css" rel="stylesheet"/>
+    <link rel="stylesheet" th:href="@{/css/my-style.css}"/>
+</head>
+<style>
+    .rightNav {
+        width: 240px;
+        position: fixed !important;
+        z-index: 9999 !important;
+        right: 0px !important;
+        top: 30%;
+    }
 
-                    <!--搜索-->
-                    <div class="right item">
-                        <div class="ui icon input ">
-                            <input type="text" placeholder="搜索..." />
-                            <i class="search icon link"></i>
-                        </div>
-                    </div>
-                    <a href="#" class="item"><i class="motorcycle icon"></i>登出</a>
+    .question-index {
+        padding: 7px !important;
+        margin-bottom: 5px !important;
+    }
+
+    img {
+        max-width: 300px !important;
+    }
+
+    .gap {
+        border-bottom: 1px solid #000;
+        border-top: 0px;
+        border-left: 0px;
+        border-right: 0px;
+        outline: none;
+    }
+</style>
+<body style="background-image: url(https://i.loli.net/2020/03/27/7zpgTsbHovPuJm6.png);">
+<!--导航-->
+<nav class="ui  attached segment my-padded-tb-mini" th:replace="~{stu/_fragment :: menu('exam', ${user.getPhoto()}, ${user.getNickname()})}">
+</nav>
+
+<div class="animated fadeIn ui margin-bottom-1 container margin-top-2">
+
+    <input type="hidden" th:value="${questions.id}" id="pid">
+    <!-- 单选题 -->
+    <div class="ui segments" th:unless="${questions.singleQues.size() == 0}">
+        <!-- 头部 -->
+        <div class="ui green segment big transparent-8">
+            <div class="ui two column aligned middle grid">
+                <div class="column">
+                    <h3 class="ui header">单选题</h3>
                 </div>
+                <div class="right aligned column">题数：[[${questions.singleQues.size()}]]</div>
             </div>
-        </nav>
-
-        <div class="animated fadeIn ui margin-bottom-1 container margin-top-2">
-            <div class="ui large breadcrumb margin-bottom-1">
-                <a class="section">考试</a>
-                <i class="right chevron icon divider"></i>
-                <a class="section">数据结构</a>
-                <i class="right chevron icon divider"></i>
-                <div class="active section">期末考试</div>
-            </div>
-
-            <!-- 单选题 -->
-            <div class="ui segments">
-                <!-- 头部 -->
-                <div class="ui green segment big transparent-8">
-                    <div class="ui two column aligned middle grid">
-                        <div class="column">
-                            <h3 class="ui header">单选题</h3>
-                        </div>
-                        <div class="right aligned column">题数：<span>40</span>，共 <span>40.0</span> 分</div>
+        </div>
+        <!-- 题目 -->
+        <div class="ui segment big" th:id="${'s-i'+q.id}" th:each="q, status: ${questions.singleQues}">
+            <div class="grouped fields">
+                <label>
+                    <span class="margin-right-1">[[${status.count}]]:</span>
+                    <span th:utext="${q.title}"></span>
+                    <span class="my-font-tips">分值:[[${q.grade}]]</span>
+                </label>
+                <div class="field margin-top-1">
+                    <div class="ui radio checkbox">
+                        <input type="radio" class="single" th:name="${'s-name-'+q.id}" th:id="${'s-1-'+q.id}"
+                               th:qid="${q.id}" th:value="${q.choose1}"
+                               th:attr="checked=${q.userAnswer==q.choose1?true:false}"/>
+                        <label th:for="${'s-1-'+q.id}"><span class="margin-right-05">A:</span><span
+                                th:text="${q.choose1}"></span></label>
                     </div>
                 </div>
-                <!-- 题目 -->
-                <div class="ui segment big" id="jys">
-                    <div class="grouped fields">
-                        <label for="fruit">
-                            <span class="margin-right-1">1:</span>
-                            <p>
-                                已知一棵度为3的树有2个度为1的结点,3个度为2的结点,4个度为3的结点,则该树中有( )个叶子结点。
-                            </p>
-                        </label>
-                        <div class="field margin-top-1">
-                            <div class="ui radio checkbox">
-                                <input type="radio" name="fruit" id="1" />
-                                <label for="1"><span class="margin-right-05">A:</span>10</label>
-                            </div>
-                        </div>
-                        <div class="field margin-top-05">
-                            <div class="ui radio checkbox">
-                                <input type="radio" name="fruit" />
-                                <label><span class="margin-right-05">B:</span>11</label>
-                            </div>
-                        </div>
-                        <div class="field margin-top-05">
-                            <div class="ui radio checkbox">
-                                <input type="radio" name="fruit" />
-                                <label><span class="margin-right-05">C:</span>12</label>
-                            </div>
-                        </div>
-                        <div class="field margin-top-05">
-                            <div class="ui radio checkbox">
-                                <input type="radio" name="fruit" />
-                                <label><span class="margin-right-05">D:</span>13</label>
-                            </div>
-                        </div>
+                <div class="field margin-top-05">
+                    <div class="ui radio checkbox">
+                        <input type="radio" class="single" th:name="${'s-name-'+q.id}" th:id="${'s-2-'+q.id}"
+                               th:qid="${q.id}" th:value="${q.choose2}"
+                               th:attr="checked=${q.userAnswer==q.choose2?true:false}"/>
+                        <label th:for="${'s-2-'+q.id}"><span class="margin-right-05">B:</span><span
+                                th:text="${q.choose2}"></span></label>
                     </div>
                 </div>
-                <!-- 题目 -->
-                <div class="ui segment big" id="jys">
-                    <div class="grouped fields">
-                        <label for="fruit">
-                            <span class="margin-right-1">1:</span>
-                            <p>
-                                已知一棵度为3的树有2个度为1的结点,3个度为2的结点,4个度为3的结点,则该树中有( )个叶子结点。
-                            </p>
-                        </label>
-                        <div class="field margin-top-1">
-                            <div class="ui radio checkbox">
-                                <input type="radio" name="fruit" id="1" />
-                                <label for="1"><span class="margin-right-05">A:</span>10</label>
-                            </div>
-                        </div>
-                        <div class="field margin-top-05">
-                            <div class="ui radio checkbox">
-                                <input type="radio" name="fruit" />
-                                <label><span class="margin-right-05">B:</span>11</label>
-                            </div>
-                        </div>
-                        <div class="field margin-top-05">
-                            <div class="ui radio checkbox">
-                                <input type="radio" name="fruit" />
-                                <label><span class="margin-right-05">C:</span>12</label>
-                            </div>
-                        </div>
-                        <div class="field margin-top-05">
-                            <div class="ui radio checkbox">
-                                <input type="radio" name="fruit" />
-                                <label><span class="margin-right-05">D:</span>13</label>
-                            </div>
-                        </div>
+                <div class="field margin-top-05">
+                    <div class="ui radio checkbox">
+                        <input type="radio" class="single" th:name="${'s-name-'+q.id}" th:id="${'s-3-'+q.id}"
+                               th:qid="${q.id}" th:value="${q.choose3}"
+                               th:attr="checked=${q.userAnswer==q.choose3?true:false}"/>
+                        <label th:for="${'s-3-'+q.id}"><span class="margin-right-05">C:</span><span
+                                th:text="${q.choose3}"></span></label>
                     </div>
                 </div>
-                <!-- 题目 -->
-                <div class="ui segment big" id="jys">
-                    <div class="grouped fields">
-                        <label for="fruit">
-                            <span class="margin-right-1">1:</span>
-                            <p>
-                                已知一棵度为3的树有2个度为1的结点,3个度为2的结点,4个度为3的结点,则该树中有( )个叶子结点。
-                            </p>
-                        </label>
-                        <div class="field margin-top-1">
-                            <div class="ui radio checkbox">
-                                <input type="radio" name="fruit" id="1" />
-                                <label for="1"><span class="margin-right-05">A:</span>10</label>
-                            </div>
-                        </div>
-                        <div class="field margin-top-05">
-                            <div class="ui radio checkbox">
-                                <input type="radio" name="fruit" />
-                                <label><span class="margin-right-05">B:</span>11</label>
-                            </div>
-                        </div>
-                        <div class="field margin-top-05">
-                            <div class="ui radio checkbox">
-                                <input type="radio" name="fruit" />
-                                <label><span class="margin-right-05">C:</span>12</label>
-                            </div>
-                        </div>
-                        <div class="field margin-top-05">
-                            <div class="ui radio checkbox">
-                                <input type="radio" name="fruit" />
-                                <label><span class="margin-right-05">D:</span>13</label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 判断题 -->
-            <div class="ui segments">
-                <!-- 头部 -->
-                <div class="ui green segment big transparent-8">
-                    <div class="ui two column aligned middle grid">
-                        <div class="column">
-                            <h3 class="ui header">判断题</h3>
-                        </div>
-                        <div class="right aligned column">题数：<span>40</span>，共 <span>40.0</span> 分</div>
-                    </div>
-                </div>
-
-                <!-- 题目 -->
-                <div class="ui segment big attached" id="last">
-                    <div class="grouped fields">
-                        <label for="fruit">
-                            <span class="margin-right-1">1:</span>
-                            <p>
-                                已知一棵度为3的树有2个度为1的结点,3个度为2的结点,4个度为3的结点,则该树中有( )个叶子结点。
-                            </p>
-                        </label>
-                        <div class="field margin-top-1">
-                            <div class="ui radio checkbox">
-                                <input type="radio" name="fruit" id="1" />
-                                <label
-                                    ><span class="margin-right-05"><i class="check icon"></i></span
-                                ></label>
-                            </div>
-                        </div>
-                        <div class="field margin-top-05">
-                            <div class="ui radio checkbox">
-                                <input type="radio" name="fruit" />
-                                <label
-                                    ><span class="margin-right-05"><i class="times icon"></i></span
-                                ></label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- 题目 -->
-                <div class="ui segment big attached" id="last">
-                    <div class="grouped fields">
-                        <label for="fruit">
-                            <span class="margin-right-1">1:</span>
-                            <p>
-                                已知一棵度为3的树有2个度为1的结点,3个度为2的结点,4个度为3的结点,则该树中有( )个叶子结点。
-                            </p>
-                        </label>
-                        <div class="field margin-top-1">
-                            <div class="ui radio checkbox">
-                                <input type="radio" name="fruit" id="1" />
-                                <label
-                                    ><span class="margin-right-05"><i class="check icon"></i></span
-                                ></label>
-                            </div>
-                        </div>
-                        <div class="field margin-top-05">
-                            <div class="ui radio checkbox">
-                                <input type="radio" name="fruit" />
-                                <label
-                                    ><span class="margin-right-05"><i class="times icon"></i></span
-                                ></label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- 题目 -->
-                <div class="ui segment big attached" id="last">
-                    <div class="grouped fields">
-                        <label for="fruit">
-                            <span class="margin-right-1">1:</span>
-                            <p>
-                                已知一棵度为3的树有2个度为1的结点,3个度为2的结点,4个度为3的结点,则该树中有( )个叶子结点。
-                            </p>
-                        </label>
-                        <div class="field margin-top-1">
-                            <div class="ui radio checkbox">
-                                <input type="radio" name="fruit" id="1" />
-                                <label
-                                    ><span class="margin-right-05"><i class="check icon"></i></span
-                                ></label>
-                            </div>
-                        </div>
-                        <div class="field margin-top-05">
-                            <div class="ui radio checkbox">
-                                <input type="radio" name="fruit" />
-                                <label
-                                    ><span class="margin-right-05"><i class="times icon"></i></span
-                                ></label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- 题目 -->
-                <div class="ui segment big attached" id="last">
-                    <div class="grouped fields">
-                        <label for="fruit">
-                            <span class="margin-right-1">1:</span>
-                            <p>
-                                已知一棵度为3的树有2个度为1的结点,3个度为2的结点,4个度为3的结点,则该树中有( )个叶子结点。
-                            </p>
-                        </label>
-                        <div class="field margin-top-1">
-                            <div class="ui radio checkbox">
-                                <input type="radio" name="fruit" id="1" />
-                                <label
-                                    ><span class="margin-right-05"><i class="check icon"></i></span
-                                ></label>
-                            </div>
-                        </div>
-                        <div class="field margin-top-05">
-                            <div class="ui radio checkbox">
-                                <input type="radio" name="fruit" />
-                                <label
-                                    ><span class="margin-right-05"><i class="times icon"></i></span
-                                ></label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 填空题 -->
-            <div class="ui segments">
-                <!-- 头部 -->
-                <div class="ui green segment big transparent-8">
-                    <div class="ui two column aligned middle grid">
-                        <div class="column">
-                            <h3 class="ui header">填空题</h3>
-                        </div>
-                        <div class="right aligned column">题数：<span>40</span>，共 <span>40.0</span> 分</div>
-                    </div>
-                </div>
-
-                <!-- 题目 -->
-                <div class="ui segment big attached">
-                    <div class="grouped fields">
-                        <label for="fruit">
-                            <span class="margin-right-1">1:</span>
-                            <p>
-                                已知一棵度为3的树有2个度为1的结点,3个度为2的结点,4个度为3的结点,则该树中有____个叶子结点。
-                            </p>
-                        </label>
-                        <div class="field margin-top-1">
-                            <input type="text" class="gap" />
-                        </div>
-                    </div>
-                </div>
-                <!-- 题目 -->
-                <div class="ui segment big attached">
-                    <div class="grouped fields">
-                        <label for="fruit">
-                            <span class="margin-right-1">1:</span>
-                            <p>
-                                已知一棵度为3的树有2个度为1的结点,3个度为2的结点,4个度为3的结点,则该树中有____个叶子结点。
-                            </p>
-                        </label>
-                        <div class="field margin-top-1">
-                            <input type="text" class="gap" />
-                        </div>
-                    </div>
-                </div>
-                <!-- 题目 -->
-                <div class="ui segment big attached">
-                    <div class="grouped fields">
-                        <label for="fruit">
-                            <span class="margin-right-1">1:</span>
-                            <p>
-                                已知一棵度为3的树有2个度为1的结点,3个度为2的结点,4个度为3的结点,则该树中有____个叶子结点。
-                            </p>
-                        </label>
-                        <div class="field margin-top-1">
-                            <input type="text" class="gap" />
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 解答题 -->
-            <div class="ui segments">
-                <!-- 头部 -->
-                <div class="ui green segment big  transparent-8">
-                    <div class="ui two column aligned middle grid">
-                        <div class="column">
-                            <h3 class="ui header">解答题</h3>
-                        </div>
-                        <div class="right aligned column">题数：<span>40</span>，共 <span>40.0</span> 分</div>
-                    </div>
-                </div>
-                <!-- 题目 -->
-                <div class="ui segment big attached">
-                    <div class="grouped fields">
-                        <label for="fruit">
-                            <span class="margin-right-1">1:</span>
-                            <p>
-                                xxx
-                            </p>
-                        </label>
-                        <div class="field margin-top-1">
-                            <div id="div1"></div>
-                        </div>
-                    </div>
-                </div>
-                <!-- 题目 -->
-                <div class="ui segment big attached">
-                    <div class="grouped fields">
-                        <label for="fruit">
-                            <span class="margin-right-1">1:</span>
-                            <p>
-                                xxx
-                            </p>
-                        </label>
-                        <div class="field margin-top-1">
-                            <div id="div2"></div>
-                        </div>
+                <div class="field margin-top-05">
+                    <div class="ui radio checkbox">
+                        <input type="radio" class="single" th:name="${'s-name-'+q.id}" th:id="${'s-4-'+q.id}"
+                               th:qid="${q.id}" th:value="${q.choose4}"
+                               th:attr="checked=${q.userAnswer==q.choose4?true:false}"/>
+                        <label th:for="${'s-4-'+q.id}"><span class="margin-right-05">D:</span><span
+                                th:text="${q.choose4}"></span></label>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
 
-        <div class="rightNav">
-            <div class="ui segment center aligned my-mobile-hide">
-                <div class="ui horizontal divider">选择题</div>
-                <button class="ui mini green button question-index" onclick="goToQue('jys')">1</button>
-                <button class="ui mini green basic button question-index" onclick="goToQue('last')">2</button>
-                <button class="ui mini basic button question-index">3</button>
-                <button class="ui mini basic button question-index">4</button>
-                <button class="ui mini basic button question-index">5</button>
-                <button class="ui mini basic button question-index">6</button>
-                <button class="ui mini basic button question-index">7</button>
-                <button class="ui mini basic button question-index">8</button>
-                <button class="ui mini basic button question-index">9</button>
-                <button class="ui mini basic button question-index">10</button>
-                <button class="ui mini basic button question-index">11</button>
-                <button class="ui mini basic button question-index">12</button>
-
-                <div class="ui horizontal divider">判断题</div>
-                <button class="ui mini basic button question-index">13</button>
-                <button class="ui mini basic button question-index">14</button>
-                <button class="ui mini basic button question-index">15</button>
-                <div class="ui horizontal divider">填空</div>
-                <button class="ui mini basic button question-index">13</button>
-                <button class="ui mini basic button question-index">14</button>
-                <button class="ui mini basic button question-index">15</button>
-                <div class="ui horizontal divider">解答题</div>
-                <button class="ui mini basic button question-index">16</button>
-                <button class="ui mini basic button question-index">17</button>
-                <button class="ui mini basic button question-index">18</button>
-            </div>
-            <div class="my-mobile-right">
-                <div class="ui icon green button">
-                    <i class="upload icon"></i>
-                    提交
+    <!-- 判断题 -->
+    <div class="ui segments" th:unless="${questions.torfQues.size() == 0}">
+        <!-- 头部 -->
+        <div class="ui green segment big transparent-8">
+            <div class="ui two column aligned middle grid">
+                <div class="column">
+                    <h3 class="ui header">判断题</h3>
                 </div>
-                <div class="ui icon primary button">
-                    <i class="cloud icon"></i>
-                    保存
+                <div class="right aligned column">题数：[[${questions.torfQues.size()}]]</div>
+            </div>
+        </div>
+
+        <!-- 题目 -->
+        <div class="ui segment big attached" th:id="${'t-i'+q.id}" th:each="q, status : ${questions.torfQues}">
+            <div class="grouped fields">
+                <label>
+                    <span class="margin-right-1">[[${status.count}]]:</span>
+                    <span th:utext="${q.title}"></span>
+                    <span class="my-font-tips">分值:[[${q.grade}]]</span>
+                </label>
+                <div class="field margin-top-1">
+                    <div class="ui radio checkbox">
+                        <input type="radio" th:name="${'t-name-'+q.id}" class="torf" th:qid="${q.id}"
+                               th:id="${'t-1-'+q.id}" value="true" th:attr="checked=${q.userAnswer==true?true:false}"/>
+                        <label th:for="${'t-1-'+q.id}"><span class="margin-right-05"><i
+                                class="check icon"></i></span></label>
+                    </div>
+                </div>
+                <div class="field margin-top-05">
+                    <div class="ui radio checkbox">
+                        <input type="radio" th:name="${'t-name-'+q.id}" class="torf" th:qid="${q.id}"
+                               th:id="${'t-1-'+q.id}" value="false"
+                               th:attr="checked=${q.userAnswer==false?true:false}"/>
+                        <label th:for="${'t-1-'+q.id}"><span class="margin-right-05"><i
+                                class="times icon"></i></span></label>
+                    </div>
                 </div>
             </div>
         </div>
-    </body>
-    <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
-    <script src="https://cdn.bootcss.com/wangEditor/10.0.13/wangEditor.min.js"></script>
+    </div>
 
-    <script>
-        function goToQue(id) {
-            $("html,body").animate({ scrollTop: $("#" + id).offset().top }, 200);
+    <!-- 填空题 -->
+    <div class="ui segments" th:unless="${questions.gapQues.size() == 0}">
+        <!-- 头部 -->
+        <div class="ui green segment big transparent-8">
+            <div class="ui two column aligned middle grid">
+                <div class="column">
+                    <h3 class="ui header">填空题</h3>
+                </div>
+                <div class="right aligned column">题数：[[${questions.gapQues.size()}]]</div>
+            </div>
+        </div>
+
+        <!-- 题目 -->
+        <div class="ui segment big attached" th:id="${'g-i'+q.id}" th:each="q, status : ${questions.gapQues}">
+            <div class="grouped fields">
+                <label>
+                    <span class="margin-right-1">[[${status.count}]]:</span>
+                    <span th:utext="${q.title}"></span>
+                    <span class="my-font-tips">分值:[[${q.grade}]]</span>
+                </label>
+                <div class="field margin-top-1">
+                    <input type="text" class="gap" th:qid="${q.id}" th:value="${q.userAnswer}"/>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 解答题 -->
+    <div class="ui segments" th:unless="${questions.essayQues.size() == 0}">
+        <!-- 头部 -->
+        <div class="ui green segment big  transparent-8">
+            <div class="ui two column aligned middle grid">
+                <div class="column">
+                    <h3 class="ui header">解答题</h3>
+                </div>
+                <div class="right aligned column">题数：[[${questions.essayQues.size()}]]</div>            </div>
+        </div>
+        <!-- 题目 -->
+        <div class="ui segment big attached" th:id="${'e-i'+q.id}" th:each="q, status : ${questions.essayQues}">
+            <input type="hidden" th:value="${q.userAnswer}" th:class="${'e-'+q.id}">
+            <div class="grouped fields">
+                <label>
+                    <span class="margin-right-1">[[${status.count}]]:</span>
+                    <span th:utext="${q.title}"></span>
+                    <span class="my-font-tips">分值:[[${q.grade}]]</span>
+                </label>
+                <div class="field margin-top-1">
+                    <div th:id="${'e-'+q.id}" class="essayInput" th:qid="${q.id}"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="rightNav">
+    <div class="ui segment center aligned my-mobile-hide">
+        <div th:unless="${questions.singleQues.size() == 0}">
+            <div class="ui horizontal divider">选择题</div>
+            <button class="ui mini basic button question-index mybtn" th:onclick="'goToQue(\'s-i'+${q.id}+'\')'"
+                    th:each="q, status : ${questions.singleQues}">[[${status.count}]]
+            </button>
+        </div>
+        <div th:unless="${questions.torfQues.size() == 0}">
+            <div class="ui horizontal divider">判断题</div>
+            <button class="ui mini basic button question-index mybtn" th:onclick="'goToQue(\'t-i'+${q.id}+'\')'"
+                    th:each="q, status : ${questions.torfQues}">[[${status.count}]]
+            </button>
+        </div>
+        <div th:unless="${questions.gapQues.size() == 0}">
+            <div class="ui horizontal divider">填空</div>
+            <button class="ui mini basic button question-index mybtn" th:onclick="'goToQue(\'g-i'+${q.id}+'\')'"
+                    th:each="q, status : ${questions.gapQues}">[[${status.count}]]
+            </button>
+        </div>
+        <div th:unless="${questions.essayQues.size() == 0}">
+            <div class="ui horizontal divider">解答题</div>
+            <button class="ui mini basic button question-index mybtn" th:onclick="'goToQue(\'e-i'+${q.id}+'\')'"
+                    th:each="q, status : ${questions.essayQues}">[[${status.count}]]
+            </button>
+        </div>
+    </div>
+    <div class="my-mobile-right" th:unless="${questions.status}">
+        <button class="ui icon green button" onclick="submit()">
+            <i class="upload icon"></i>
+            提交
+        </button>
+        <div class="ui icon primary button" onclick="save()">
+            <i class="cloud icon"></i>
+            保存
+        </div>
+    </div>
+    <input type="hidden" th:value="${questions.status}" id="z233">
+</div>
+</body>
+<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+<script src="https://cdn.bootcss.com/wangEditor/10.0.13/wangEditor.min.js"></script>
+<script th:src="@{/js/axios.min.js}"></script>
+
+<script>
+
+    function getContextPath() {
+        var pathName = document.location.pathname;
+        var index = pathName.substr(1).indexOf("/");
+        var result = pathName.substr(0, index + 1);
+        return result + '/';
+    }
+
+    $(".ui.dropdown").dropdown({
+        on: "hover"
+    });
+
+    // 跳转题目
+    function goToQue(id) {
+        $("html,body").animate({scrollTop: $("#" + id).offset().top}, 200);
+    }
+
+    // 保存富文本编辑器对象
+    let editors = {};
+    // 初始化富文本编辑器
+    $('.essayInput').each(function () {
+        var id = $(this).attr('id');
+        var qid = $(this).attr('qid');
+        var E = window.wangEditor;
+        var editor = new E("#" + id);
+        editor.customConfig.menus = [
+            'head',  // 标题
+            'bold',  // 粗体
+            'fontSize',  // 字号
+            'fontName',  // 字体
+            'italic',  // 斜体
+            'underline',  // 下划线
+            'strikeThrough',  // 删除线
+            'foreColor',  // 文字颜色
+            'link',  // 插入链接
+            'list',  // 列表
+            'justify',  // 对齐方式
+            'quote',  // 引用
+            'image',  // 插入图片
+            'table',  // 表格
+            'code',  // 插入代码
+            'undo',  // 撤销
+            'redo'  // 重复
+        ];
+        editor.customConfig.customUploadImg = function (files, insert) {
+            var f = files[0];
+            var formData = new FormData();
+            formData.append("image", f);
+            formData.append("key", "9f44a7c9879610d03afb08ed5631446e");
+            $('#upload-btn').addClass('loading');
+            $('#upload-btn').addClass('disabled');
+            $('#upload-btn').removeClass('green');
+            $.ajax({
+                url: "https://api.imgbb.com/1/upload",
+                type: "POST",
+                success: function (rep) {
+                    insert(rep.data.url);
+                    $('#upload-btn').removeClass('loading');
+                    $('#upload-btn').addClass('green');
+                    $('#upload-btn').removeClass('disabled');
+                },
+                error: function (rep) {
+                    alert("上传失败");
+                    $('#upload-btn').removeClass('loading');
+                    $('#upload-btn').addClass('green');
+                    $('#upload-btn').removeClass('disabled');
+                },
+                data: formData,
+                cache: false,
+                contentType: false,
+                processData: false,
+            });
+        };
+        editor.create();
+        editor.txt.html($('.' + id).val());
+        editors[qid] = editor;
+    })
+
+    $('.mybtn').click(function () {
+        //$(this).addClass('green')
+    });
+
+    // 保存用户答案
+    let single = {}
+    let gap = {}
+    let torf = {}
+    let essay = {}
+
+    function getAnswer() {
+        $('.single').each(function () {
+            if ($(this).is(':checked')) {
+                single[$(this).attr('qid')] = $(this).val();
+            }
+        });
+        $('.torf').each(function () {
+            if ($(this).is(':checked')) {
+                torf[$(this).attr('qid')] = $(this).val();
+            }
+        });
+        $('.gap').each(function () {
+            gap[$(this).attr('qid')] = $(this).val().trim();
+        });
+
+        for (const key in editors) {
+            essay[key] = editors[key].txt.html().trim();
         }
-        var E = window.wangEditor;
-        var editor = new E("#div1");
 
-        editor.create();
-        var E = window.wangEditor;
-        var editor = new E("#div2");
+    }
 
-        editor.create();
-    </script>
+    // 提交答案
+    function submit() {
+        if (!confirm("你确认要提交吗")) {
+            return;
+        }
+        getAnswer();
+
+        axios.put(getContextPath() + 'stu/submitExam/' + $('#pid').val(), {
+            single: single,
+            gap: gap,
+            essay: essay,
+            torf: torf,
+        })
+            .then(rep => {
+                if (rep.data.code === 200) {
+                    location.reload();
+                } else {
+                    alert(rep.data.data);
+                }
+            })
+            .catch(() => alert("请求失败"))
+    }
+
+    // 保存
+    function save() {
+        getAnswer();
+        axios.put(getContextPath() + 'stu/saveExam/' + $('#pid').val(), {
+            single: single,
+            gap: gap,
+            essay: essay,
+            torf: torf,
+        })
+            .then(rep => {
+                if (rep.data.code === 200) {
+
+                } else {
+                    alert(rep.data.data);
+                }
+            })
+            .catch(() => alert("请求失败"))
+    }
+
+    $(function () {
+        if ($('#z233').val() === 'true') {
+            $('input').attr('disabled', true)
+            for (const key in editors) {
+                editors[key].$textElem.attr('contenteditable', false);
+            }
+        }
+    })
+</script>
 </html>

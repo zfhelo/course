@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
@@ -136,16 +137,20 @@ public class UserController {
      * @return
      */
     @GetMapping("/tea/index")
-    public String indexTea(@AuthenticationPrincipal UserDetails userDetails) {
-        userDetails.getUsername();
-        return "tea/index";
+    public ModelAndView indexTea(@AuthenticationPrincipal UserDetails userDetails, ModelAndView mv) {
+        Teacher tea = teacherService.findByUsername(userDetails.getUsername());
+        mv.addObject("user", tea);
+        mv.setViewName("tea/index");
+        return mv;
     }
 
 
     @GetMapping("/stu/index")
-    public String indexStu(@AuthenticationPrincipal UserDetails userDetails) {
-        userDetails.getUsername();
-        return "stu/index";
+    public ModelAndView indexStu(@AuthenticationPrincipal UserDetails userDetails, ModelAndView mv) {
+        Student stu = studentService.findByUsername(userDetails.getUsername());
+        mv.addObject("user", stu);
+        mv.setViewName("stu/index");
+        return mv;
     }
 
     /**
@@ -154,15 +159,15 @@ public class UserController {
      * @return
      */
     @GetMapping("/")
-    public String index(@AuthenticationPrincipal UserDetails userDetails) {
+    public ModelAndView index(@AuthenticationPrincipal UserDetails userDetails, ModelAndView mv) {
         // 教师
         for (GrantedAuthority permissions:userDetails.getAuthorities()) {
             if ("ROLE_TEA".equals(permissions.getAuthority())) {
-                return indexTea(userDetails);
+                return indexTea(userDetails, mv);
             }
         }
         // 学生
-        return indexStu(userDetails);
+        return indexStu(userDetails, mv);
     }
 
 }
