@@ -39,9 +39,14 @@ public class ExamPaperServiceImpl implements ExamPaperService {
     }
 
     @Override
-    public ExamPaper getQuestions(Integer id) {
+    public ExamPaper getQuestionsForStu(Integer id) {
         ExamPaper question = examPaperMapper.getQuestion(id);
         QuestionUtils.upsetSingle(question.getSingleQues(), question.getRule());
+        return question;
+    }
+    @Override
+    public ExamPaper getQuestionsForTea(Integer id) {
+        ExamPaper question = examPaperMapper.getQuestion(id);
         return question;
     }
 
@@ -117,5 +122,38 @@ public class ExamPaperServiceImpl implements ExamPaperService {
     @Override
     public void saveUserAnswer(Map<String, Map<Integer, Object>> answer, Integer pid) {
         updateUserAnswer(answer, pid);
+    }
+
+    @Override
+    public void addEssayGrade(Map<Integer, Integer> gradeEssay, Integer pid) {
+        // 计算成绩..
+        final ArrayList<Integer> grade = new ArrayList<>();
+        // 计算选择题成绩
+        ExamPaper question = examPaperMapper.getQuestion(pid);
+        question.getSingleQues().forEach(singleQuestion -> {
+            if (singleQuestion.getChoose1().equals(singleQuestion.getUserAnswer())) {
+                grade.add(singleQuestion.getGrade());
+            }
+        });
+        // 计算判断题
+        question.getTorfQues().forEach(trueOrFalseQuestion -> {
+            if (trueOrFalseQuestion.getAnswer().equals(trueOrFalseQuestion.getUserAnswer())) {
+                grade.add(trueOrFalseQuestion.getGrade());
+            }
+        });
+        // 填空题答案
+        question.getGapQues().forEach(gapFillingQuestion -> {
+            if (gapFillingQuestion.getAnswer().equals(gapFillingQuestion.getUserAnswer())) {
+                grade.add(gapFillingQuestion.getGrade());
+            }
+        });
+
+        gradeEssay.forEach((key, value) -> {
+            if (value != null) {
+                grade.add(value);
+            }
+        });
+        int sum = grade.stream().mapToInt(value -> value).sum();
+        examPaperMapper.updateGrade(pid, (float) sum);
     }
 }

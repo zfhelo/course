@@ -37,7 +37,14 @@ public interface ExamPaperService {
      * @param id
      * @return
      */
-    ExamPaper getQuestions(Integer id);
+    ExamPaper getQuestionsForStu(Integer id);
+
+    /**
+     * 通过试卷id获得题目并获取用户答案
+     * @param id
+     * @return
+     */
+    ExamPaper getQuestionsForTea(Integer id);
 
     /**
      * 提交答案
@@ -52,4 +59,11 @@ public interface ExamPaperService {
      * @param pid
      */
     void saveUserAnswer(Map<String, Map<Integer, Object>> answer, Integer pid);
+
+    /**
+     * 添加解答题成绩
+     * @param grade
+     * @param pid
+     */
+    void addEssayGrade(Map<Integer, Integer> grade, Integer pid);
 }

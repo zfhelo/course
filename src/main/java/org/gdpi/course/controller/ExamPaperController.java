@@ -82,11 +82,38 @@ public class ExamPaperController {
             throw new ExamPaperNotFoundException("试卷没有找到");
         }
 
-        ExamPaper questions = examPaperService.getQuestions(id);
+        ExamPaper questions = examPaperService.getQuestionsForStu(id);
         mv.addObject("user", stu);
         mv.addObject("questions", questions);
         mv.setViewName("stu/exam");
         return mv;
+
+    }
+    /**
+     * 考试获取题目
+     * @param id
+     * @param userDetails
+     * @return
+     */
+    @GetMapping("/tea/paper/{id:\\d+}")
+    @ResponseBody
+    public SimpleResponse exam(@PathVariable Integer id,
+                             @AuthenticationPrincipal UserDetails userDetails) {
+        ExamPaper paper = examPaperService.findById(id);
+        if (paper == null) {
+            return SimpleResponse.error("未知试卷");
+        }
+        Teacher tea = teacherService.findByUsername(userDetails.getUsername());
+
+        Course course =
+                courseService.findByIdAndTeaId(paper.getExamModel().getCourseId(), tea.getId());
+        if (course == null) {
+            return SimpleResponse.error("没有权限");
+        }
+
+        ExamPaper questions = examPaperService.getQuestionsForTea(id);
+
+        return SimpleResponse.success(questions);
 
     }
 
@@ -156,6 +183,26 @@ public class ExamPaperController {
 
         examPaperService.submitUserAnswer(que, id);
 
+        return SimpleResponse.success();
+    }
+
+    @PutMapping("/tea/essayGrade/{id:\\d+}")
+    @ResponseBody
+    public SimpleResponse submitEssayGrade(@AuthenticationPrincipal UserDetails userDetails,
+                                           @RequestBody Map<Integer, Integer> grade,
+                                           @PathVariable Integer id) {
+
+        ExamPaper paper = examPaperService.findById(id);
+        if (paper == null) {
+            return SimpleResponse.error("未知试卷");
+        }
+        Teacher tea = teacherService.findByUsername(userDetails.getUsername());
+        Course course = courseService.findByIdAndTeaId(paper.getExamModel().getCourseId(), tea.getId());
+        if (course == null) {
+            return SimpleResponse.error("没有权限");
+        }
+
+        examPaperService.addEssayGrade(grade, id);
         return SimpleResponse.success();
     }
 }

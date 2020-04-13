@@ -16,28 +16,36 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css" />
     <link href="https://cdn.bootcss.com/animate.css/3.7.2/animate.css" rel="stylesheet" />
     <link rel="stylesheet" href="css/my-style.css" />
+    <style>
+        .gap {
+            border-bottom: 1px solid #000;
+            border-top: 0px;
+            border-left: 0px;
+            border-right: 0px;
+            outline: none;
+            width: 50px;
+        }
+    </style>
 </head>
 <body>
     <div class="ui container">
+        <input type="hidden" id="pid">
         <div class="ui horizontal divider"><h1>测验</h1></div>
-        <div class="ui segments">
+        <div class="ui segments" id="singles">
             <div class="ui segment green center aligned"><h3>单选题</h3></div>
-            <div class="ui segment">
-                <p>题目</p><span></span>
-                <p>正确答案: <span>xxx</span></p>
-                <p>用户答案</p>
-            </div>
-            <div class="ui segment">
-                <p>题目</p>
-                <p>正确答案</p>
-                <p>用户答案</p>
-            </div>
-            <div class="ui segment">
-                <p>题目</p>
-                <p>正确答案</p>
-                <p>用户答案</p>
-            </div>
         </div>
+        <div class="ui segments" id="torfs">
+            <div class="ui segment green center aligned"><h3>判断题</h3></div>
+        </div>
+        <div class="ui segments" id="gaps">
+            <div class="ui segment green center aligned"><h3>填空题</h3></div>
+
+        </div>
+        <div class="ui segments" id="essays">
+            <div class="ui segment green center aligned"><h3>问答题</h3></div>
+        </div>
+        <button class="ui button mini primary" onclick="submit()" id="submit">提交</button>
+        <button class="ui button mini" onclick="history.back()">返回</button>
     </div>
 
 </body>
@@ -45,5 +53,109 @@
 <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
 <script src="js/my.js"></script>
 <script src="js/axios.min.js"></script>
+<script>
+    $(function () {
+        axios.get(getContextPath() + 'tea/paper/'+getUrlParam('id'))
+            .then(rep => {
+                if (rep.data.code === 200) {
+                    $('#pid').val(rep.data.data.id);
+                    createSingles(rep.data.data.singleQues);
+                    createTorfs(rep.data.data.torfQues);
+                    createGaps(rep.data.data.gapQues);
+                    createEssays(rep.data.data.essayQues);
 
+                } else {
+                    alert(rep.data.data);
+                }
+            })
+            .catch(() => alert("请求失败"));
+    });
+    function createSingles(array) {
+        if (array.length === 0) {
+            $('#singles').remove();
+            return;
+        }
+        array.forEach(item => {
+            var node = $(
+                '<div class="ui segment">' +
+                '    <p>题目<span class="my-font-tips">分值:'+item.grade+'' +
+                '    </span></p><p>'+item.title+'</p>' +
+                '    <p>正确答案: <span>'+item.choose1+'</span></p>' +
+                '    <p>用户答案: <span>'+item.userAnswer+'</span></p>' +
+                '</div>'
+            );
+            $('#singles').append(node);
+        })
+    }
+    function createTorfs(array) {
+        if (array.length === 0) {
+            $('#torfs').remove();
+            return;
+        }
+        array.forEach(item => {
+            var node = $(
+                '<div class="ui segment">' +
+                '    <p>题目<span class="my-font-tips">分值:'+item.grade+'' +
+                '    </span></p><p>'+item.title+'</p>' +
+                '    <p>正确答案: <span>'+item.answer+'</span></p>' +
+                '    <p>用户答案: <span>'+item.userAnswer+'</span></p>' +
+                '</div>'
+            );
+            $('#torfs').append(node);
+        })
+    }
+    function createGaps(array) {
+        if (array.length === 0) {
+            $('#gaps').remove();
+            return;
+        }
+
+        array.forEach(item => {
+            var node = $(
+                '<div class="ui segment">' +
+                '    <p>题目<span class="my-font-tips">分值:'+item.grade+'' +
+                '    </span></p><p>'+item.title+'</p>' +
+                '    <p>正确答案: <span>'+item.answer+'</span></p>' +
+                '    <p>用户答案: <span>'+item.userAnswer+'</span></p>' +
+                '</div>'
+            );
+            $('#gaps').append(node);
+        })
+    }
+    function createEssays(array) {
+        if (array.length === 0) {
+            $('#essays').remove();
+            $('#submit').remove();
+            return;
+        }
+        array.forEach(item => {
+            var node = $(
+                '<div class="ui segment">' +
+                '    <p>题目<span class="my-font-tips">分值:'+item.grade+'' +
+                '    </span></p><p>'+item.title+'</p>' +
+                '    <p>用户答案: <span>'+item.userAnswer+'</span></p>' +
+                '    得分<input type="text" class="gap" qid="'+item.id+'">' +
+                '</div>'
+            );
+            $('#essays').append(node);
+        })
+    }
+    let grade = {};
+    function submit() {
+        $('.gap').each(function () {
+            var qid = $(this).attr('qid');
+            grade[qid] = $(this).val();
+        })
+
+        axios.put(getContextPath() + 'tea/essayGrade/' +$('#pid').val(), grade)
+            .then(rep => {
+                if (rep.data.code === 200) {
+
+                } else {
+                    alert(rep.data.data);
+                }
+            })
+            .catch(() => alert("请求失败"));
+    }
+</script>
 </html>
