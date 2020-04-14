@@ -10,4 +10,5 @@ import lombok.ToString;
 @ToString(callSuper = true)
 public class EssayQuestion extends Question {
     private String userAnswer;
+    private Float userGrade;
 }

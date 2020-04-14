@@ -23,7 +23,7 @@ public class Question {
     private String title;
 
     @Range(min = 0, message = "分值不能小于零")
-    private Integer grade;
+    private Float grade;
 
 
     @JsonSerialize(using = LocalDateTimeSerializer.class)

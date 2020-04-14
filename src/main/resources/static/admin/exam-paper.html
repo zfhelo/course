@@ -134,7 +134,7 @@
                 '    <p>题目<span class="my-font-tips">分值:'+item.grade+'' +
                 '    </span></p><p>'+item.title+'</p>' +
                 '    <p>用户答案: <span>'+item.userAnswer+'</span></p>' +
-                '    得分<input type="text" class="gap" qid="'+item.id+'">' +
+                '    得分<input type="text" class="gap" qid="'+item.id+'" value="'+item.userGrade+'">' +
                 '</div>'
             );
             $('#essays').append(node);
@@ -150,7 +150,8 @@
         axios.put(getContextPath() + 'tea/essayGrade/' +$('#pid').val(), grade)
             .then(rep => {
                 if (rep.data.code === 200) {
-
+                    $('#submit').removeClass("primary");
+                    $('#submit').addClass("green");
                 } else {
                     alert(rep.data.data);
                 }

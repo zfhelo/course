@@ -81,11 +81,18 @@ public class ExamPaperController {
         if (paper == null || !stu.getId().equals(paper.getStuId())) {
             throw new ExamPaperNotFoundException("试卷没有找到");
         }
+        ExamPaper questions;
+        if (paper.getStatus()) {
+            questions = examPaperService.getQuestionsForTea(id);
+            mv.setViewName("stu/exam-preview");
+        } else {
+            questions = examPaperService.getQuestionsForStu(id);
+            mv.setViewName("stu/exam");
+        }
 
-        ExamPaper questions = examPaperService.getQuestionsForStu(id);
         mv.addObject("user", stu);
         mv.addObject("questions", questions);
-        mv.setViewName("stu/exam");
+
         return mv;
 
     }
@@ -189,7 +196,7 @@ public class ExamPaperController {
     @PutMapping("/tea/essayGrade/{id:\\d+}")
     @ResponseBody
     public SimpleResponse submitEssayGrade(@AuthenticationPrincipal UserDetails userDetails,
-                                           @RequestBody Map<Integer, Integer> grade,
+                                           @RequestBody Map<Integer, Float> grade,
                                            @PathVariable Integer id) {
 
         ExamPaper paper = examPaperService.findById(id);

@@ -95,7 +95,13 @@ public class ExamPaperServiceImpl implements ExamPaperService {
         // 更改状态为已提交
         examPaperMapper.updateStatus(pid, true, LocalDateTime.now());
         // 计算成绩..
-        final ArrayList<Integer> grade = new ArrayList<>();
+        Float sum = calcGrade(pid);
+        examPaperMapper.updateGrade(pid, (float) sum);
+    }
+
+    private Float calcGrade(Integer pid) {
+        // 计算成绩..
+        final ArrayList<Float> grade = new ArrayList<>();
         // 计算选择题成绩
         ExamPaper question = examPaperMapper.getQuestion(pid);
         question.getSingleQues().forEach(singleQuestion -> {
@@ -115,8 +121,13 @@ public class ExamPaperServiceImpl implements ExamPaperService {
                 grade.add(gapFillingQuestion.getGrade());
             }
         });
-        int sum = grade.stream().mapToInt(value -> value).sum();
-        examPaperMapper.updateGrade(pid, (float) sum);
+        question.getEssayQues().forEach(essayQuestion -> {
+            grade.add(essayQuestion.getUserGrade());
+        });
+
+
+        Float sum = (float)grade.stream().mapToDouble(value -> value).sum();
+        return sum;
     }
 
     @Override
@@ -125,35 +136,14 @@ public class ExamPaperServiceImpl implements ExamPaperService {
     }
 
     @Override
-    public void addEssayGrade(Map<Integer, Integer> gradeEssay, Integer pid) {
-        // 计算成绩..
-        final ArrayList<Integer> grade = new ArrayList<>();
-        // 计算选择题成绩
-        ExamPaper question = examPaperMapper.getQuestion(pid);
-        question.getSingleQues().forEach(singleQuestion -> {
-            if (singleQuestion.getChoose1().equals(singleQuestion.getUserAnswer())) {
-                grade.add(singleQuestion.getGrade());
+    public void addEssayGrade(Map<Integer, Float> gradeEssay, Integer pid) {
+        gradeEssay.forEach((qid, grade) -> {
+            if (grade != null) {
+                examPaperMapper.updateEssayGrade(pid, qid, grade);
             }
+            // 计算成绩..
+            Float sum = calcGrade(pid);
+            examPaperMapper.updateGrade(pid, (float) sum);
         });
-        // 计算判断题
-        question.getTorfQues().forEach(trueOrFalseQuestion -> {
-            if (trueOrFalseQuestion.getAnswer().equals(trueOrFalseQuestion.getUserAnswer())) {
-                grade.add(trueOrFalseQuestion.getGrade());
-            }
-        });
-        // 填空题答案
-        question.getGapQues().forEach(gapFillingQuestion -> {
-            if (gapFillingQuestion.getAnswer().equals(gapFillingQuestion.getUserAnswer())) {
-                grade.add(gapFillingQuestion.getGrade());
-            }
-        });
-
-        gradeEssay.forEach((key, value) -> {
-            if (value != null) {
-                grade.add(value);
-            }
-        });
-        int sum = grade.stream().mapToInt(value -> value).sum();
-        examPaperMapper.updateGrade(pid, (float) sum);
     }
 }

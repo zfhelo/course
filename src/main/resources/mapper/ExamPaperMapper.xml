@@ -42,4 +42,8 @@
     <update id="updateGrade" >
         UPDATE exam_paper SET grade = #{grade} WHERE id =#{pid}
     </update>
+
+    <update id="updateEssayGrade">
+        UPDATE paper_essay_map SET user_grade = #{grade} WHERE paper_id = #{pid} AND essay_id = #{qid}
+    </update>
 </mapper>

@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -140,11 +142,41 @@ public class StudentController {
         Student stu = studentService.findByUsername(userDetails.getUsername());
 
         List<ExamPaper> paper = examPaperService.findAllBySid(stu.getId(), courseId);
+        ArrayList<ExamPaper> result = new ArrayList<>();
+        // 去除没有发布的
+        paper.forEach(examPaper -> {
+            LocalDateTime startTime = examPaper.getExamModel().getStartTime();
+            if (startTime.compareTo(LocalDateTime.now()) < 0) {
+                result.add(examPaper);
+            }
+        });
+
         mv.addObject("user", stu);
-        mv.addObject("paper", paper);
+        mv.addObject("paper", result);
         mv.setViewName("stu/exam_list");
         return mv;
     }
 
+    @GetMapping("/resources")
+    public ModelAndView initResources(@AuthenticationPrincipal UserDetails userDetails, ModelAndView mv) {
+        Student student = studentService.findByUsername(userDetails.getUsername());
 
+        mv.addObject("user", student);
+        mv.setViewName("stu/file-upload");
+        return mv;
+    }
+
+    /**
+     * 初始化作业页面
+     * @param userDetails
+     * @param mv
+     * @return
+     */
+    @GetMapping("/homework")
+    public ModelAndView initHomework(@AuthenticationPrincipal UserDetails userDetails, ModelAndView mv) {
+        Student student = studentService.findByUsername(userDetails.getUsername());
+        mv.addObject("user", student);
+        mv.setViewName("stu/homework_index");
+        return mv;
+    }
 }

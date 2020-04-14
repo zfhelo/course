@@ -1,9 +1,19 @@
 <!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Document</title>
+<html lang="zh-CN">
+<head>
+    <base id="base" href="/course/">
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta http-equiv="x-ua-compatible" content="ie=edge"/>
+    <script>
+        function getContextPath() {
+            var pathName = document.location.pathname;
+            var index = pathName.substr(1).indexOf("/");
+            var result = pathName.substr(0, index + 1);
+            return result + '/';
+        }
+        document.getElementById('base').href = getContextPath();
+    </script>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css" />
         <link href="https://cdn.bootcss.com/animate.css/3.7.2/animate.css" rel="stylesheet" />
 
@@ -11,22 +21,22 @@
     </head>
     <body>
         <div class="ui container">
-            <div class="ui horizontal divider"><h2>郑海锋</h2></div>
+            <input type="hidden" id="homeworkId">
+            <div class="ui horizontal divider"><h2 id="nickname"></h2></div>
             <div class="animated bounceInDown ui segments">
                 <div class="ui segment teal big">题目</div>
-                <div class="ui segment ">
-                    <!-- <p><divcourier new',="" monospace;font-weight:="" normal;font-size:="" 16px;line-height:="" 24px;white-space:="" pre;"=""></divcourier></p><div><div><div><h1>简介</h1><p>顾名思义 这是一款语义化的UI框架，代码可读性与可理解性很强，界面简洁美观，与bootstrap风格接近，基于jquery，适用响应式布局，提供一些基本模板，兼容Firefox、Chrome、safari,IE 10+等浏览器。</p><h2>使用方法</h2><p>引入js与css文件: <br>&lt;script src="/js/semantic.min.js"&gt;&lt;/script&gt; <br>&lt;link href="/css/semantic.min.css"&gt;</p><p>使用:给元素添加对应class即可使用相关组件，若需使用相关组件的动态效果 如tab切换，下拉等，使用相关元素调用对应的js即可；semantic组件调用方法中都包含各类callback和相关配置项,根据需要可进行调用</p></div><br><br>作者：Smile_smile_<br>链接：https://www.jianshu.com/p/cc2f9f2b2f1a<br>来源：简书<br>著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。</div></div> -->
+                <div class="ui segment " id="content">
                 </div>
                 <div class="ui segment big teal">作答</div>
-                <div class="ui segment ">
-                    <!-- <p><divcourier new',="" monospace;font-weight:="" normal;font-size:="" 16px;line-height:="" 24px;white-space:="" pre;"=""></divcourier></p><div><div><div><h1>简介</h1><p>顾名思义 这是一款语义化的UI框架，代码可读性与可理解性很强，界面简洁美观，与bootstrap风格接近，基于jquery，适用响应式布局，提供一些基本模板，兼容Firefox、Chrome、safari,IE 10+等浏览器。</p><h2>使用方法</h2><p>引入js与css文件: <br>&lt;script src="/js/semantic.min.js"&gt;&lt;/script&gt; <br>&lt;link href="/css/semantic.min.css"&gt;</p><p>使用:给元素添加对应class即可使用相关组件，若需使用相关组件的动态效果 如tab切换，下拉等，使用相关元素调用对应的js即可；semantic组件调用方法中都包含各类callback和相关配置项,根据需要可进行调用</p></div><br><br>作者：Smile_smile_<br>链接：https://www.jianshu.com/p/cc2f9f2b2f1a<br>来源：简书<br>著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。</div></div> -->
+                <div class="ui segment " id="answer">
                 </div>
                 <div class="ui segment right aligned">
+                    <span class="hide" style="color: green" id="success">成功</span>
                     <div class="ui labeled input">
                         <div class="ui label">得分</div>
-                        <input type="text" placeholder="" />
-                        <div class="ui button green basic margin-right-1">确认</div>
-                        <div class="ui button" onclick="myback()">返回</div>
+                        <input type="text" placeholder="" id="grade"/>
+                        <div class="ui button green basic margin-right-1" onclick="submit()">确认</div>
+                        <div class="ui button" onclick="history.back()">返回</div>
                     </div>
                 </div>
             </div>
@@ -35,4 +45,49 @@
     <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
     <script src="js/my.js"></script>
+    <script src="js/axios.min.js"></script>
+    <script>
+        function echo() {
+            axios.get(`${getContextPath()}tea/homework/check/${getUrlParam('id')}`)
+                .then(rep => {
+                    if (rep.data.code === 200) {
+                        $('#content').html(rep.data.data.homework.content);
+                        $('#nickname').text(rep.data.data.student.nickname);
+                        $('#answer').html(rep.data.data.answer);
+                        $('#grade').val(rep.data.data.grade);
+                        $('#homeworkId').val(rep.data.data.id);
+                    } else {
+                        alert(rep.data.data);
+                    }
+                })
+                .catch(() => alert("请求失败"));
+        }
+        echo();
+        function submit() {
+            var grade = $('#grade').val();
+            let reg = /\D/
+
+            if (reg.test(grade)) {
+                alert("请输入合法成绩")
+                return;
+            }
+
+            axios.put(`${getContextPath()}tea/homework/grade`, {
+                id:$('#homeworkId').val(),
+                grade
+            })
+                .then(rep => {
+                    console.log(rep);
+                    if (rep.data.code === 200) {
+                        $('#success').removeClass('hide');
+                        setTimeout(() =>{$('#success').addClass('hide');},2000);
+                    } else {
+                        alert(rep.data.data);
+                    }
+                })
+                .catch(() => {
+                alert("请求失败")
+            })
+        }
+    </script>
 </html>

@@ -1,12 +1,22 @@
 <!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<html lang="zh-CN">
+<head>
+    <base id="base" href="/course/">
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta http-equiv="x-ua-compatible" content="ie=edge"/>
+    <script>
+        function getContextPath() {
+            var pathName = document.location.pathname;
+            var index = pathName.substr(1).indexOf("/");
+            var result = pathName.substr(0, index + 1);
+            return result + '/';
+        }
+        document.getElementById('base').href = getContextPath();
+    </script>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css" />
         <link href="https://cdn.bootcss.com/animate.css/3.7.2/animate.css" rel="stylesheet" />
         <link rel="stylesheet" href="css/my-style.css" />
-        <title>首页</title>
     </head>
     <body>
         <div class="ui container my-padding-top-2">
@@ -17,74 +27,36 @@
                         <div class="ui label large black basic icon my-font-weight">
                             当前课程
                             <i class="angle right icon"></i>
-                            <span>未选择</span>
+                            <span id="courseName">未选择</span>
                             <!-- 保存课程号 -->
                             <input type="hidden" />
                         </div>
                         <div class="ui action input">
-                            <input type="text" placeholder="搜索..." />
-                            <select class="ui compact selection dropdown">
-                                <option value="all">课程号</option>
-                                <option value="articles" disabled>题干</option>
-                                <option value="products" disabled>选项</option>
-                            </select>
-                            <div class="ui button">搜索</div>
+                            <input type="text" placeholder="搜索..." id="courseNum" />
+                            <div class="ui button" onclick="listPage(1)">搜索</div>
                         </div>
-
-                        <div class="ui button red mini right floated">删除已选题目</div>
                     </div>
 
                     <table class="ui celled table">
                         <thead>
                             <tr>
-                                <th width="1">
-                                    <div class="ui mini checkbox">
-                                        <input type="checkbox" />
-                                        <label></label>
-                                    </div>
-                                </th>
                                 <th>标题</th>
                                 <th>发布时间</th>
                                 <th>结束时间</th>
                                 <th>提交人数</th>
-                                <th>状态</th>
                                 <th width="70">分值</th>
-                                <th width="300">
+                                <th width="210">
                                     操作
                                 </th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>
-                                    <div class="ui mini checkbox">
-                                        <input type="checkbox" />
-                                        <label></label>
-                                    </div>
-                                </td>
-                                <td>数据结构</td>
-                                <td>
-                                    2020
-                                </td>
-                                <td>
-                                    2020
-                                </td>
-                                <td>1</td>
-                                <td>1</td>
-                                <td>1</td>
-                                <td>
-                                    <a class="ui mini primary button" href="homework-deatil-edit.html"><i class="icon edit"></i> 编辑</a>
-                                    <a class="ui mini teal button" href="homework-detail-list.html"><i class="icon users"></i> 完成情况</a>
-                                    <button class="ui mini red button"><i class="archive icon"></i>删除</button>
-                                </td>
-                            </tr>
                         </tbody>
                         <tfoot>
                             <tr>
                                 <th colspan="8">
-                                    <div class="ui mini pagination menu">
-                                        <div class="item">1</div>
-                                        <div class="item active">2</div>
+                                    <div class="ui mini pagination menu teal" id="page-nav">
+
                                     </div>
                                 </th>
                             </tr>
@@ -98,32 +70,92 @@
     <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
     <script src="https://cdn.bootcss.com/wangEditor/10.0.13/wangEditor.min.js"></script>
+    <script src="js/axios.min.js"></script>
     <script>
-        //在input file内容改变的时候触发事件
-        $("#cover").change(function() {
-            //获取input file的files文件数组;
-            //$('#filed')获取的是jQuery对象，.get(0)转为原生对象;
-            //这边默认只能选一个，但是存放形式仍然是数组，所以取第一个元素使用[0];
-            var file = $("#cover").get(0).files[0];
-            //创建用来读取此文件的对象
-            var reader = new FileReader();
-            //使用该对象读取file文件
-            reader.readAsDataURL(file);
-            //读取文件成功后执行的方法函数
-            reader.onload = function(e) {
-                //读取成功后返回的一个参数e，整个的一个进度事件
-                console.log(e);
-                //选择所要显示图片的img，要赋值给img的src就是e中target下result里面
-                //的base64编码格式的地址
-                $("#image-show").get(0).src = e.target.result;
-            };
-        });
-        var f = function() {
-            $(".button.reset").click();
-        };
 
-        var E = window.wangEditor;
-        var editor = new E("#div1");
-        editor.create();
+        function listPage(page) {
+            if ($('#courseNum').val().length < 6) {
+                alert("请输入正确的课程号");
+                return;
+            }
+
+            axios.get(`${getContextPath()}tea/homework?page=${page}&courseNumber=${$('#courseNum').val()}`)
+                .then(rep => {
+                    if (rep.data.code === 200) {
+                        $('#courseName').text(rep.data.data.course.name);
+                        createNode(rep.data.data.page.list);
+                        createPageNav(rep.data.data.page);
+                    } else {
+                        alert(rep.data.data);
+                    }
+
+                })
+                .catch(() => alert("请求失败"))
+        }
+
+        function createNode(list) {
+            $('tbody').empty();
+            list.forEach(item => {
+                let node = $(
+                    `<tr class="animated" id="que-tr-${item.id}">
+                         <td>${item.title}</td>
+                         <td>${item.startTime}</td>
+                         <td>${item.endTime}</td>
+                         <td>${item.submitNum}</td>
+                         <td>${item.grade}</td>
+                         <td>
+                              <button class="ui mini teal button" onclick="jump(${item.id})"><i class="icon users"></i> 完成情况</button>
+                              <button class="ui mini red button" onclick="deleteSingleQue(${item.id})"><i class="archive icon"></i>删除</button>
+                         </td>
+                      </tr>`
+                );
+
+                $('tbody').append(node);
+            });
+        }
+
+        function createPageNav(page) {
+            $('#page-nav').empty();
+            page.navigatepageNums.forEach(item => {
+                var node = $('<button class="item" id="nav-' + item + '" onclick="listPage(' + item + ')">' + item + '</button>');
+                $('#page-nav').append(node);
+            });
+
+            $('#nav-' + page.pageNum).addClass('active');
+        }
+
+
+        function jump(id) {
+            sessionStorage.setItem("courseNum", $('#courseNum').val());
+            location.href=`admin/homework-detail-list.html?id=${id}`;
+        }
+
+        // 删除题目
+        function deleteSingleQue(id) {
+            axios.delete(getContextPath()+'tea/homework/'+id)
+                .then(rep => {
+                    if (rep.data.code === 200) {
+                        $('#que-tr-' + id).addClass('fadeOutLeft');
+                        setTimeout(() => {
+                            $('#que-tr-' + id).remove();
+                        }, 800);
+                    } else {
+                        alert(rep.data.data);
+                    }
+                })
+                .catch(() => alert('请求失败'));
+        }
+
+        function echo() {
+            var courseNum = sessionStorage.getItem("courseNum");
+            if (courseNum === null) {
+                return;
+            }
+            $('#courseNum').val(courseNum);
+            sessionStorage.removeItem("courseNum");
+            listPage(1);
+        }
+
+        echo();
     </script>
 </html>

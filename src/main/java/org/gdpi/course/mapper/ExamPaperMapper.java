@@ -2,7 +2,7 @@ package org.gdpi.course.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import org.gdpi.course.entity.*;
+import org.gdpi.course.entity.ExamPaper;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -93,4 +93,12 @@ public interface ExamPaperMapper {
      * @param grade
      */
     void updateGrade(@Param("pid") Integer id, @Param("grade")Float grade);
+
+    /**
+     * 更新解答题分数
+     * @param pid
+     * @param qid
+     * @param grade
+     */
+    void updateEssayGrade(@Param("pid") Integer pid, @Param("qid") Integer qid, @Param("grade")Float grade);
 }
