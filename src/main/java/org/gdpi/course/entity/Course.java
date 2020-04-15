@@ -9,6 +9,7 @@ import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.Pattern;
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * @author zhf
@@ -38,4 +39,7 @@ public class Course {
     private Integer published;
     private Integer overdue;
     private Integer finished;
+    private List<Homework> homework;
+    private List<Homework> submitHomework;
+    private List<Homework> overdueHomework;
 }

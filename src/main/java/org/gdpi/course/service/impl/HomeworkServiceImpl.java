@@ -62,5 +62,35 @@ public class HomeworkServiceImpl implements HomeworkService {
     public Integer updateGradeById(StudentHomework studentHomework) {
         return homeworkMapper.updateGradeById(studentHomework);
     }
+
+    @Override
+    public List<Homework> findByCid(Integer cid) {
+        return homeworkMapper.findByCid(cid);
+    }
+
+    @Override
+    public List<Homework> findSubmit(Integer cid, Integer sid) {
+        return homeworkMapper.findSubmit(cid, sid);
+    }
+
+    @Override
+    public List<Homework> findOverdue(Integer cid, Integer sid) {
+        return homeworkMapper.findOverdue(cid,sid);
+    }
+
+    @Override
+    public List<Homework> findByCourseIdForStu(Integer cid, Integer sid) {
+        return homeworkMapper.findByCourseIdForStu(cid, sid);
+    }
+
+    @Override
+    public StudentHomework findByHomeworkIdAndStuId(Integer hid, Integer sid) {
+        return homeworkMapper.findByHomeworkIdAndStuId(hid, sid);
+    }
+
+    @Override
+    public Integer updateHomework(StudentHomework studentHomework) {
+        return homeworkMapper.updateHomework(studentHomework);
+    }
 }
 

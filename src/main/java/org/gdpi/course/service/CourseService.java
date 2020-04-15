@@ -60,4 +60,11 @@ public interface CourseService {
      * @return
      */
     Course findById(Integer id);
+
+    /**
+     * 查询已发布的作业
+     * @param sid
+     * @return
+     */
+    List<Course> findHomework(Integer sid);
 }

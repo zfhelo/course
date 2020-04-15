@@ -21,59 +21,24 @@
                 <thead>
                 <tr>
                     <th>课程</th>
-                    <th>总数</th>
-                    <th>未完成</th>
-                    <th>已过期</th>
+                    <th>已发布</th>
+                    <th>已完成</th>
+                    <th>已结束</th>
                     <th>操作</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <td>数据结构</td>
-                    <td>100</td>
-                    <td>99</td>
-                    <td>1</td>
+                <tr th:each="c : ${courses}">
+                    <td th:text="${c.name}"></td>
+                    <td th:text="${c.homework.size()}"></td>
+                    <td th:text="${c.submitHomework.size()}"></td>
+                    <td th:text="${c.overdueHomework.size()}"></td>
                     <td>
-                        <a href="#" class="ui mini blue basic button"> 详情 <i class="angle double right icon"></i> </a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>数据结构</td>
-                    <td>100</td>
-                    <td>99</td>
-                    <td>1</td>
-                    <td>
-                        <a href="#" class="ui mini blue basic button"> 详情 <i class="angle double right icon"></i> </a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>数据结构</td>
-                    <td>100</td>
-                    <td>99</td>
-                    <td>1</td>
-                    <td>
-                        <a href="#" class="ui mini blue basic button"> 详情 <i class="angle double right icon"></i> </a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>数据结构</td>
-                    <td>100</td>
-                    <td>99</td>
-                    <td>1</td>
-                    <td>
-                        <a href="#" class="ui mini blue basic button"> 详情 <i class="angle double right icon"></i> </a>
+                        <a th:href="@{/stu/homework/{id}(id=${c.id})}" class="ui mini blue basic button"> 详情 <i class="angle double right icon"></i> </a>
                     </td>
                 </tr>
                 </tbody>
                 <tfoot>
-                <tr>
-                    <th colspan="6">
-                        <div class="ui mini pagination menu">
-                            <a class="item">上一页</a>
-                            <a class="item">下一页</a>
-                        </div>
-                    </th>
-                </tr>
                 </tfoot>
             </table>
         </div>

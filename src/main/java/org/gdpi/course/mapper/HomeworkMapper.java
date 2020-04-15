@@ -69,4 +69,41 @@ public interface HomeworkMapper {
      * @param studentHomework
      */
     Integer updateGradeById(StudentHomework studentHomework);
+
+
+    /**
+     * 通过课程号查询已发布的作业
+     * @param cid
+     * @return
+     */
+    List<Homework> findByCid(Integer cid);
+
+
+
+    /**
+     * 查找学生指定课程已提交的作业
+     * @param cid
+     * @param sid
+     * @return
+     */
+    List<Homework> findSubmit(@Param("cid") Integer cid, @Param("sid") Integer sid);
+
+    /**
+     * 查找已过期的
+     * @param cid
+     * @param sid
+     * @return
+     */
+    List<Homework> findOverdue(@Param("cid") Integer cid, @Param("sid") Integer sid);
+
+    List<Homework> findByCourseIdForStu(@Param("cid") Integer cid, @Param("sid") Integer sid);
+
+    StudentHomework findByHomeworkIdAndStuId(@Param("hid") Integer hid, @Param("sid") Integer sid);
+
+    /**
+     * 更新作业
+     * @param studentHomework
+     * @return
+     */
+    Integer updateHomework(StudentHomework studentHomework);
 }

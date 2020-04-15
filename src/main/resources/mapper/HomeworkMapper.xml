@@ -39,4 +39,27 @@
     <update id="updateGradeById" parameterType="studentHomework">
         UPDATE stu_homework_answer SET grade = #{grade} WHERE id = #{id}
     </update>
+
+    <select id="findByCid" parameterType="int" resultType="homework">
+        SELECT * FROM homework WHERE id IN(SELECT id FROM homework WHERE course_id = #{cid} AND start_time &lt; now())
+    </select>
+
+    <select id="findSubmit" resultType="homework">
+        SELECT * FROM homework WHERE course_id = #{cid} AND id IN(SELECT homework_id FROM stu_homework_answer WHERE stu_id = #{sid} AND answer != '')
+    </select>
+    <select id="findOverdue" resultType="homework">
+        SELECT * FROM homework WHERE course_id = #{cid} AND end_time &lt; now() AND id IN(SELECT homework_id FROM stu_homework_answer WHERE stu_id = #{sid})
+    </select>
+
+    <select id="findByCourseIdForStu" resultType="homework">
+        SELECT * FROM homework WHERE course_id = #{cid}  AND start_time &lt; now() AND id IN(SELECT homework_id FROM stu_homework_answer WHERE stu_id = #{sid})
+    </select>
+
+    <select id="findByHomeworkIdAndStuId" resultType="studentHomework">
+        SELECT * FROM stu_homework_answer WHERE homework_id = #{hid} AND stu_id = #{sid}
+    </select>
+
+    <update id="updateHomework" parameterType="studentHomework">
+        UPDATE stu_homework_answer SET answer = #{answer}, update_time = now() WHERE id = #{id}
+    </update>
 </mapper>

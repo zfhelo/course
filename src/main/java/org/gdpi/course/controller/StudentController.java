@@ -2,12 +2,11 @@ package org.gdpi.course.controller;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import org.gdpi.course.entity.Course;
-import org.gdpi.course.entity.ExamPaper;
-import org.gdpi.course.entity.Student;
+import org.gdpi.course.entity.*;
 import org.gdpi.course.reponse.SimpleResponse;
 import org.gdpi.course.service.CourseService;
 import org.gdpi.course.service.ExamPaperService;
+import org.gdpi.course.service.HomeworkService;
 import org.gdpi.course.service.StudentService;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -31,6 +30,9 @@ public class StudentController {
     private StudentService studentService;
     @Resource
     private CourseService courseService;
+
+    @Resource
+    private HomeworkService homeworkService;
 
     @Resource
     private ExamPaperService examPaperService;
@@ -175,8 +177,86 @@ public class StudentController {
     @GetMapping("/homework")
     public ModelAndView initHomework(@AuthenticationPrincipal UserDetails userDetails, ModelAndView mv) {
         Student student = studentService.findByUsername(userDetails.getUsername());
+
+        List<Course> courses = courseService.findHomework(student.getId());
+        courses.forEach(course -> {
+            List<Homework> submit = homeworkService.findSubmit(course.getId(), student.getId());
+            List<Homework> overdue = homeworkService.findOverdue(course.getId(), student.getId());
+            course.setSubmitHomework(submit);
+            course.setOverdueHomework(overdue);
+        });
+
+
         mv.addObject("user", student);
+        mv.addObject("courses", courses);
         mv.setViewName("stu/homework_index");
         return mv;
     }
+
+    /**
+     * 获取指定课程作业
+     * @param userDetails
+     * @param mv
+     * @param id
+     * @return
+     */
+    @GetMapping("/homework/{id:\\d+}")
+    public ModelAndView initHomeworkDetail(@AuthenticationPrincipal UserDetails userDetails,
+                                           ModelAndView mv,
+                                           @PathVariable Integer id) {
+        Student stu = studentService.findByUsername(userDetails.getUsername());
+
+        List<Homework> h = homeworkService.findByCourseIdForStu(id, stu.getId());
+
+        h.forEach(homework -> {
+            homework.setStudentHomework(homeworkService.findByHomeworkIdAndStuId(homework.getId(), stu.getId()));
+        });
+
+        mv.addObject("user", stu);
+        mv.addObject("homework", h);
+        mv.setViewName("stu/homework_detail");
+
+        return mv;
+    }
+
+    @GetMapping("/homework/edit/{id:\\d+}")
+    public ModelAndView editHomework(@AuthenticationPrincipal UserDetails userDetails,
+                                     ModelAndView mv,
+                                     @PathVariable Integer id) {
+        Student stu = studentService.findByUsername(userDetails.getUsername());
+        Homework homework = homeworkService.findById(id);
+
+        if (homework.getEndTime().compareTo(LocalDateTime.now()) < 0) {
+            homework.setEndTime(null);
+        }
+
+
+        StudentHomework studentHomework = homeworkService.findByHomeworkIdAndStuId(homework.getId(), stu.getId());
+        homework.setStudentHomework(studentHomework);
+
+        mv.addObject("user", stu);
+        mv.addObject("homework", homework);
+        mv.setViewName("stu/homework");
+        return mv;
+    }
+
+    @PutMapping("/homework")
+    @ResponseBody
+    public SimpleResponse submitHomework(@RequestBody StudentHomework studentHomework,
+                                         @AuthenticationPrincipal UserDetails userDetails) {
+        if (studentHomework.getId() == null) {
+            return SimpleResponse.error("未知作业");
+        }
+        Student stu = studentService.findByUsername(userDetails.getUsername());
+        StudentHomework h = homeworkService.findStuHomeworkById(studentHomework.getId());
+        if (h == null || !h.getStuId().equals(stu.getId())) {
+            return SimpleResponse.error("没有权限");
+        }
+        Integer num = homeworkService.updateHomework(studentHomework);
+        if (num == 0) {
+            return SimpleResponse.error("更新失败");
+        }
+        return SimpleResponse.success();
+    }
+
 }

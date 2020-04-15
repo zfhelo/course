@@ -49,4 +49,5 @@ public class Homework {
 
     private Integer submitNum;
 
+    private StudentHomework studentHomework;
 }

@@ -1,5 +1,6 @@
 package org.gdpi.course.service;
 
+import org.apache.ibatis.annotations.Param;
 import org.gdpi.course.entity.Homework;
 import org.gdpi.course.entity.StudentHomework;
 
@@ -56,4 +57,52 @@ public interface HomeworkService {
      * @param studentHomework
      */
     Integer updateGradeById(StudentHomework studentHomework);
+
+    /**
+     * 通过课程号查询已发布的作业
+     * @param cid
+     * @return
+     */
+    List<Homework> findByCid(Integer cid);
+
+
+    /**
+     * 查找学生指定课程已提交的作业
+     * @param cid
+     * @param sid
+     * @return
+     */
+    List<Homework> findSubmit(Integer cid, Integer sid);
+
+    /**
+     * 查找已过期的
+     * @param cid
+     * @param sid
+     * @return
+     */
+    List<Homework> findOverdue(Integer cid, Integer sid);
+
+    /**
+     * 通过课程号和学号查作业
+     * @param cid
+     * @param sid
+     * @return
+     */
+    List<Homework> findByCourseIdForStu(Integer cid, Integer sid);
+
+    /**
+     *
+     * @param hid
+     * @param sid
+     * @return
+     */
+    StudentHomework findByHomeworkIdAndStuId(@Param("hid") Integer hid, @Param("sid") Integer sid);
+
+    /**
+     * 更新作业
+     * @param studentHomework
+     * @return
+     */
+    Integer updateHomework(StudentHomework studentHomework);
+
 }

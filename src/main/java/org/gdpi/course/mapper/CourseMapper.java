@@ -81,4 +81,12 @@ public interface CourseMapper {
      */
     List<Course> findCourseBySid(Integer sid);
 
+
+    /**
+     * 查询已发布的作业
+     * @param sid
+     * @return
+     */
+    List<Course> findHomework(Integer sid);
+
 }

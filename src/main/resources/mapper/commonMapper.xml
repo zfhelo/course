@@ -110,4 +110,12 @@
         <association property="homework" javaType="homework" column="homework_id" select="org.gdpi.course.mapper.HomeworkMapper.findById"/>
     </resultMap>
 
+    
+    <resultMap id="courseAndHomework" type="course" extends="baseCourse">
+        <collection property="homework" ofType="homework" column="id" select="org.gdpi.course.mapper.HomeworkMapper.findByCid"/>
+    </resultMap>
+
+    <resultMap id="homeworkDetail" type="homework" extends="baseHomework">
+        <association property="studentHomework" column="id" select="org.gdpi.course.mapper.HomeworkMapper.findStuHomeworkById"/>
+    </resultMap>
 </mapper>
