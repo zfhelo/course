@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>个人详情</title>
+</head>
+<link rel="icon" th:href="@{/favicon.ico}" type="image/x-icon">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css"/>
+<link href="https://cdn.bootcss.com/animate.css/3.7.2/animate.css" rel="stylesheet"/>
+<link rel="stylesheet" th:href="@{/css/my-style.css}"/>
+<body style="background-image: url(https://i.loli.net/2020/03/27/7zpgTsbHovPuJm6.png);">
+<!--导航-->
+<nav class="ui  attached segment my-padded-tb-mini"
+     th:replace="~{tea/_fragment :: menu('profile', ${user.getPhoto()}, ${user.getNickname()})}">
+</nav>
+
+<div class="ui container margin-top-2 animated fadeInDown">
+    <div class="ui segment" style="padding: 70px;">
+        <div class="ui grid stackable">
+            <div class="ui six wide column">
+                <img class="ui small rounded image" id="headImage" th:src="${user.photo}"/>
+                <label for="fileInput" class="ui button mini basic" id="label1">更换</label>
+                <input type="file" id="fileInput" style="display: none;"/>
+
+                <div class="ui header">
+                    姓名: <span class="my-margin-left-1" th:text="${user.nickname}" id="showName"></span>
+                    <div class="ui button tiny basic mini" onclick="edit('name')">修改</div>
+                </div>
+                <hr/>
+                <div class="ui header">账号: <span class="my-margin-left-1" th:text="${user.username}"></span></div>
+                <hr/>
+                <div class="ui header">
+                    密码: <span class="my-margin-left-1">********</span>
+                    <div class="ui button mini basic mini" onclick="edit('password')">修改</div>
+                </div>
+                <hr/>
+                <div class="ui header">
+                    邮箱: <span class="my-margin-left-1" th:text="${user.email} == null?'未绑定':${user.email}" id="showEmail"></span>
+                    <div class="ui button mini basic mini" onclick="edit('email')">修改</div>
+                </div>
+                <hr/>
+                <div class="ui header">
+                    手机: <span class="my-margin-left-1" th:text="${user.phone} == null?'未绑定':${user.phone}"
+                              id="showPhone"></span>
+                    <div class="ui button mini basic mini" onclick="edit('phone')">修改</div>
+                </div>
+            </div>
+            <div class="ui tow wide column"></div>
+            <div class="ui eight wide column aligned eidts">
+                <div class="edit-name hide tag">
+                    <div class="ui labeled input mini">
+                        <label class="ui label">姓名</label>
+                        <input type="text" id="nickname"/>
+                        <div class="ui button primary mini" onclick="updateName()">提交</div>
+                    </div>
+                </div>
+                <div class="edit-email hide tag">
+                    <!-- 验证旧邮箱 -->
+                    <!--<div>-->
+                    <!--    <div class="ui labeled input my-patted-3 mini">-->
+                    <!--        <label class="ui label mini">验证码</label>-->
+                    <!--        <input type="text" placeholder="查看邮箱" />-->
+                    <!--        <div class="ui button mini" style="width: 70px !important;">发送</div>-->
+                    <!--    </div>-->
+                    <!--    <br />-->
+                    <!--    <div class="ui button primary mini">继续</div>-->
+                    <!--</div>-->
+                    <!-- 验证新邮箱 -->
+
+                    <div class="ui labeled input mini">
+                        <label class="ui label">新邮箱</label>
+                        <input type="email" id="email"/>
+                    </div>
+                    <div class="ui labeled input my-patted-3 mini">
+                        <label class="ui label mini">验证码</label>
+                        <input type="text" placeholder="查看邮箱" id="emailCode"/>
+                        <button class="ui button mini" style="width: 70px !important;" onclick="sendEmail(this)"
+                                id="sendEmail1">发送
+                        </button>
+                    </div>
+                    <div class="ui button primary mini" onclick="updateEmail()">提交</div>
+
+                </div>
+                <div class="edit-phone hide tag">
+                    <div class="ui labeled input mini">
+                        <label class="ui label">手机号</label>
+                        <input type="text" id="phone"/>
+                        <div class="ui button primary mini" onclick="updatePhone()">提交</div>
+                    </div>
+                </div>
+                <div class="edit-password hide tag">
+                    <div class="ui labeled input my-patted-3 mini">
+                        <label class="ui label">原密码</label>
+                        <input type="text" id="oldPassword" onchange="checkPassword(this)"/>
+                        <span id="tips" style="color: red"></span>
+                    </div>
+                    <br>
+                    <div class="ui labeled input my-patted-3 mini">
+                        <label class="ui label" >新秘密</label>
+                        <input type="text" id="newPassword1"/>
+                    </div>
+                    <br/>
+                    <div class="ui labeled input my-patted-3 mini">
+                        <label class="ui label" >新秘密</label>
+                        <input type="text" id="newPassword2"/><span id="tips2"></span>
+                    </div>
+                    <div class="ui labeled input my-patted-3 mini">
+                        <label class="ui label">验证码</label>
+                        <input type="text" placeholder="查看邮箱" id="emailPassword"/>
+                        <button class="ui button mini" style="width: 70px !important;" id="sendEmail" onclick="sendEmail1(this)">获取</button>
+                    </div>
+                    <br/>
+                    <div class="ui button primary my-patted-3 mini" onclick="updatePassword()">提交</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+<script th:src="@{/js/axios.min.js}"></script>
+<script>
+    function getContextPath() {
+        var pathName = document.location.pathname;
+        var index = pathName.substr(1).indexOf("/");
+        var result = pathName.substr(0, index + 1);
+        return result + '/';
+    }
+
+    $(".ui.dropdown").dropdown({
+        on: "hover"
+    });
+
+    function edit(str) {
+        $(".edit-" + str).toggleClass("tag");
+        $(".tag").addClass("hide");
+        $(".edit-" + str).toggleClass("hide");
+        $(".edit-" + str).toggleClass("tag");
+    }
+
+    $("#fileInput").change(function () {
+        var f = this.files[0];
+        var formData = new FormData();
+        formData.append("image", f);
+        formData.append("key", "715e5e4b15e91404a657c818c3ad82a9");
+        $('#label1').addClass("loading")
+        $.ajax({
+            url: "https://api.imgbb.com/1/upload",
+            type: "POST",
+            success: function (rep) {
+                $('#headImage').attr('src', rep.data.url)
+                $('#label1').removeClass("loading")
+                axios.put(`${getContextPath()}tea/edit/photo?photo=${rep.data.url}`)
+                    .then().catch(() => alert("更换失败"));
+            },
+            error: function (rep) {
+                alert("上传失败");
+                $('#label1').removeClass("loading");
+            },
+            data: formData,
+            cache: false,
+            contentType: false,
+            processData: false,
+        });
+    });
+
+    const testName = /^[\w\W]{1,30}$/
+    const testPhone = /^[\d]{11}$/
+    const testEmail = /^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/
+    const testPassword = /^[A-Za-z0-9]{6,12}$/
+
+    // 修改姓名
+    function updateName() {
+        var name = $('#nickname').val();
+        if (!testName.test(name)) {
+            alert("请输入1-30个字符")
+            return;
+        }
+
+        axios.put(`${getContextPath()}tea/edit/name?name=${name}`)
+            .then(rep => {
+                console.log(rep);
+                if (rep.data.code === 200) {
+                    $('#showName').text(name);
+                } else {
+                    alert(rep.data.data);
+                }
+            })
+            .catch(() => alert("请求失败"));
+    }
+
+    // 修改手机
+    function updatePhone() {
+        var phone = $('#phone').val();
+        if (!testPhone.test(phone)) {
+            alert("请输入正确的手机号")
+            return;
+        }
+
+        axios.put(`${getContextPath()}tea/edit/phone?phone=${phone}`)
+            .then(rep => {
+                console.log(rep);
+                if (rep.data.code === 200) {
+                    $('#showPhone').text(phone);
+                } else {
+                    alert(rep.data.data);
+                }
+            })
+            .catch(() => alert("请求失败"));
+    }
+
+    // 发送email验证码
+    function sendEmail(btn) {
+        var email = $('#email').val();
+
+        if (!testEmail.test(email)) {
+            alert("请输入合法邮箱");
+            return;
+        }
+        $(btn).addClass('loading');
+        axios.get(getContextPath() + 'public/emailCode?email=' + email)
+            .then(rep => {
+                console.log(rep)
+                if (rep.data.code === 200) {
+                    // $('#sendEmail1').attr('disabled', true);
+                } else {
+                    alert(rep.data.data);
+                }
+                $(btn).removeClass('loading');
+            })
+            .catch(() => {
+                alert("请求失败");
+                $(btn).removeClass('loading');
+            });
+    }
+
+    // 修改邮箱
+    function updateEmail() {
+        var cdoe = $('#emailCode').val();
+        if (cdoe.length < 6) {
+            return "请输入正确验证码";
+            return;
+        }
+        axios.put(`${getContextPath()}tea/edit/email?code=${cdoe}`)
+            .then(rep => {
+                if (rep.data.code === 200) {
+                    $('#showEmail').text(rep.data.data);
+                } else {
+                    alert(rep.data.data);
+                }
+            })
+            .catch(() => alert("请求失败"));
+    }
+    // 检测密码
+    function checkPassword(v) {
+        if (!testPassword.test(v.value)) {
+            return;
+        }
+        $.ajax({
+            url:getContextPath()+'tea/check/password',
+            data: {
+                password:v.value
+            },
+            method: 'post',
+            dataType: 'json',
+            success:(rep) => {
+                if (rep.code === 200) {
+                    $('#tips').text('');
+                } else {
+                    $('#tips').text('错误');
+                }
+            }
+        })
+    }
+    // 发送验证码
+    function sendEmail1(btn) {
+        $(btn).addClass('loading');
+        axios.get(getContextPath()+'tea/emailCode')
+            .then(rep => {
+                if (rep.data.code === 200) {
+                    $('#tips2').text('发送成功');
+                } else {
+                    alert(rep.data.data);
+                }
+                $(btn).removeClass('loading');
+            })
+            .catch(() => {
+                alert('请求失败')
+                $(btn).removeClass('loading');
+            });
+    }
+    // 修改密码
+    function updatePassword() {
+        var p1 = $('#newPassword1').val();
+        var p2 = $('#newPassword2').val();
+        var code = $('#emailPassword').val();
+
+        if (p1 !== p2) {
+            $('#tips2').text('密码不一致');
+            return;
+        }
+        if(!testPassword.test(p1)) {
+            $('#tips2').text('密码限制6~12位');
+            return;
+        }
+        if (code.length < 6) {
+            $('#tips2').text('请输入正确验证码');
+            return;
+        }
+        $('#tips2').text('');
+
+
+
+        $.ajax({
+            url:getContextPath()+'tea/edit/password',
+            data: {
+                password:p1,
+                code:code,
+                oldPassword:$('#oldPassword').val()
+            },
+            method: 'put',
+            dataType: 'json',
+            success:(rep) => {
+                if (rep.code === 200) {
+                } else {
+                    alert(rep.data)
+                }
+            }
+        })
+    }
+
+</script>
+</html>

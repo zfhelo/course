@@ -65,6 +65,17 @@ public interface StudentService {
      */
     Student findById(Integer id);
 
+    /**
+     * 初始化课程页
+     * @param sid
+     * @return
+     */
     List<Course> initExamIndex(Integer sid);
+
+    /**
+     * 更新用户
+     * @param student
+     */
+    void updateById(Student student);
 }
 

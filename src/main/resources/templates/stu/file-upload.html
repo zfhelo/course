@@ -4,122 +4,215 @@
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <link rel="icon" th:href="@{/favicon.ico}" type="image/x-icon">
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css" />
-        <link href="https://cdn.bootcss.com/animate.css/3.7.2/animate.css" rel="stylesheet" />
-        <link th:href="@{/css/jquery.filer.css}" type="text/css" rel="stylesheet" />
-        <link th:href="@{/css/themes/jquery.filer-dragdropbox-theme.css}" type="text/css" rel="stylesheet" />
-        <link rel="stylesheet" th:href="@{/css/my-style.css}" />
-        <title>资源</title>
-    </head>
-    <style></style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css"/>
+    <link href="https://cdn.bootcss.com/animate.css/3.7.2/animate.css" rel="stylesheet"/>
+    <link rel="stylesheet" th:href="@{/css/my-style.css}"/>
+
+    <title>资源</title>
+</head>
+<style></style>
 <body style="background-image: url('https://i.loli.net/2020/04/08/X1y2R4pHI5d6qNn.png')">
-        <!--导航-->
-        <nav class="ui  attached segment my-padded-tb-mini" th:replace="~{stu/_fragment :: menu('resources', ${user.getPhoto()}, ${user.getNickname()})}">
-        </nav>
+<!--导航-->
+<nav class="ui  attached segment my-padded-tb-mini"
+     th:replace="~{stu/_fragment :: menu('resources', ${user.getPhoto()}, ${user.getNickname()})}">
+</nav>
 
-        <div class="ui container segment margin-top-3">
-            <div class="ui grid stackable">
-                <div class="ui nine wide column">
-                    <div class="ui segments">
-                        <div class="ui segment blue">
-                            <div class="ui action input mini">
-                                <input type="text" placeholder="课程号..." />
-                                <div class="ui button primary mini">筛选</div>
-                            </div>
-                        </div>
-
-                        <div class="ui segment  grid stackable my-margin-top-0">
-                            <div class="ui five wide column"><h4 class="ui header">java入门</h4></div>
-                            <div class="ui eleven wide right aligned column">
-                                所属课程：<span>java</span> 上传者 <span>xxx</span> 大小 <span>210M</span>
-                                <a href="">下载</a>
-                                <a href="">删除</a>
-                            </div>
-                        </div>
-                        <div class="ui segment grid   stackable my-margin-top-0">
-                            <div class="ui five wide column"><h4 class="ui header">java入门</h4></div>
-                            <div class="ui eleven wide right aligned column">
-                                所属课程：<span>java</span> 上传者 <span>xxx</span> 大小 <span>210M</span>
-                                <a href="">下载</a>
-                                <a href="">删除</a>
-                            </div>
-                        </div>
-                        <div class="ui segment grid  stackable my-margin-top-0">
-                            <div class="ui five wide column"><h4 class="ui header">java入门</h4></div>
-                            <div class="ui eleven wide right aligned column">
-                                所属课程：<span>java</span> 上传者 <span>xxx</span> 大小 <span>210M</span>
-                                <a href="">下载</a>
-                                <a href="">删除</a>
-                            </div>
-                        </div>
-                        <div class="ui segment grid  stackable my-margin-top-0">
-                            <div class="ui five wide column"><h4 class="ui header">java入门</h4></div>
-                            <div class="ui eleven wide right aligned column">
-                                所属课程：<span>java</span> 上传者 <span>xxx</span> 大小 <span>210M</span>
-                                <a href="">下载</a>
-                                <a href="">删除</a>
-                            </div>
-                        </div>
-                        <div class="ui segment grid  stackable my-margin-top-0">
-                            <div class="ui five wide column"><h4 class="ui header">java入门</h4></div>
-                            <div class="ui eleven wide right aligned column">
-                                所属课程：<span>java</span> 上传者 <span>xxx</span> 大小 <span>210M</span>
-                                <a href="">下载</a>
-                                <a href="">删除</a>
-                            </div>
-                        </div>
-                        <div class="ui segment grid   stackable my-margin-top-0">
-                            <div class="ui five wide column"><h4 class="ui header">java入门</h4></div>
-                            <div class="ui eleven wide right aligned column">
-                                所属课程：<span>java</span> 上传者 <span>xxx</span> 大小 <span>210M</span>
-                                <a href="">下载</a>
-                                <a href="">删除</a>
-                            </div>
-                        </div>
-                        <div class="ui segment">页码...</div>
+<div class="ui container segment margin-top-1 animated bounceInDown">
+    <div class="ui grid stackable">
+        <div class="ui nine wide column">
+            <div class="ui segments">
+                <div class="ui segment">
+                    <div class="ui action input small">
+                        <input type="text" placeholder="课程号..." id="searchNumber">
+                        <select class="ui compact selection dropdown" id="identity">
+                            <option selected="" value="stu">学生</option>
+                            <option value="tea">教师</option>
+                        </select>
+                        <div class="ui button primary" onclick="listPageForNumber(1)">筛选</div>
                     </div>
                 </div>
-                <div class="ui seven wide column centered" style="text-align: center;">
-                    <div class="ui left corner labeled input">
-                        <input type="text" placeholder="描述" />
-                        <div class="ui left corner label blue">
-                            <i class="asterisk icon"></i>
+
+                    <div class="ui segment  grid stackable my-margin-top-0 tag1 animated" th:if="${page.list.size() != 0}" th:each="item : ${page.list}" th:id="'item-'+${item.id}">
+                        <div class="ui five wide column">
+                            <h4 class="ui header" th:text="${item.description}"></h4>
+                        </div>
+                        <div class="ui eleven wide right aligned column font-10">
+                            所属课程：<span th:text="${item.course.name}">java</span>
+                            上传者 <span th:text="${item.user.nickname}">xxx</span>
+                            大小 <span th:text="${item.size / 1024 / 1024}">210</span>M
+                            <a th:href="@{/public/res/stu/{id}(id=${item.id})}">下载</a>
+                            <a th:href="'javascript:deleteNode('+${item.id}+')'" th:if="${item.isSelf}">删除</a>
                         </div>
                     </div>
-                    <div class="ui left corner labeled input">
-                        <input type="text" placeholder="课程号" />
-                        <div class="ui left corner label blue">
-                            <i class="asterisk icon"></i>
-                        </div>
-                    </div>
-                    <div class=" my-margin-top-08">
-                        <input type="file" name="files[]" id="filer_input" multiple="multiple" />
-                        <div class="ui animated fade button primary mini ">
-                            <div class="visible content"><i class="icon upload"> </i> 上传</div>
-                            <div class="hidden content"><i class="icon cloud"></i></div>
-                        </div>
-                    </div>
+
+                <div class="ui borderless menu attached teal" id="page-nav">
+                    <a class="item" th:each="p : ${page.navigatepageNums}" th:text="${p}" th:classappend="${page.pageNum == p} ? 'active'" th:onclick="'listPage('+${p}+')'"></a>
                 </div>
             </div>
         </div>
-    </body>
-    <!-- <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script> -->
-    <script th:src="@{/js/jquery-latest.min.js}"></script>
+        <div class="ui seven wide column centered" style="text-align: center;">
+            <div class="ui left corner labeled input">
+                <input type="text" placeholder="描述" id="description"/>
+                <div class="ui left corner label blue">
+                    <i class="asterisk icon"></i>
+                </div>
+            </div>
+            <div class="ui left corner labeled input">
+                <input type="text" placeholder="课程号" id="courseNumber"/>
+                <div class="ui left corner label blue">
+                    <i class="asterisk icon"></i>
+                </div>
+            </div>
+            <div class="ui my-margin-top-08">
+                <label class="ui animated fade button basic green mini" for="file">
+                    <div class="visible content" ><i class="icon folder"> </i> 选择</div>
+                    <div class="hidden content">限制500M</div>
+                </label>
+                <input type="file" id="file" class="hide" onchange="tips(this)">
+                <div class="ui animated fade button primary mini disabled" onclick="upload()" id="upload-btn">
+                    <div class="visible content" ><i class="icon upload"> </i> 上传</div>
+                    <div class="hidden content"><i class="icon cloud"></i></div>
+                </div>
+                <div class="ui olive message hide mini"></div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+<script th:src="@{/js/axios.min.js}"></script>
+<script>
+    $(".ui.dropdown").dropdown({
+        on: "hover"
+    });
+    let identity = 'stu';
+    function tips(e) {
+        var file = e.files[0];
+        $(".olive.message").text(file.name);
+        $(".olive.message").removeClass('hide');
+        $('#upload-btn').removeClass('disabled')
+    }
 
-    <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
-    <script th:src="@{/js/jquery.filer.min.js}"></script>
-    <script>
-        $(".ui.dropdown").dropdown({
-            on: "hover"
+    function upload() {
+        var description = $('#description').val();
+        var courseNumber = $('#courseNumber').val();
+
+        if (description === '' || courseNumber === '') {
+            alert("请输入必要信息");
+            return;
+        }
+        var formData = new FormData();
+        formData.append('file', $('#file')[0].files[0]);
+        formData.append('description', description);
+        formData.append('courseNumber', courseNumber);
+        axios.post(`${getContextPath()}stu/upload`, formData, {
+            headers: { "Content-Type": "multipart/form-data;boundary="+new Date().getTime() }
+        })
+            .then(rep => {
+                if (rep.data.code === 200) {
+                    $('#upload-btn').addClass('disabled');
+                    $(".olive.message").text('成功');
+                } else {
+                    alert(rep.data.data);
+                }
+
+            })
+            .catch(() => alert("请求失败"));
+    }
+
+    function getContextPath() {
+        var pathName = document.location.pathname;
+        var index = pathName.substr(1).indexOf("/");
+        var result = pathName.substr(0, index + 1);
+        return result + '/';
+    }
+
+    function listPage(page) {
+        axios.get(`${getContextPath()}stu/resources/list?page=${page}`)
+            .then(rep => {
+
+                if (rep.data.code === 200) {
+                    createQueNode(rep.data.data.list)
+                    createPageNav(rep.data.data)
+                } else {
+                    alert(rep.data.data);
+                }
+            }).catch(() => alert("请求失败"));
+    }
+
+    function listPageForNumber(page) {
+        axios.get(`${getContextPath()}stu/resources/${$('#identity').val()}/?page=${page}&number=${$('#searchNumber').val()}`)
+            .then(rep => {
+
+                if (rep.data.code === 200) {
+                    createQueNode(rep.data.data.list);
+                    createPageNav1(rep.data.data);
+                    identity = $('#identity').val();
+                } else {
+                    alert(rep.data.data)
+                }
+            })
+            .catch(() => alert("请求失败"));
+    }
+
+    function createQueNode(list) {
+        $('.tag1').remove();
+        list.forEach(item => {
+            var node = $(
+                '<div class="ui segment  grid stackable my-margin-top-0 tag1 animated" id="item-'+item.id+'">' +
+                '     <div class="ui five wide column">' +
+                '           <h4 class="ui header">'+item.description+'</h4>' +
+                '     </div>' +
+                '       <div class="ui eleven wide right aligned column font-10">' +
+                '       所属课程：<span>'+item.course.name+'</span>' +
+                '       上传者 <span>'+item.user.nickname+'</span>' +
+                '       大小 <span>'+Math.round(item.size / 1024 / 1024) +'</span>M' +
+                '       <a href="'+`${getContextPath()}public/res/${identity}/${item.id}`+'">下载</a>' +
+                '      '+(item.isSelf ? '<a href="javascript:deleteNode('+item.id+')">删除</a>' :'')+
+                '     </div>\n' +
+                '</div>'
+            );
+            $('#page-nav').before(node);
+        })
+    }
+
+    function createPageNav(page) {
+        $('#page-nav').empty();
+        page.navigatepageNums.forEach(item => {
+            var node = $('<a class="item" id="nav-' + item + '" onclick="listPage(' + item + ')">' + item + '</a>');
+            $('#page-nav').append(node);
         });
-    </script>
-    <script>
-        $('#filer_input').filer({
-            limit: 3,
-            maxSize: 3,
-            extensions: ['jpg', 'jpeg', 'png', 'gif'],
-            changeInput: true,
-            showThumbs: true
+
+        $('#nav-' + page.pageNum).addClass('active');
+    }
+    function createPageNav1(page) {
+        $('#page-nav').empty();
+        page.navigatepageNums.forEach(item => {
+            var node = $('<a class="item" id="nav-' + item + '" onclick="listPageForNumber(' + item + ')">' + item + '</a>');
+            $('#page-nav').append(node);
         });
-    </script>
+
+        $('#nav-' + page.pageNum).addClass('active');
+    }
+
+    function deleteNode(id) {
+        if (!confirm("你确认要删除吗")) {
+            return;
+        }
+        axios.delete(`${getContextPath()}stu/resource/${id}`)
+            .then(rep => {
+                if (rep.data.code === 200) {
+                    $('#item-' + id).addClass('fadeOutLeft');
+                    setTimeout(() => {
+                        $('#item-' + id).remove();
+                    }, 800);
+                } else {
+                    alert(rep.data.data);
+                }
+            })
+            .catch(()=> alert("请求失败"));
+    }
+</script>
+
 </html>

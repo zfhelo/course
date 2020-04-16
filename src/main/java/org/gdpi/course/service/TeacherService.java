@@ -21,4 +21,10 @@ public interface TeacherService {
      * @return
      */
     Teacher findByUsername(String username);
+
+    /**
+     * 更新用户
+     * @param teacher
+     */
+    void updateById(Teacher teacher);
 }

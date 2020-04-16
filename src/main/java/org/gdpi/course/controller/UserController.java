@@ -37,6 +37,7 @@ public class UserController {
     @Resource
     private StudentService studentService;
 
+
     /**
      * 创建教师用户
      *
@@ -169,5 +170,6 @@ public class UserController {
         // 学生
         return indexStu(userDetails, mv);
     }
+
 
 }

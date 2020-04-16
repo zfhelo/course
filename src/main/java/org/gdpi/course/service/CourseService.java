@@ -67,4 +67,13 @@ public interface CourseService {
      * @return
      */
     List<Course> findHomework(Integer sid);
+
+    /**
+     * 通过课程号和学生id查找
+     * @param number
+     * @param sid
+     * @return
+     */
+    Course findByNumberAndSid(String number, Integer sid);
+
 }

@@ -71,4 +71,9 @@ public class CourseServiceImpl implements CourseService {
     public List<Course> findHomework(Integer sid) {
         return courseMapper.findHomework(sid);
     }
+
+    @Override
+    public Course findByNumberAndSid(String number, Integer sid) {
+        return courseMapper.findByNumberAndSid(number, sid);
+    }
 }

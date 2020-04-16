@@ -89,4 +89,12 @@ public interface CourseMapper {
      */
     List<Course> findHomework(Integer sid);
 
+    /**
+     * 通过课程号和学生id查找
+     * @param number
+     * @param sid
+     * @return
+     */
+    Course findByNumberAndSid( @Param("number") String number, @Param("sid") Integer sid);
+
 }

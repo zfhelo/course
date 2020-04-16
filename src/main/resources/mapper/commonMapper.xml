@@ -118,4 +118,24 @@
     <resultMap id="homeworkDetail" type="homework" extends="baseHomework">
         <association property="studentHomework" column="id" select="org.gdpi.course.mapper.HomeworkMapper.findStuHomeworkById"/>
     </resultMap>
+
+    <resultMap id="baseResource" type="resource">
+        <id property="id" column="id"/>
+        <result property="description" column="description"/>
+        <result property="size" column="size"/>
+        <result property="path" column="path"/>
+        <result property="time" column="time"/>
+    </resultMap>
+
+    <resultMap id="stuResource" type="studentResource" extends="baseResource">
+        <result property="stuId" column="stu_id"/>
+        <association property="user" column="stu_id" javaType="student" select="org.gdpi.course.mapper.StudentMapper.findById"/>
+        <association property="course" column="course_id" javaType="course" select="org.gdpi.course.mapper.CourseMapper.findById"/>
+    </resultMap>
+
+    <resultMap id="teaResource" type="teacherResource" extends="baseResource">
+        <result property="teaId" column="tea_id"/>
+        <association property="user" column="tea_id" javaType="teacher" select="org.gdpi.course.mapper.TeacherMapper.findById"/>
+        <association property="course" column="course_id" javaType="course" select="org.gdpi.course.mapper.CourseMapper.findById"/>
+    </resultMap>
 </mapper>

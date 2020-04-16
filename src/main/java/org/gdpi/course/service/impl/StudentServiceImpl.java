@@ -98,4 +98,9 @@ public class StudentServiceImpl implements StudentService {
 
         return courses;
     }
+
+    @Override
+    public void updateById(Student student) {
+        studentMapper.updateById(student);
+    }
 }

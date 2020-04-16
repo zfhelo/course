@@ -32,4 +32,9 @@
         SELECT * FROM student WHERE id = #{id}
     </select>
 
+    <update id="updateById" parameterType="student">
+        UPDATE student SET username = #{username}, nickname = #{nickname}, password = #{password},
+        photo = #{photo}, email = #{email}, phone = #{phone} WHERE id = #{id}
+    </update>
+
 </mapper>

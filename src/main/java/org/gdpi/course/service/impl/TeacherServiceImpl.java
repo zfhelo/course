@@ -39,4 +39,9 @@ public class TeacherServiceImpl implements TeacherService {
         teacher.setPassword(encode);
         teacherMapper.addTeacher(teacher);
     }
+
+    @Override
+    public void updateById(Teacher teacher) {
+        teacherMapper.updateById(teacher);
+    }
 }

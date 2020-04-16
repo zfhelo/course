@@ -69,4 +69,10 @@ public interface StudentMapper {
      * @return
      */
     Student findById(Integer id);
+
+    /**
+     * 更新用户
+     * @param student
+     */
+    void updateById(Student student);
 }

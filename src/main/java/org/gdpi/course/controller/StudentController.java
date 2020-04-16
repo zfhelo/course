@@ -4,14 +4,13 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.gdpi.course.entity.*;
 import org.gdpi.course.reponse.SimpleResponse;
-import org.gdpi.course.service.CourseService;
-import org.gdpi.course.service.ExamPaperService;
-import org.gdpi.course.service.HomeworkService;
-import org.gdpi.course.service.StudentService;
+import org.gdpi.course.service.*;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
@@ -36,6 +35,10 @@ public class StudentController {
 
     @Resource
     private ExamPaperService examPaperService;
+    @Resource
+    private ResourceService resourceService;
+    @Resource
+    private PasswordEncoder passwordEncoder;
 
     /**
      * 初始化课程页
@@ -48,6 +51,7 @@ public class StudentController {
 
         Student stu = studentService.findByUsername(userDetails.getUsername());
         List<Course> course = studentService.findCourseById(stu.getId());
+
 
         mv.addObject("course", course);
         mv.addObject("user", stu);
@@ -159,11 +163,23 @@ public class StudentController {
         return mv;
     }
 
+    /**
+     * 初始化资源页
+     * @param userDetails
+     * @param mv
+     * @return
+     */
     @GetMapping("/resources")
-    public ModelAndView initResources(@AuthenticationPrincipal UserDetails userDetails, ModelAndView mv) {
+    public ModelAndView initResources(@AuthenticationPrincipal UserDetails userDetails, ModelAndView mv,@RequestParam(defaultValue = "1") Integer page) {
         Student student = studentService.findByUsername(userDetails.getUsername());
-
+        PageInfo<StudentResource> pageInfo = PageHelper.startPage(page, 10).doSelectPageInfo(() -> resourceService.findResourcesStu(student.getId()));
+        pageInfo.getList().forEach(studentResource -> {
+            if (studentResource.getStuId().equals(student.getId())) {
+                studentResource.setIsSelf(true);
+            }
+        });
         mv.addObject("user", student);
+        mv.addObject("page", pageInfo);
         mv.setViewName("stu/file-upload");
         return mv;
     }
@@ -256,6 +272,129 @@ public class StudentController {
         if (num == 0) {
             return SimpleResponse.error("更新失败");
         }
+        return SimpleResponse.success();
+    }
+
+    @GetMapping("/profile")
+    @ResponseBody
+    public ModelAndView profile(@AuthenticationPrincipal UserDetails userDetails, ModelAndView mv) {
+
+        Student stu = studentService.findByUsername(userDetails.getUsername());
+        mv.addObject("user", stu);
+        mv.setViewName("stu/profile");
+
+        return mv;
+    }
+
+    /**
+     * 修改姓名
+     * @param name
+     * @param userDetails
+     * @return
+     */
+    @PutMapping("/edit/name")
+    @ResponseBody
+    public SimpleResponse editName(@RequestParam String name,
+                                   @AuthenticationPrincipal UserDetails userDetails) {
+        Student stu = studentService.findByUsername(userDetails.getUsername());
+        stu.setNickname(name);
+        studentService.updateById(stu);
+        return SimpleResponse.success();
+    }
+    /**
+     * 修改手机
+     * @param phone
+     * @param userDetails
+     * @return
+     */
+    @PutMapping("/edit/phone")
+    @ResponseBody
+    public SimpleResponse editPhone(@RequestParam String phone,
+                                    @AuthenticationPrincipal UserDetails userDetails) {
+        Student stu = studentService.findByUsername(userDetails.getUsername());
+        stu.setPhone(phone);
+        studentService.updateById(stu);
+        return SimpleResponse.success();
+    }
+
+    /**
+     * 修改头像
+     * @param photo
+     * @param userDetails
+     * @return
+     */
+    @PutMapping("/edit/photo")
+    @ResponseBody
+    public SimpleResponse editPhoto(@RequestParam String photo,
+                                   @AuthenticationPrincipal UserDetails userDetails) {
+        Student stu = studentService.findByUsername(userDetails.getUsername());
+        stu.setPhoto(photo);
+        studentService.updateById(stu);
+        return SimpleResponse.success();
+    }
+    /**
+     * 修改邮箱
+     * @param code 验证码
+     * @param userDetails
+     * @return
+     */
+    @PutMapping("/edit/email")
+    @ResponseBody
+    public SimpleResponse editEmail(@RequestParam String code,
+                                    @AuthenticationPrincipal UserDetails userDetails,
+                                    @SessionAttribute("EMAIL_CODE") EmailCode emailCode,
+                                    SessionStatus sessionStatus) {
+        if (!emailCode.getCode().equalsIgnoreCase(code)) {
+            return SimpleResponse.error("验证码错误");
+        }
+        sessionStatus.setComplete();
+        Student stu = studentService.findByUsername(userDetails.getUsername());
+        stu.setEmail(emailCode.getTo());
+        studentService.updateById(stu);
+        return SimpleResponse.success(emailCode.getTo());
+    }
+
+    /**
+     * 校验密码
+     * @param password
+     * @param userDetails
+     * @return
+     */
+    @PostMapping("/check/password")
+    @ResponseBody
+    public SimpleResponse checkPassword(@RequestParam String password,
+                                        @AuthenticationPrincipal UserDetails userDetails) {
+
+        Student stu = studentService.findByUsername(userDetails.getUsername());
+        if (!passwordEncoder.matches(password, stu.getPassword())) {
+            return SimpleResponse.error();
+        }
+        return SimpleResponse.success();
+    }
+
+    /**
+     * 修改密码
+     * @param code 验证码
+     * @param userDetails
+     * @return
+     */
+    @PutMapping("/edit/password")
+    @ResponseBody
+    public SimpleResponse editPassword(@RequestParam String code,@RequestParam String password,
+                                    @RequestParam String oldPassword,
+                                    @AuthenticationPrincipal UserDetails userDetails,
+                                    @SessionAttribute("EMAIL_CODE") EmailCode emailCode,
+                                    SessionStatus sessionStatus) {
+        if (!emailCode.getCode().equalsIgnoreCase(code)) {
+            return SimpleResponse.error("验证码错误");
+        }
+        Student stu = studentService.findByUsername(userDetails.getUsername());
+        if (!passwordEncoder.matches(oldPassword,stu.getPassword())) {
+            return SimpleResponse.error("原密码错误");
+        }
+        stu.setPassword(passwordEncoder.encode(password));
+        studentService.updateById(stu);
+        sessionStatus.setComplete();
         return SimpleResponse.success();
     }
 

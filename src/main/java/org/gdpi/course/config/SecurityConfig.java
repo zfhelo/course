@@ -31,7 +31,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         String[] permitPath = {
-                "/login.html", "/register.html", "/forget.html", "/css/**", "/favicon.ico",
+                "/login.html", "/register.html", "/forget.html", "/css/**", "/plugins/**","/favicon.ico",
                 "/js/**", "/img/**","/error/**",
                 "/public/**"
         };

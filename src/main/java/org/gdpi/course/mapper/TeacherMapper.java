@@ -35,4 +35,10 @@ public interface TeacherMapper {
      * @return
      */
     Teacher findById(Integer id);
+
+    /**
+     * 更新用户
+     * @param teacher
+     */
+    void updateById(Teacher teacher);
 }

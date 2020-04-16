@@ -19,4 +19,9 @@
     <select id="findById" parameterType="integer" resultType="teacher">
         SELECT * FROM teacher WHERE id = #{id}
     </select>
+
+    <update id="updateById" parameterType="teacher">
+        UPDATE teacher SET username = #{username}, nickname = #{nickname}, password = #{password},
+        photo = #{photo}, email = #{email}, phone = #{phone} WHERE id = #{id}
+    </update>
 </mapper>
