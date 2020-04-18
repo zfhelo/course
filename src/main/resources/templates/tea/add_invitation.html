@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="icon" th:href="@{/favicon.ico}" type="image/x-icon">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css" />
+        <link rel="stylesheet" th:href="@{/css/my-style.css}"/>
+    </head>
+    <body style="background-image: url('https://i.loli.net/2020/04/08/X1y2R4pHI5d6qNn.png')">
+        <!--导航-->
+        <nav th:replace="~{stu/_fragment :: menu('comment', ${user.getPhoto()}, ${user.getNickname()})}" class="ui  attached segment my-padded-tb-mini">
+        </nav>
+
+        <div class="ui container margin-top-2">
+            <div id="div1"></div>
+            <div class="ui input mini">
+                <input type="text" placeholder="标题..." id="title">
+            </div>
+            <div class="ui input mini">
+                <input type="text" placeholder="课程号..." id="courseNumber">
+            </div>
+            <div class="ui button mini  right floated" onclick="history.back()">返回</div>
+            <div class="ui button mini primary right floated" onclick="release()" id="send">发布</div>
+        </div>
+    </body>
+    <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+    <script src="https://cdn.bootcss.com/wangEditor/10.0.13/wangEditor.min.js"></script>
+    <script th:src="@{/js/axios.min.js}"></script>
+    <script>
+        $(".ui.dropdown").dropdown({
+            on: "hover"
+        });
+        function getContextPath() {
+            var pathName = document.location.pathname;
+            var index = pathName.substr(1).indexOf("/");
+            var result = pathName.substr(0, index + 1);
+            return result + '/';
+        }
+        var E = window.wangEditor;
+        var editor = new E("#div1");
+        editor.customConfig.menus = [
+            'head',  // 标题
+            'bold',  // 粗体
+            'fontSize',  // 字号
+            'fontName',  // 字体
+            'italic',  // 斜体
+            'underline',  // 下划线
+            'strikeThrough',  // 删除线
+            'foreColor',  // 文字颜色
+            'link',  // 插入链接
+            'list',  // 列表
+            'justify',  // 对齐方式
+            'quote',  // 引用
+            'image',  // 插入图片
+            'table',  // 表格
+            'code',  // 插入代码
+            'undo',  // 撤销
+            'redo'  // 重复
+        ];
+        editor.customConfig.customUploadImg = function (files, insert) {
+            var f = files[0];
+            var formData = new FormData();
+            formData.append("image", f);
+            formData.append("key", "9f44a7c9879610d03afb08ed5631446e");
+            $('#send').addClass('loading');
+            $('#send').addClass('disabled');
+            $.ajax({
+                url: "https://api.imgbb.com/1/upload",
+                type: "POST",
+                success: function (rep) {
+                    insert(rep.data.url);
+                    $('#send').removeClass('loading');
+                    $('#send').removeClass('disabled');
+                },
+                error: function (rep) {
+                    alert("上传失败");
+                    $('#send').removeClass('loading');
+                    $('#send').removeClass('disabled');
+                },
+                data: formData,
+                cache: false,
+                contentType: false,
+                processData: false,
+            });
+        };
+        editor.create();
+
+        function release() {
+            var title = $('#title').val();
+            var courseNumber = $('#courseNumber').val();
+            var content = editor.txt.html();
+
+            if (title === '' || courseNumber === '') {
+                alert("请输入标题和对应课程")
+                return;
+            }
+
+            if (content.length < 10) {
+                alert("文章太短");
+                return;
+            }
+
+
+            axios.post(`${getContextPath()}tea/invitation`,{title, courseNumber, content})
+                .then(rep => {
+                    if (rep.data.code === 200) {
+                        $('#title').val('');
+                        $('#courseNumber').val('');
+                        editor.txt.html('');
+                    }else {
+                        alert(rep.data.data);
+                    }
+                })
+                .catch(() => {alert("请求失败")});
+        }
+
+
+    </script>
+
+</html>

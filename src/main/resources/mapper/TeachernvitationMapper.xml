@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.gdpi.course.mapper.TeacherInvitationMapper">
+    <insert id="addInvitation" parameterType="teacherInvitation">
+        INSERT tea_invitation(course_id, tea_id, title, content)
+        VALUES(#{courseId}, #{teaId}, #{title}, #{content})
+    </insert>
+
+    <select id="findByTid" parameterType="int" resultMap="#.invitationAndTeaAndCourse">
+        SELECT * FROM tea_invitation WHERE tea_id = #{tid}
+    </select>
+
+    <select id="findByCourseId" parameterType="int" resultMap="#.invitationAndTeaAndCourse">
+        SELECT * FROM tea_invitation WHERE course_id = #{courseId}
+    </select>
+
+    <select id="findById" parameterType="int"  resultMap="#.invitationAndTeaAndCourse">
+        SELECT * FROM tea_invitation WHERE id = #{id}
+    </select>
+
+    <insert id="addComment" parameterType="comment">
+        INSERT tea_comment(user_name, head_img, invitation_id, content, parent_id)
+        VALUES(#{userName}, #{headImg}, #{invitationId}, #{content}, #{parentId})
+    </insert>
+
+    <select id="findByInvitationId" parameterType="int" resultType="comment">
+        SELECT * FROM tea_comment WHERE invitation_id = #{invitationId} ORDER BY time DESC
+    </select>
+</mapper>

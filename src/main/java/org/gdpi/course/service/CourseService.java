@@ -76,4 +76,11 @@ public interface CourseService {
      */
     Course findByNumberAndSid(String number, Integer sid);
 
+
+    /**
+     * 查询选课的学生
+     * @param sid
+     * @return
+     */
+    List<Course> findCourseBySid(Integer sid);
 }

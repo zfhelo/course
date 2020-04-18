@@ -39,6 +39,10 @@ public class StudentController {
     private ResourceService resourceService;
     @Resource
     private PasswordEncoder passwordEncoder;
+    @Resource
+    private StudentInvitationService studentInvitationService;
+    @Resource
+    private TeacherInvitationService teacherInvitationService;
 
     /**
      * 初始化课程页
@@ -342,8 +346,12 @@ public class StudentController {
     @ResponseBody
     public SimpleResponse editEmail(@RequestParam String code,
                                     @AuthenticationPrincipal UserDetails userDetails,
-                                    @SessionAttribute("EMAIL_CODE") EmailCode emailCode,
+                                    @SessionAttribute(value = "EMAIL_CODE", required = false) EmailCode emailCode,
                                     SessionStatus sessionStatus) {
+        if (emailCode == null) {
+            return SimpleResponse.error("请先获取验证码");
+        }
+
         if (!emailCode.getCode().equalsIgnoreCase(code)) {
             return SimpleResponse.error("验证码错误");
         }
@@ -383,8 +391,12 @@ public class StudentController {
     public SimpleResponse editPassword(@RequestParam String code,@RequestParam String password,
                                     @RequestParam String oldPassword,
                                     @AuthenticationPrincipal UserDetails userDetails,
-                                    @SessionAttribute("EMAIL_CODE") EmailCode emailCode,
+                                    @SessionAttribute(value = "EMAIL_CODE", required = false) EmailCode emailCode,
                                     SessionStatus sessionStatus) {
+        if (emailCode == null) {
+            return SimpleResponse.error("请先获取验证码");
+        }
+
         if (!emailCode.getCode().equalsIgnoreCase(code)) {
             return SimpleResponse.error("验证码错误");
         }
@@ -398,4 +410,82 @@ public class StudentController {
         return SimpleResponse.success();
     }
 
+
+    /**
+     * 初始化讨论区
+     * @param mv
+     * @param userDetails
+     * @return
+     */
+    @GetMapping("/invitation")
+    public ModelAndView initInvitation(ModelAndView mv, @AuthenticationPrincipal UserDetails userDetails) {
+
+        Student stu = studentService.findByUsername(userDetails.getUsername());
+
+        List<StudentInvitation> page = studentInvitationService.findBySid(stu.getId());
+        List<Course> course = courseService.findCourseBySid(stu.getId());
+        mv.addObject("user", stu);
+        mv.addObject("page", page);
+        mv.addObject("course", course);
+        mv.setViewName("stu/invitation");
+        return mv;
+    }
+
+    /**
+     * 跳转发送帖子页面
+     * @param mv
+     * @param userDetails
+     * @return
+     */
+    @GetMapping("/addInvitation")
+    public ModelAndView addInvitation(ModelAndView mv, @AuthenticationPrincipal UserDetails userDetails) {
+
+        Student stu = studentService.findByUsername(userDetails.getUsername());
+        mv.addObject("user", stu);
+        mv.setViewName("stu/add_invitation");
+        return mv;
+    }
+
+    /**
+     * 跳转帖子详情页面
+     * @param mv
+     * @param userDetails
+     * @param id
+     * @return
+     */
+    @GetMapping("/invitationStu/{id:\\d+}")
+    public ModelAndView invitationDetailStu(ModelAndView mv, @AuthenticationPrincipal UserDetails userDetails,
+                                         @PathVariable Integer id) {
+
+        StudentInvitation invitation = studentInvitationService.findById(id);
+        Student stu = studentService.findByUsername(userDetails.getUsername());
+        List<Comment> comments = studentInvitationService.findByInvitationId(id);
+        mv.addObject("user", stu);
+        mv.addObject("isStu", true);
+        mv.addObject("article", invitation);
+        mv.addObject("comments", comments);
+        mv.setViewName("stu/invitation_detail");
+        return mv;
+    }
+    /**
+     * 跳转帖子详情页面
+     * @param mv
+     * @param userDetails
+     * @param id
+     * @return
+     */
+    @GetMapping("/invitationTea/{id:\\d+}")
+    public ModelAndView invitationDetailTea(ModelAndView mv, @AuthenticationPrincipal UserDetails userDetails,
+                                         @PathVariable Integer id) {
+
+        TeacherInvitation invitation = teacherInvitationService.findById(id);
+        Student stu = studentService.findByUsername(userDetails.getUsername());
+        List<Comment> comments = teacherInvitationService.findByInvitationId(id);
+        mv.addObject("user", stu);
+        mv.addObject("isStu", false);
+        mv.addObject("article", invitation);
+        mv.addObject("comments", comments);
+        mv.setViewName("stu/invitation_detail");
+        return mv;
+    }
 }

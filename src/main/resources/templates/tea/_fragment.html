@@ -5,7 +5,7 @@
             <div class="ui  secondary stackable menu">
                 <h2 class="ui teal header item">Course</h2>
                 <a href="#" th:href="@{/tea/index}" class="item" th:classappend="${active == 'index'} ? 'active'"><i class="home icon"></i>首页</a>
-                <a href="#" class="item" th:classappend="${active == 'xx'} ? 'active'"><i class="comment alternate outline icon"></i>讨论区</a>
+                <a th:href="@{/tea/invitation}" class="item" th:classappend="${active == 'comment'} ? 'active'"><i class="comment alternate outline icon"></i>讨论区</a>
                 <a th:href="@{/tea/resources}" class="item" th:classappend="${active == 'resources'} ? 'active'"><i class="box icon"></i>资源</a>
                 <a th:href="@{/admin/index.html}" class="item" th:classappend="${active == 'xx'} ? 'active'"><i class="cog icon"></i>课程管理</a>
 

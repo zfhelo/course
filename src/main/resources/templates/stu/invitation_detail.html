@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="icon" th:href="@{/favicon.ico}" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css"/>
+    <link rel="stylesheet" th:href="@{/css/my-style.css}"/>
+</head>
+<body style="background-image: url('https://i.loli.net/2020/04/08/X1y2R4pHI5d6qNn.png')">
+<!--导航-->
+<nav th:replace="~{stu/_fragment :: menu('comment', ${user.getPhoto()}, ${user.getNickname()})}"
+     class="ui  attached segment my-padded-tb-mini">
+</nav>
+<div class="ui container margin-top-2">
+    <div class="ui segments" style="max-width: 55em; margin: 0 auto">
+        <div class="ui segment center aligned"><h3 th:text="${article.title}"></h3></div>
+        <div class="ui segment" th:utext="${article.content}"></div>
+        <div class="ui segment">
+            <div class="ui threaded comments">
+                <h3 class="ui dividing header">评论</h3>
+                <div class="comment" th:each="c : ${comments}">
+                    <a class="avatar">
+                        <img th:src="${c.headImg}">
+                    </a>
+                    <div class="content">
+                        <a class="author" th:text="${c.userName}"></a>
+                        <div class="metadata">
+                            <span class="date" th:text="${#temporals.format(c.time, 'MM月dd日 HH:mm')}"></span>
+                        </div>
+                        <div class="text" th:text="${c.content}"></div>
+                    </div>
+                </div>
+                <form class="ui reply form mini">
+                    <div class="field">
+                        <textarea id="content"></textarea>
+                    </div>
+                    <div class="ui blue labeled submit icon button mini" onclick="sendComment()"><i
+                            class="icon edit"></i>回复本帖
+                    </div>
+                    <div class="ui button mini" onclick="history.back()">返回</div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+<script th:src="@{/js/axios.min.js}"></script>
+<script th:inline="javascript">
+    const invitationId = [[${article.id}]];
+    const isStu = [[${isStu}]];
+
+    function getContextPath() {
+        var pathName = document.location.pathname;
+        var index = pathName.substr(1).indexOf("/");
+        var result = pathName.substr(0, index + 1);
+        return result + '/';
+    }
+
+    $(".ui.dropdown").dropdown({
+        on: "hover"
+    });
+
+    function sendComment() {
+        let content = $('#content').val();
+        if (content.length < 1) {
+            alert("请输入评论内容")
+            return;
+        }
+        let url = `${getContextPath()}stu/commentTea`;
+        if (isStu) {
+            url = `${getContextPath()}stu/commentStu`;
+        }
+
+        axios.post(url, {content, invitationId})
+            .then(rep => {
+                if (rep.data.code === 200) {
+                    location.reload();
+                } else {
+                    alert(rep.data.data)
+                }
+            })
+            .catch(() => alert("请求失败"));
+    }
+</script>
+
+</html>

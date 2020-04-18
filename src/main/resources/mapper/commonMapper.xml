@@ -138,4 +138,25 @@
         <association property="user" column="tea_id" javaType="teacher" select="org.gdpi.course.mapper.TeacherMapper.findById"/>
         <association property="course" column="course_id" javaType="course" select="org.gdpi.course.mapper.CourseMapper.findById"/>
     </resultMap>
+
+
+    <resultMap id="baseInvitation" type="invitation">
+        <id property="id" column="id"/>
+        <result property="title" column="title"/>
+        <result property="content" column="content"/>
+        <result property="courseId" column="course_id"/>
+        <result property="time" column="time"/>
+    </resultMap>
+
+    <resultMap id="invitationAndStuAndCourse" type="studentInvitation" extends="baseInvitation">
+        <result property="stuId" column="stu_id"/>
+        <association property="course" column="course_id" javaType="course" select="org.gdpi.course.mapper.CourseMapper.findById"/>
+        <association property="user" javaType="student" column="stu_id" select="org.gdpi.course.mapper.StudentMapper.findById"/>
+    </resultMap>
+
+    <resultMap id="invitationAndTeaAndCourse" type="teacherInvitation" extends="baseInvitation">
+        <result property="stuId" column="stu_id"/>
+        <association property="course" column="course_id" javaType="course" select="org.gdpi.course.mapper.CourseMapper.findById"/>
+        <association property="user" javaType="teacher" column="tea_id" select="org.gdpi.course.mapper.TeacherMapper.findById"/>
+    </resultMap>
 </mapper>

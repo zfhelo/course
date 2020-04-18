@@ -76,4 +76,9 @@ public class CourseServiceImpl implements CourseService {
     public Course findByNumberAndSid(String number, Integer sid) {
         return courseMapper.findByNumberAndSid(number, sid);
     }
+
+    @Override
+    public List<Course> findCourseBySid(Integer sid) {
+        return courseMapper.findCourseBySid(sid);
+    }
 }

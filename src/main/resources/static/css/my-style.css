@@ -8,6 +8,10 @@
     padding-top: 0.3em !important;
     padding-bottom: 0.3em !important;
 }
+.my-patted-btlr {
+    /*1em==14px*/
+    padding: 0.1em 0 0.1em !important;
+}
 .my-patted-3 {
     /*1em==14px*/
     padding-top: 0.6em !important;

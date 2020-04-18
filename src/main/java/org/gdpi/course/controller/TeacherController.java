@@ -2,12 +2,9 @@ package org.gdpi.course.controller;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import org.gdpi.course.entity.EmailCode;
-import org.gdpi.course.entity.StudentResource;
-import org.gdpi.course.entity.Teacher;
+import org.gdpi.course.entity.*;
 import org.gdpi.course.reponse.SimpleResponse;
-import org.gdpi.course.service.ResourceService;
-import org.gdpi.course.service.TeacherService;
+import org.gdpi.course.service.*;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -16,6 +13,7 @@ import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * @author zhf
@@ -30,6 +28,13 @@ public class TeacherController {
     private ResourceService resourceService;
     @Resource
     private PasswordEncoder passwordEncoder;
+    @Resource
+    private CourseService courseService;
+
+    @Resource
+    private StudentInvitationService studentInvitationService;
+    @Resource
+    private TeacherInvitationService teacherInvitationService;
 
     /**
      * 初始化管理页数据
@@ -124,8 +129,11 @@ public class TeacherController {
     @ResponseBody
     public SimpleResponse editEmail(@RequestParam String code,
                                     @AuthenticationPrincipal UserDetails userDetails,
-                                    @SessionAttribute("EMAIL_CODE") EmailCode emailCode,
+                                    @SessionAttribute(value = "EMAIL_CODE", required = false) EmailCode emailCode,
                                     SessionStatus sessionStatus) {
+        if (emailCode == null) {
+            return SimpleResponse.error("请先获取验证码");
+        }
         if (!emailCode.getCode().equalsIgnoreCase(code)) {
             return SimpleResponse.error("验证码错误");
         }
@@ -165,8 +173,12 @@ public class TeacherController {
     public SimpleResponse editPassword(@RequestParam String code,@RequestParam String password,
                                        @RequestParam String oldPassword,
                                        @AuthenticationPrincipal UserDetails userDetails,
-                                       @SessionAttribute("EMAIL_CODE") EmailCode emailCode,
+                                       @SessionAttribute(value = "EMAIL_CODE", required = false) EmailCode emailCode,
                                        SessionStatus sessionStatus) {
+        if (emailCode == null) {
+            return SimpleResponse.error("请先获取验证码");
+        }
+
         if (!emailCode.getCode().equalsIgnoreCase(code)) {
             return SimpleResponse.error("验证码错误");
         }
@@ -181,5 +193,84 @@ public class TeacherController {
     }
 
 
+    /**
+     * 初始化讨论区
+     * @param mv
+     * @param userDetails
+     * @return
+     */
+    @GetMapping("/invitation")
+    public ModelAndView initInvitation(ModelAndView mv, @AuthenticationPrincipal UserDetails userDetails) {
 
+        Teacher tea = teacherService.findByUsername(userDetails.getUsername());
+
+        List<TeacherInvitation> page = teacherInvitationService.findByTid(tea.getId());
+        List<Course> course = courseService.findByTeaId(tea.getId());
+        mv.addObject("user", tea);
+        mv.addObject("page", page);
+        mv.addObject("course", course);
+        mv.setViewName("tea/invitation");
+        return mv;
+    }
+
+    /**
+     * 跳转发送帖子页面
+     * @param mv
+     * @param userDetails
+     * @return
+     */
+    @GetMapping("/addInvitation")
+    public ModelAndView addInvitation(ModelAndView mv, @AuthenticationPrincipal UserDetails userDetails) {
+
+        Teacher tea = teacherService.findByUsername(userDetails.getUsername());
+        mv.addObject("user", tea);
+        mv.setViewName("tea/add_invitation");
+        return mv;
+    }
+
+
+    /**
+     * 跳转帖子详情页面
+     * @param mv
+     * @param userDetails
+     * @param id
+     * @return
+     */
+    @GetMapping("/invitationStu/{id:\\d+}")
+    public ModelAndView invitationDetailStu(ModelAndView mv, @AuthenticationPrincipal UserDetails userDetails,
+                                            @PathVariable Integer id) {
+
+        StudentInvitation invitation = studentInvitationService.findById(id);
+        Teacher tea = teacherService.findByUsername(userDetails.getUsername());
+        List<Comment> comments = studentInvitationService.findByInvitationId(id);
+        mv.addObject("user", tea);
+        mv.addObject("isStu", true);
+        mv.addObject("article", invitation);
+        mv.addObject("comments", comments);
+        mv.setViewName("tea/invitation_detail");
+        return mv;
+    }
+    /**
+     * 跳转帖子详情页面
+     * @param mv
+     * @param userDetails
+     * @param id
+     * @return
+     */
+    @GetMapping("/invitationTea/{id:\\d+}")
+    public ModelAndView invitationDetailTea(ModelAndView mv, @AuthenticationPrincipal UserDetails userDetails,
+                                            @PathVariable Integer id) {
+
+        TeacherInvitation invitation = teacherInvitationService.findById(id);
+        Teacher tea = teacherService.findByUsername(userDetails.getUsername());
+        List<Comment> comments = teacherInvitationService.findByInvitationId(id);
+        mv.addObject("user", tea);
+        mv.addObject("isStu", false);
+        mv.addObject("article", invitation);
+        mv.addObject("comments", comments);
+        mv.setViewName("tea/invitation_detail");
+        return mv;
+    }
 }
+
+

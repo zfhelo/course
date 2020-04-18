@@ -43,7 +43,7 @@
     </select>
 
     <select id="findCourseBySid" parameterType="int" resultType="course">
-        SELECT * FROM course WHERE id IN(SELECT course_id FROM stu_course_map);
+        SELECT * FROM course WHERE id IN(SELECT course_id FROM stu_course_map WHERE stu_id = #{sid});
     </select>
 
     <select id="findHomework" parameterType="int" resultMap="#.courseAndHomework">
