@@ -244,7 +244,13 @@ CREATE TABLE tea_comment (
 	`time` TIMESTAMP DEFAULT NOW( ),
 	FOREIGN KEY ( invitation_id ) REFERENCES tea_invitation ( id ) ON DELETE CASCADE ON UPDATE CASCADE
 );
-DROP TABLE
-IF
-	EXISTS `persistent_logins`;
-CREATE TABLE persistent_logins ( username VARCHAR ( 64 ) NOT NULL, series VARCHAR ( 64 ) PRIMARY KEY, token VARCHAR ( 64 ) NOT NULL, last_used TIMESTAMP NOT NULL );
+
+CREATE TABLE notice (
+	id INT PRIMARY KEY AUTO_INCREMENT,
+	course_id INT NOT NULL,
+	title VARCHAR ( 255 ) NOT NULL,
+	content LONGTEXT NOT NULL,
+	`time` TIMESTAMP DEFAULT NOW(),
+	`overdue_time` TIMESTAMP DEFAULT NULL,
+	FOREIGN KEY ( course_id ) REFERENCES course ( id ) ON DELETE CASCADE ON UPDATE CASCADE
+);
