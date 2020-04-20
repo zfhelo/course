@@ -44,81 +44,144 @@
         </nav>
 
         <div class="ui container margin-top-2">
-            <div class="ui grid stackable">
-                <div class="twelve wide column"></div>
-                <div class="four wide right aligned column">
-                    <!--公告-->
-                    <div class="ui segments my-margin-top-large">
-                        <div class="ui segment  left aligned secondary"><i class="bullhorn icon"></i> 课程公告</div>
-                        <div class="ui segment">
-                            <i class="circle     teal  mini icon"></i>
-                            数据结构
-
-                            <div class="ui basic left pointing mini label">13</div>
-                        </div>
-                        <div class="ui segment">
-                            <!-- <i class="circle teal teal mini icon"></i> -->
-                            数据结构
-
-                            <div class="ui basic left pointing mini label">13</div>
-                        </div>
-                        <div class="ui segment">
-                            <!-- <i class="circle     teal  mini icon"></i> -->
-                            数据结构
-
-                            <div class="ui basic left pointing mini label">13</div>
-                        </div>
-                    </div>
-                    <!-- 作业 -->
-                    <div class="ui segments my-margin-top-large">
-                        <div class="ui segment  left aligned secondary"><i class="sticky note outline icon"></i> 作业</div>
-                        <div class="ui segment">
-                            数据结构
-
-                            <div class="ui basic left pointing mini label">13</div>
-                            <i class="circle     teal  mini icon"></i>
-                        </div>
-                        <div class="ui segment">
-                            数据结构
-
-                            <div class="ui basic left pointing mini label">13</div>
-                            <i class="circle     teal  mini icon"></i>
-                        </div>
-                        <div class="ui segment">
-                            数据结构
-
-                            <div class="ui basic left pointing mini label">13</div>
-                            <i class="circle     teal  mini icon"></i>
-                        </div>
-                    </div>
-                    <!-- 考试 -->
-                    <div class="ui segments my-margin-top-large">
-                        <div class="ui segment  left aligned secondary"><i class="pen square icon"></i> 考试</div>
-                        <div class="ui segment">
-                            数据结构期末考试
-
-                            <i class="circle     teal  mini icon"></i>
-                        </div>
-                        <div class="ui segment">
-                            数据结构期末考试
-
-                            <i class="circle teal  mini icon"></i>
-                        </div>
-                        <div class="ui segment">
-                            数据结构期末考试
-
-                            <i class="circle     teal  mini icon"></i>
-                        </div>
+            <div class="ui stackable grid centered animated bounceInDown">
+                <div class="ui three wide column">
+                    <div class="ui  vertical pointing menu">
+                        <a class="item leftMenu active" onclick="notice(this)">课程公告</a>
+                        <a class="item leftMenu" onclick="news(this)">新闻资讯 </a>
                     </div>
                 </div>
+                <div class="ui ten wide column">
+                    <div id="body">
+
+                    </div>
+                    <div class="ui borderless menu attached teal" id="page-nav">
+                        <a class="item active">1</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="ui small modal">
+            <i class="close icon"></i>
+            <div class="content" id="noticeBody">
+
             </div>
         </div>
     </body>
     <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+    <script th:src="@{/js/axios.min.js}"></script>
     <script>
         $(".ui.dropdown").dropdown({
             on: "hover"
         });
+        function showNotice(id) {
+            axios.get(`${getContextPath()}public/notice/${id}`)
+                .then(rep => {
+                    if (rep.data.code === 200) {
+                        $('#noticeBody').html(rep.data.data.content)
+                    } else {
+                        $('#noticeBody').html('<h3>获取消息失败</h3>')
+                    }
+                })
+                .catch(() => $('#noticeBody').html('<h3>请求失败</h3>'));
+            $('.ui.modal')
+                .modal('show');
+        }
+        function getContextPath() {
+            var pathName = document.location.pathname;
+            var index = pathName.substr(1).indexOf("/");
+            var result = pathName.substr(0, index + 1);
+            return result + '/';
+        }
+
+        function news(node) {
+            $('.leftMenu').removeClass('active');
+            $(node).addClass('active');
+            $('#body').html('<div class="ui fluid placeholder">\n' +
+                '  <div class="image header">\n' +
+                '    <div class="line"></div>\n' +
+                '    <div class="line"></div>\n' +
+                '  </div>\n' +
+                '  <div class="paragraph">\n' +
+                '    <div class="line"></div>\n' +
+                '    <div class="line"></div>\n' +
+                '    <div class="line"></div>\n' +
+                '  </div>\n' +
+                '</div>');
+            $('#page-nav').addClass('hide');
+            axios.get(`${getContextPath()}public/news`)
+                .then(({data}) => {
+                    console.log(data)
+                    if (data.error_code === 0) {
+                        createNews(data.result.data);
+                    } else {
+                        alert("请稍后再试");
+                    }
+                })
+                .catch(() => alert("请求失败"));
+        }
+        function createNews(list) {
+            $('#body').empty();
+            console.log(list)
+            for (let i = 0; i < 10; i++) {
+                let node = $(
+                    `<div class="ui segment attached">
+                         <a href="${list[i].url}" target="_blank">${list[i].title}</a>
+                     </div>`
+                )
+                $('#body').append(node);
+            }
+        }
+
+
+
+        function notice(node) {
+            $('.leftMenu').removeClass('active');
+            $(node).addClass('active');
+            listNotice(1)
+        }
+        function listNotice(page) {
+            axios.get(`${getContextPath()}tea/notice?page=${page}`)
+                .then(rep => {
+                    if (rep.data.code === 200) {
+                        console.log(rep);
+                        createNotice(rep.data.data.list);
+                        createNoticeNav(rep.data.data);
+                    } else {
+                        alert(rep.data.data);
+                    }
+                })
+                .catch(() => alert("请求失败"));
+        }
+        function createNotice(list) {
+            $('#body').empty();
+            list.forEach(item => {
+                let node = $(
+                    `<div class="ui segment attached">
+                         <a href="javascript:showNotice(${item.id})">${item.title}</a>
+                         <span class="my-font-tips my-margin-left-1">by: ${item.course.name}</span>
+                         <span class="my-font-tips">${item.time}</span>
+                     </div>`
+                );
+                $('#body').append(node);
+            });
+        }
+        function createNoticeNav(page) {
+            $('#page-nav').empty();
+            $('#page-nav').removeClass('hide');
+            page.navigatepageNums.forEach(item => {
+                var node = $(`<a class="item" id="nav-${item}" onclick="listNotice(${item})">${item}</a>`);
+                $('#page-nav').append(node);
+            });
+
+            $('#nav-' + page.pageNum).addClass('active');
+        }
+        listNotice(1);
+
+
     </script>
+
 </html>

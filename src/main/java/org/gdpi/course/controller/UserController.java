@@ -1,7 +1,9 @@
 package org.gdpi.course.controller;
 
+import org.gdpi.course.entity.EmailCode;
 import org.gdpi.course.entity.Student;
 import org.gdpi.course.entity.Teacher;
+import org.gdpi.course.entity.User;
 import org.gdpi.course.exception.UserAlreadyExistedException;
 import org.gdpi.course.reponse.SimpleResponse;
 import org.gdpi.course.service.StudentService;
@@ -11,16 +13,16 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.time.LocalDateTime;
 
 /**
  * 账号创建
@@ -36,7 +38,8 @@ public class UserController {
     private TeacherService teacherService;
     @Resource
     private StudentService studentService;
-
+    @Resource
+    private PasswordEncoder passwordEncoder;
 
     /**
      * 创建教师用户
@@ -98,6 +101,58 @@ public class UserController {
         return SimpleResponse.success();
     }
 
+
+    /**
+     * 修改密码
+     * @param request
+     * @param isStu
+     * @param username
+     * @param password
+     * @param emailCode
+     * @return
+     */
+    @PostMapping("/public/findPassword")
+    @ResponseBody
+    public SimpleResponse updatePassword(HttpServletRequest request,
+                                         @RequestParam Boolean isStu,
+                                         @RequestParam String username,
+                                         @RequestParam String password,
+                                         @RequestParam String emailCode) {
+        Object obj = request.getSession().getAttribute("EMAIL_CODE");
+        if (obj == null) {
+            return SimpleResponse.error("请先获取验证码");
+        }
+        EmailCode code = (EmailCode) obj;
+        if (code.getTimeout().compareTo(LocalDateTime.now()) < 0) {
+            return SimpleResponse.error("验证码已过期");
+        }
+        if (!code.getCode().equals(emailCode)) {
+            return SimpleResponse.error("验证码错误");
+        }
+        User user;
+        if (isStu) {
+            user = studentService.findByUsername(username);
+        } else {
+            user = teacherService.findByUsername(username);
+        }
+
+        if (user == null) {
+            return SimpleResponse.error("不存在该账号");
+        }
+
+        if (!user.getEmail().equals(code.getTo())) {
+            return SimpleResponse.error("请勿尝试修改他人密码");
+        }
+        user.setPassword(passwordEncoder.encode(password));
+        if (isStu) {
+            studentService.updateById((Student) user);
+        } else {
+            teacherService.updateById((Teacher) user);
+        }
+        request.getSession().invalidate();
+        return SimpleResponse.success("修改成功");
+    }
+
     /**
      * 验证用户是否存在
      *
@@ -145,7 +200,11 @@ public class UserController {
         return mv;
     }
 
-
+    /**
+     * 初始化首页数据
+     * @param userDetails
+     * @return
+     */
     @GetMapping("/stu/index")
     public ModelAndView indexStu(@AuthenticationPrincipal UserDetails userDetails, ModelAndView mv) {
         Student stu = studentService.findByUsername(userDetails.getUsername());

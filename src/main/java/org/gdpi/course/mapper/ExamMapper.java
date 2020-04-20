@@ -73,6 +73,13 @@ public interface ExamMapper {
      * @param cid
      * @return
      */
+    List<ExamModel> findByCourseIdPublish(Integer cid);
+
+    /**
+     * 查询所有模板试卷
+     * @param cid
+     * @return
+     */
     List<ExamModel> findByCourseId(Integer cid);
 
     /**
@@ -108,7 +115,7 @@ public interface ExamMapper {
      * @param cid
      * @return
      */
-    List<ExamModel> findOverdue(@Param("cid") Integer cid, @Param("nowTime") String nowTime);
+    List<ExamModel> findOverdue(@Param("cid") Integer cid);
 
 
 

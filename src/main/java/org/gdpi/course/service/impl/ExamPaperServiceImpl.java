@@ -146,4 +146,9 @@ public class ExamPaperServiceImpl implements ExamPaperService {
             examPaperMapper.updateGrade(pid, (float) sum);
         });
     }
+
+    @Override
+    public void deleteAllPaperForStu(Integer cid, Integer sid) {
+        examPaperMapper.deleteAllPaperForStu(cid, sid);
+    }
 }

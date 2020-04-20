@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.gdpi.course.mapper.NoticeMapper">
+    <insert id="addNotice" parameterType="notice">
+        INSERT notice(course_id, title, content, overdue_time)
+        VALUES (#{courseId}, #{title}, #{content}, #{overdueTime})
+    </insert>
+
+    <select id="findBySid" parameterType="int" resultMap="#.noticeAndCourse">
+        SELECT * FROM notice WHERE (overdue_time IS NULL || overdue_time &gt; NOW()) AND course_id IN (SELECT course_id FROM stu_course_map WHERE stu_id = #{sid}) ORDER BY `time` DESC
+    </select>
+
+    <select id="findByTid" parameterType="int" resultMap="#.noticeAndCourse">
+        SELECT * FROM notice WHERE (overdue_time IS NULL || overdue_time &gt; NOW()) AND course_id IN (SELECT course_id FROM course WHERE tea_id = #{tid}) ORDER BY `time` DESC
+    </select>
+
+    <select id="findById" parameterType="int" resultType="notice">
+        SELECT * FROM notice WHERE id = #{id}
+    </select>
+</mapper>

@@ -106,4 +106,6 @@ public interface HomeworkMapper {
      * @return
      */
     Integer updateHomework(StudentHomework studentHomework);
+
+    void deleteByAllForStu(@Param("cid") Integer cid, @Param("sid") Integer sid);
 }

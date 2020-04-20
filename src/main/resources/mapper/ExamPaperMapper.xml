@@ -8,7 +8,7 @@
     </select>
 
     <select id="findSubmitBySid" parameterType="Integer" resultType="examPaper">
-        SELECT * FROM exam_paper WHERE stu_id = #{sid} AND status = true
+        SELECT * FROM exam_paper WHERE stu_id = #{sid} AND status = true AND (model_id IN (SELECT id FROM exam_model WHERE course_id = #{cid}))
     </select>
 
     <select id="findAllBySid" resultMap="#.paperAndModle">
@@ -46,4 +46,8 @@
     <update id="updateEssayGrade">
         UPDATE paper_essay_map SET user_grade = #{grade} WHERE paper_id = #{pid} AND essay_id = #{qid}
     </update>
+
+    <delete id="deleteAllPaperForStu">
+        DELETE FROM exam_paper WHERE stu_id = #{sid} AND model_id IN(SELECT id FROM exam_model WHERE course_id = #{cid})
+    </delete>
 </mapper>

@@ -159,4 +159,14 @@
         <association property="course" column="course_id" javaType="course" select="org.gdpi.course.mapper.CourseMapper.findById"/>
         <association property="user" javaType="teacher" column="tea_id" select="org.gdpi.course.mapper.TeacherMapper.findById"/>
     </resultMap>
+
+    <resultMap id="noticeAndCourse" type="notice">
+        <id property="id" column="id"/>
+        <result property="title" column="title"/>
+        <result property="content" column="content"/>
+        <result property="courseId" column="course_id"/>
+        <result property="time" column="time"/>
+        <result property="overdueTime" column="overdue_time"/>
+        <association property="course" column="course_id" javaType="course" select="org.gdpi.course.mapper.CourseMapper.findById"/>
+    </resultMap>
 </mapper>

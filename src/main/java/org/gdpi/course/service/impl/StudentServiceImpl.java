@@ -13,8 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -88,12 +86,9 @@ public class StudentServiceImpl implements StudentService {
         List<Course> courses = courseMapper.findCourseBySid(sid);
 
         for (Course course:courses) {
-            course.setFinished(examPaperMapper.findSubmitBySid(sid).size());
-            Date date = new Date();
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            String format = sdf.format(date);
-            course.setOverdue(examMapper.findOverdue(course.getId(), format).size());
-            course.setPublished(examMapper.findByCourseId(course.getId()).size());
+            course.setFinished(examPaperMapper.findSubmitBySid(sid, course.getId()).size());
+            course.setOverdue(examMapper.findOverdue(course.getId()).size());
+            course.setPublished(examMapper.findByCourseIdPublish(course.getId()).size());
         }
 
         return courses;

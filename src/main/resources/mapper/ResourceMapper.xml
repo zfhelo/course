@@ -48,4 +48,7 @@
         IN(SELECT id FROM course WHERE tea_id = #{tid})
     </select>
 
+    <delete id="deleteByAllForStu">
+        DELETE FROM student_resources WHERE stu_id = #{sid} AND course_id = #{cid}
+    </delete>
 </mapper>

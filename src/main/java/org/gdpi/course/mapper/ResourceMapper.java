@@ -1,5 +1,6 @@
 package org.gdpi.course.mapper;
 
+import org.apache.ibatis.annotations.Param;
 import org.gdpi.course.entity.StudentResource;
 import org.gdpi.course.entity.TeacherResource;
 
@@ -74,4 +75,6 @@ public interface ResourceMapper {
      * @return
      */
     List<TeacherResource> findByCourseIdTea(Integer cid);
+
+    void deleteByAllForStu(@Param("cid") Integer cid, @Param("sid") Integer sid);
 }

@@ -74,4 +74,5 @@ public interface ResourceService {
      */
     List<TeacherResource> findByCourseIdTea(Integer cid);
 
+    void deleteByAllForStu(Integer cid, Integer sid);
 }

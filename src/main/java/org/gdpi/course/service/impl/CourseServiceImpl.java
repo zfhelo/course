@@ -81,4 +81,9 @@ public class CourseServiceImpl implements CourseService {
     public List<Course> findCourseBySid(Integer sid) {
         return courseMapper.findCourseBySid(sid);
     }
+
+    @Override
+    public void exitCourse(Integer cid, Integer sid) {
+        courseMapper.exitCourse(cid, sid);
+    }
 }

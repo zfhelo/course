@@ -9,11 +9,11 @@
     </insert>
 
     <select id="findBySid" parameterType="int" resultMap="#.invitationAndStuAndCourse">
-        SELECT * FROM stu_invitation WHERE stu_id = #{sid}
+        SELECT * FROM stu_invitation WHERE stu_id = #{sid} ORDER BY `time` DESC
     </select>
 
     <select id="findByCourseId" parameterType="int" resultMap="#.invitationAndStuAndCourse">
-        SELECT * FROM stu_invitation WHERE course_id = #{courseId}
+        SELECT * FROM stu_invitation WHERE course_id = #{courseId} ORDER BY `time` DESC
     </select>
 
     <select id="findById" parameterType="int"  resultMap="#.invitationAndStuAndCourse">
@@ -28,4 +28,8 @@
     <select id="findByInvitationId" parameterType="int" resultType="comment">
         SELECT * FROM stu_comment WHERE invitation_id = #{invitationId} ORDER BY time DESC
     </select>
+
+    <delete id="deleteByAllForStu">
+        DELETE FROM stu_invitation WHERE stu_id = #{sid} AND course_id = #{cid}
+    </delete>
 </mapper>

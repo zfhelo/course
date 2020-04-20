@@ -62,4 +62,8 @@
     <update id="updateHomework" parameterType="studentHomework">
         UPDATE stu_homework_answer SET answer = #{answer}, update_time = now() WHERE id = #{id}
     </update>
+
+    <delete id="deleteByAllForStu">
+        DELETE FROM stu_homework_answer WHERE stu_id = #{sid} AND homework_id IN(SELECT id FROM homework WHERE course_id = #{cid})
+    </delete>
 </mapper>

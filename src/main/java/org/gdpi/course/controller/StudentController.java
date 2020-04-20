@@ -118,6 +118,24 @@ public class StudentController {
 
     }
 
+    @DeleteMapping("/exit/course/{id:\\d+}")
+    @ResponseBody
+    public SimpleResponse exitCourse(@PathVariable Integer id,
+                                     @AuthenticationPrincipal UserDetails userDetails) {
+        Student stu = studentService.findByUsername(userDetails.getUsername());
+        // 删除选课
+        courseService.exitCourse(id, stu.getId());
+        // 删除试卷
+        examPaperService.deleteAllPaperForStu(id, stu.getId());
+        // 删除作业
+        homeworkService.deleteByAllForStu(id, stu.getId());
+        // 删除帖子
+        studentInvitationService.deleteByAllForStu(id, stu.getId());
+        // 删除资源
+        resourceService.deleteByAllForStu(id, stu.getId());
+        return SimpleResponse.success();
+    }
+
     /**
      * 初始化
      * @param userDetails
@@ -161,6 +179,7 @@ public class StudentController {
             }
         });
 
+        mv.addObject("course", courseService.findById(courseId));
         mv.addObject("user", stu);
         mv.addObject("paper", result);
         mv.setViewName("stu/exam_list");
@@ -231,7 +250,7 @@ public class StudentController {
         h.forEach(homework -> {
             homework.setStudentHomework(homeworkService.findByHomeworkIdAndStuId(homework.getId(), stu.getId()));
         });
-
+        mv.addObject("course", courseService.findById(id));
         mv.addObject("user", stu);
         mv.addObject("homework", h);
         mv.setViewName("stu/homework_detail");

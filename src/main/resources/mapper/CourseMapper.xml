@@ -54,4 +54,8 @@
         SELECT * FROM course WHERE `number` = #{number}
         AND id IN(SELECT course_id FROM stu_course_map WHERE stu_id = #{sid})
     </select>
+
+    <delete id="exitCourse">
+        DELETE FROM stu_course_map WHERE course_id = #{cid} AND stu_id = #{sid}
+    </delete>
 </mapper>

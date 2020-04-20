@@ -97,4 +97,10 @@ public interface CourseMapper {
      */
     Course findByNumberAndSid( @Param("number") String number, @Param("sid") Integer sid);
 
+    /**
+     * 删除选课
+     * @param cid
+     * @param sid
+     */
+    void exitCourse( @Param("cid")Integer cid,  @Param("sid")Integer sid);
 }

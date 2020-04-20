@@ -9,11 +9,11 @@
     </insert>
 
     <select id="findByTid" parameterType="int" resultMap="#.invitationAndTeaAndCourse">
-        SELECT * FROM tea_invitation WHERE tea_id = #{tid}
+        SELECT * FROM tea_invitation WHERE tea_id = #{tid} ORDER BY `time` DESC
     </select>
 
     <select id="findByCourseId" parameterType="int" resultMap="#.invitationAndTeaAndCourse">
-        SELECT * FROM tea_invitation WHERE course_id = #{courseId}
+        SELECT * FROM tea_invitation WHERE course_id = #{courseId} ORDER BY `time` DESC
     </select>
 
     <select id="findById" parameterType="int"  resultMap="#.invitationAndTeaAndCourse">

@@ -105,4 +105,10 @@ public interface HomeworkService {
      */
     Integer updateHomework(StudentHomework studentHomework);
 
+    /**
+     * 删除该学员在该课程下所有作业
+     * @param cid
+     * @param sid
+     */
+    void deleteByAllForStu(Integer cid, Integer sid);
 }

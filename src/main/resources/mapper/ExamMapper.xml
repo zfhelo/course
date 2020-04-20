@@ -37,6 +37,10 @@
         SELECT * FROM exam_model WHERE course_id = #{cid}
     </select>
 
+    <select id="findByCourseIdPublish" resultMap="#.modelAndSubmitNum" parameterType="Integer">
+        SELECT * FROM exam_model WHERE course_id = #{cid} AND start_time &lt; now();
+    </select>
+
     <select id="findSubmitNum" resultType="Integer" parameterType="Integer">
         SELECT count(*) FROM exam_paper WHERE model_id = #{modelId} AND status = true
     </select>
@@ -56,7 +60,7 @@
     </delete>
 
     <select id="findOverdue"  resultType="examModel">
-        select * from exam_model where  course_id = #{cid} AND  end_time &lt; #{nowTime};
+        select * from exam_model where  course_id = #{cid} AND  end_time &lt; now();
     </select>
 
 </mapper>

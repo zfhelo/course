@@ -51,4 +51,6 @@ public interface StudentInvitationService {
      * @return
      */
     List<Comment> findByInvitationId(Integer invitationId);
+
+    void deleteByAllForStu(Integer cid, Integer sid);
 }

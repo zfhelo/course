@@ -1,6 +1,7 @@
 package org.gdpi.course.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.gdpi.course.entity.Comment;
 import org.gdpi.course.entity.StudentInvitation;
 
@@ -51,4 +52,6 @@ public interface StudentInvitationMapper {
      * @return
      */
     List<Comment> findByInvitationId(Integer invitationId);
+
+    void deleteByAllForStu(@Param("cid") Integer cid, @Param("sid") Integer sid);
 }

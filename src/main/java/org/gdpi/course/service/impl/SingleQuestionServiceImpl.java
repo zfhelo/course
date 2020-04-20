@@ -3,6 +3,7 @@ package org.gdpi.course.service.impl;
 import org.gdpi.course.entity.SingleQuestion;
 import org.gdpi.course.mapper.SingleQuestionMapper;
 import org.gdpi.course.service.SingleQuestionService;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,6 +36,7 @@ public class SingleQuestionServiceImpl implements SingleQuestionService {
     }
 
     @Override
+    @Cacheable(cacheNames = "single", key = "#root.args[0]", unless = "#result == null")
     public SingleQuestion findById(Integer id) {
         return singleQuestionMapper.findById(id);
     }

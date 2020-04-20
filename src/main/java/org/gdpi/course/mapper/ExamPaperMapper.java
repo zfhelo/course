@@ -22,9 +22,10 @@ public interface ExamPaperMapper {
     /**
      * 查询已提交的试卷
      * @param sid
+     * @param cid
      * @return
      */
-    List<ExamPaper> findSubmitBySid(Integer sid);
+    List<ExamPaper> findSubmitBySid(@Param("sid") Integer sid, @Param("cid")Integer cid);
 
     /**
      * 查询该学生在指定课程下的试卷
@@ -101,4 +102,11 @@ public interface ExamPaperMapper {
      * @param grade
      */
     void updateEssayGrade(@Param("pid") Integer pid, @Param("qid") Integer qid, @Param("grade")Float grade);
+
+    /**
+     * 删除所有试卷
+     * @param cid 课程id
+     * @param sid 学生id
+     */
+    void deleteAllPaperForStu(@Param("cid") Integer cid, @Param("sid") Integer sid);
 }

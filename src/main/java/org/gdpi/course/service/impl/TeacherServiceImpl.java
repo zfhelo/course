@@ -22,7 +22,6 @@ public class TeacherServiceImpl implements TeacherService {
     private PasswordEncoder passwordEncoder;
 
     @Override
-    //@Cacheable(cacheNames = "tea", key = "#root.args[0]", unless = "#result == null")
     public Teacher findByUsername(String username) {
         return teacherMapper.findByUsername(username);
     }

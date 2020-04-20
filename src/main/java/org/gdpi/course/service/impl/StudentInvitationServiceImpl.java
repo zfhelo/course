@@ -47,4 +47,9 @@ public class StudentInvitationServiceImpl implements StudentInvitationService {
     public List<Comment> findByInvitationId(Integer invitationId) {
         return studentInvitationMapper.findByInvitationId(invitationId);
     }
+
+    @Override
+    public void deleteByAllForStu(Integer cid, Integer sid) {
+        studentInvitationMapper.deleteByAllForStu(cid, sid);
+    }
 }

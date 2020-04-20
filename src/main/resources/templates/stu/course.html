@@ -51,7 +51,7 @@
             </div>
             <div class="ui five stackable link cards">
 
-                <div class="ui card" th:each="course : ${course}">
+                <div class="ui card" th:each="course : ${course}" th:id="'course_'+${course.id}">
                     <div class="image">
                         <img th:attr="src=@{${course.cover}}"
                              src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1585301424819&di=a090af7a21526f19521195d1b581b181&imgtype=0&src=http%3A%2F%2Fimg.name2012.com%2Fuploads%2Fallimg%2F2015-06%2F06-023958_197.jpg"/>
@@ -99,7 +99,18 @@
     });
 
     function exitCourse(id) {
-        console.log('删除课程' + id);
+        if (!confirm("你确认要退出吗! 这将会清空所有数据")) {
+            return;
+        }
+        axios.delete(`${getContextPath()}stu/exit/course/${id}`)
+            .then(rep => {
+                if (rep.data.code === 200) {
+                    $('#course_'+id).remove();
+                } else {
+                    alert(rep.data.data)
+                }
+            })
+            .catch(() => alert("请求失败"));
     }
 
     function joinCourse(id) {

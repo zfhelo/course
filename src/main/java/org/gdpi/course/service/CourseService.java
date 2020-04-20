@@ -83,4 +83,11 @@ public interface CourseService {
      * @return
      */
     List<Course> findCourseBySid(Integer sid);
+
+    /**
+     * 删除选课
+     * @param cid
+     * @param sid
+     */
+    void exitCourse(Integer cid, Integer sid);
 }

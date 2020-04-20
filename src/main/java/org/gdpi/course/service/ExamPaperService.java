@@ -66,4 +66,6 @@ public interface ExamPaperService {
      * @param pid
      */
     void addEssayGrade(Map<Integer, Float> grade, Integer pid);
+
+    void deleteAllPaperForStu(Integer cid, Integer sid);
 }

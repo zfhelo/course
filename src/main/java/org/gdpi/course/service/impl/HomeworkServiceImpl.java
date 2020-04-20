@@ -92,5 +92,10 @@ public class HomeworkServiceImpl implements HomeworkService {
     public Integer updateHomework(StudentHomework studentHomework) {
         return homeworkMapper.updateHomework(studentHomework);
     }
+
+    @Override
+    public void deleteByAllForStu(Integer cid, Integer sid) {
+        homeworkMapper.deleteByAllForStu(cid, sid);
+    }
 }
 

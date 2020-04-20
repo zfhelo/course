@@ -102,4 +102,9 @@ public class ResourceServiceImpl implements ResourceService {
     public void deleteByIdTea(Integer id) {
         resourceMapper.deleteByIdTea(id);
     }
+
+    @Override
+    public void deleteByAllForStu(Integer cid, Integer sid) {
+        resourceMapper.deleteByAllForStu(cid, sid);
+    }
 }
