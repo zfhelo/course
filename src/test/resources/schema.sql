@@ -1,6 +1,3 @@
-DROP TABLE
-IF
-	EXISTS `student`;
 CREATE TABLE `student` (
 	`id` INT PRIMARY KEY AUTO_INCREMENT,
 	`username` VARCHAR ( 12 ) UNIQUE NOT NULL,
@@ -11,9 +8,6 @@ CREATE TABLE `student` (
 	`phone` VARCHAR ( 11 ),
 	`time` TIMESTAMP DEFAULT NOW( )
 );
-DROP TABLE
-IF
-	EXISTS `teacher`;
 CREATE TABLE `teacher` (
 	`id` INT PRIMARY KEY AUTO_INCREMENT,
 	`username` VARCHAR ( 12 ) UNIQUE NOT NULL,
@@ -24,9 +18,6 @@ CREATE TABLE `teacher` (
 	`phone` VARCHAR ( 11 ),
 	`time` TIMESTAMP DEFAULT NOW( )
 );
-DROP TABLE
-IF
-	EXISTS `course`;
 CREATE TABLE course (
 	id INT PRIMARY KEY AUTO_INCREMENT,
 	tea_id INT NOT NULL,
@@ -37,9 +28,6 @@ CREATE TABLE course (
 	description VARCHAR ( 50 ),
 	`time` TIMESTAMP DEFAULT NOW()
 );
-DROP TABLE
-IF
-	EXISTS `stu_course_map`;
 CREATE TABLE stu_course_map (
 	id INT PRIMARY KEY AUTO_INCREMENT,
 	stu_id INT NOT NULL,
@@ -50,9 +38,6 @@ CREATE TABLE stu_course_map (
 	FOREIGN KEY ( stu_id ) REFERENCES student ( id ) ON DELETE CASCADE ON UPDATE CASCADE,
 	FOREIGN KEY ( course_id ) REFERENCES course ( id ) ON DELETE CASCADE ON UPDATE CASCADE
 );
-DROP TABLE
-IF
-	EXISTS single_question;
 CREATE TABLE single_question (
 	id INT PRIMARY KEY AUTO_INCREMENT,
 	course_id INT NOT NULL,
@@ -65,9 +50,6 @@ CREATE TABLE single_question (
 	grade INT NOT NULL,
 	`time` TIMESTAMP DEFAULT NOW( )
 );
-DROP TABLE
-IF
-	EXISTS essay_question;
 CREATE TABLE essay_question (
 	id INT PRIMARY KEY AUTO_INCREMENT,
 	course_id INT NOT NULL,
@@ -76,9 +58,6 @@ CREATE TABLE essay_question (
 	grade INT NOT NULL,
 	`time` TIMESTAMP DEFAULT NOW( )
 );
-DROP TABLE
-IF
-	EXISTS true_or_false_question;
 CREATE TABLE true_or_false_question (
 	id INT PRIMARY KEY AUTO_INCREMENT,
 	course_id INT NOT NULL,
@@ -89,9 +68,6 @@ CREATE TABLE true_or_false_question (
 	reference INT DEFAULT 0,
 	`time` TIMESTAMP DEFAULT NOW( )
 );
-DROP TABLE
-IF
-	EXISTS gap_filling_question;
 CREATE TABLE gap_filling_question (
 	id INT PRIMARY KEY AUTO_INCREMENT,
 	course_id INT NOT NULL,
@@ -119,7 +95,7 @@ CREATE TABLE exam_paper (
 	grade FLOAT DEFAULT 0.0,
 	`status` BOOLEAN DEFAULT FALSE,
 	`rule` INT NOT NULL,
-	`update_time` TIMESTAMP DEFAULT NULL,
+	`update_time` TIMESTAMP,
 	FOREIGN KEY ( stu_id ) REFERENCES student ( id ) ON DELETE CASCADE ON UPDATE CASCADE,
 	FOREIGN KEY ( `model_id` ) REFERENCES exam_model ( id ) ON DELETE CASCADE ON UPDATE CASCADE
 );
@@ -250,7 +226,7 @@ CREATE TABLE notice (
 	course_id INT NOT NULL,
 	title VARCHAR ( 255 ) NOT NULL,
 	content LONGTEXT NOT NULL,
+	`overdue_time` TIMESTAMP,
 	`time` TIMESTAMP DEFAULT NOW(),
-	`overdue_time` TIMESTAMP DEFAULT NULL,
 	FOREIGN KEY ( course_id ) REFERENCES course ( id ) ON DELETE CASCADE ON UPDATE CASCADE
 );
