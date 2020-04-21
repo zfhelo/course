@@ -13,7 +13,8 @@ import org.springframework.web.servlet.ModelAndView;
 public class GlobalController {
 
     @ExceptionHandler(Exception.class)
-    public ModelAndView customException(Exception e, ModelAndView mv) {
+    public ModelAndView customException(Exception e) {
+        ModelAndView mv = new ModelAndView();
         log.error(e.getMessage());
         mv.setViewName("500");
         return mv;
