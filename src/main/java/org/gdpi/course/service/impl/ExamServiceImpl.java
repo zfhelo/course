@@ -113,7 +113,7 @@ public class ExamServiceImpl implements ExamService {
             map.put("torfs", torfs);
         }
         // 问答题
-        if (examModel.getEssayNum() != null && examModel.getGapNum() > 0) {
+        if (examModel.getEssayNum() != null && examModel.getEssayGrade() > 0) {
             List<EssayQuestion> essays =
                     essayQuestionMapper.findGradeLessThan(examModel.getEssayGrade(), examModel.getCourseId());
             if (essays.size() == 0) {
