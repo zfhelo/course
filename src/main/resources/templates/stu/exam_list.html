@@ -53,8 +53,8 @@
         <tbody>
         <tr th:each="p : ${paper}">
             <td th:text="${p.examModel.title}"></td>
-            <td th:text="${#temporals.format(p.examModel.startTime, 'yyyy-dd-MM HH:mm')}"></td>
-            <td th:text="${#temporals.format(p.examModel.endTime, 'yyyy-dd-MM HH:mm')}"></td>
+            <td th:text="${#temporals.format(p.examModel.startTime, 'yyyy-MM-dd HH:mm')}"></td>
+            <td th:text="${#temporals.format(p.examModel.endTime, 'yyyy-MM-dd HH:mm')}"></td>
             <td th:text="${p.examModel.grade}"></td>
             <td th:text="${p.grade}"></td>
             <td th:text="${p.status} ?'已提交':'未提交'"></td>
