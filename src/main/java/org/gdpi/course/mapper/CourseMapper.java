@@ -103,4 +103,18 @@ public interface CourseMapper {
      * @param sid
      */
     void exitCourse( @Param("cid")Integer cid,  @Param("sid")Integer sid);
+
+    /**
+     * 添加标签
+     * @param name
+     * @param courseId
+     */
+    void addTag(@Param("name") String name, @Param("courseId")Integer courseId);
+
+    /**
+     * 查询加入课程的所有tag
+     * @param sid
+     * @return
+     */
+    List<String> findTags(Integer sid);
 }

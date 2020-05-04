@@ -1,190 +1,360 @@
 <!DOCTYPE html>
 <html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="icon" th:href="@{/favicon.ico}" type="image/x-icon">
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css" />
-        <!--<link href="https://cdn.bootcss.com/animate.css/3.7.2/animate.css" rel="stylesheet"/>-->
-        <link rel="stylesheet" th:href="@{/css/my-style.css}"/>
-        <title>首页</title>
-    </head>
-    <body style="background-image: url('https://i.loli.net/2020/04/08/X1y2R4pHI5d6qNn.png')">
-        <!--导航-->
-        <nav th:replace="~{stu/_fragment :: menu('index', ${user.getPhoto()}, ${user.getNickname()})}" class="ui  attached segment my-padded-tb-mini">
-            <div class="ui container">
-                <div class="ui  secondary stackable menu">
-                    <h2 class="ui teal header item">Course</h2>
-                    <a href="#" class="active item"><i class="home icon"></i>首页</a>
-                    <a href="#" class="item"><i class="book icon"></i>课程</a>
-                    <a href="#" class="item"><i class="sticky note outline icon"></i>作业</a>
-                    <a href="#" class="item"><i class="pen square icon"></i>考试</a>
-                    <a href="#" class="item"><i class="comment alternate outline icon"></i>讨论区</a>
-                    <a href="#" class="item"><i class="box icon"></i>资源</a>
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="referrer" content="no-referrer">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="icon" th:href="@{/favicon.ico}" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css"/>
+    <!--<link href="https://cdn.bootcss.com/animate.css/3.7.2/animate.css" rel="stylesheet"/>-->
+    <link rel="stylesheet" th:href="@{/css/my-style.css}"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.css"
+          integrity="sha256-aa0xaJgmK/X74WM224KMQeNQC2xYKwlAt08oZqjeF0E=" crossorigin="anonymous"/>
+    <title>首页</title>
+</head>
+<body style="background-image: url('https://i.loli.net/2020/04/08/X1y2R4pHI5d6qNn.png')">
+<!--导航-->
+<nav th:replace="~{stu/_fragment :: menu('index', ${user.getPhoto()}, ${user.getNickname()})}"
+     class="ui  attached segment my-padded-tb-mini">
+    <div class="ui container">
+        <div class="ui  secondary stackable menu">
+            <h2 class="ui teal header item">Course</h2>
+            <a href="#" class="active item"><i class="home icon"></i>首页</a>
+            <a href="#" class="item"><i class="book icon"></i>课程</a>
+            <a href="#" class="item"><i class="sticky note outline icon"></i>作业</a>
+            <a href="#" class="item"><i class="pen square icon"></i>考试</a>
+            <a href="#" class="item"><i class="comment alternate outline icon"></i>讨论区</a>
+            <a href="#" class="item"><i class="box icon"></i>资源</a>
 
-                    <!--搜索-->
-                    <div class="right item">
-                        <div class="ui icon input ">
-                            <input type="text" placeholder="搜索..." />
-                            <i class="search icon link"></i>
-                        </div>
-                    </div>
-                    <div class="right menu">
-                        <div class="ui dropdown item">
-                            <div>
-                                <img class="ui avatar image" src="https://unsplash.it/100/100?image=1005" />
-                                zfhelo
-                            </div>
-                            <i class="dropdown icon"></i>
-                            <div class="menu">
-                                <div class="item">注销</div>
-                                <a class="item" href="edit-detial.html">修改资料</a>
-                            </div>
-                        </div>
-                    </div>
+            <!--搜索-->
+            <div class="right item">
+                <div class="ui icon input ">
+                    <input type="text" placeholder="搜索..."/>
+                    <i class="search icon link"></i>
                 </div>
             </div>
-        </nav>
-
-        <div class="ui container margin-top-2">
-            <div class="ui stackable grid centered animated bounceInDown">
-                <div class="ui three wide column">
-                    <div class="ui  vertical pointing menu">
-                        <a class="item leftMenu active" onclick="notice(this)">课程公告</a>
-                        <a class="item leftMenu" onclick="news(this)">新闻资讯 </a>
+            <div class="right menu">
+                <div class="ui dropdown item">
+                    <div>
+                        <img class="ui avatar image" src="https://unsplash.it/100/100?image=1005"/>
+                        zfhelo
                     </div>
-                </div>
-                <div class="ui ten wide column">
-                    <div id="body">
-
-                    </div>
-                    <div class="ui borderless menu attached teal" id="page-nav">
-                        <a class="item active">1</a>
+                    <i class="dropdown icon"></i>
+                    <div class="menu">
+                        <div class="item">注销</div>
+                        <a class="item" href="edit-detial.html">修改资料</a>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
+</nav>
 
-
-        <div class="ui small modal">
-            <i class="close icon"></i>
-            <div class="content" id="noticeBody">
-
+<div class="ui container margin-top-2">
+    <div class="ui stackable grid centered animated bounceInDown">
+        <div class="ui three wide column">
+            <div class="ui  vertical pointing menu">
+                <a class="item leftMenu active" onclick="notice(this)">课程公告</a>
+                <a class="item leftMenu" onclick="showLine(this)">成绩统计</a>
+                <a class="item leftMenu" onclick="recommend(this)">视频推荐</a>
+                <a class="item leftMenu" onclick="news(this)">新闻资讯 </a>
             </div>
         </div>
-    </body>
-    <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
-    <script th:src="@{/js/axios.min.js}"></script>
-    <script>
-        $(".ui.dropdown").dropdown({
-            on: "hover"
-        });
-        function showNotice(id) {
-            axios.get(`${getContextPath()}public/notice/${id}`)
-                .then(rep => {
-                    if (rep.data.code === 200) {
-                        $('#noticeBody').html(rep.data.data.content)
-                    } else {
-                        $('#noticeBody').html('<h3>获取消息失败</h3>')
-                    }
-                })
-                .catch(() => $('#noticeBody').html('<h3>请求失败</h3>'));
-            $('.ui.modal')
-                .modal('show');
-        }
-        function getContextPath() {
-            var pathName = document.location.pathname;
-            var index = pathName.substr(1).indexOf("/");
-            var result = pathName.substr(0, index + 1);
-            return result + '/';
-        }
+        <div class="ui ten wide column">
+            <div id="body">
+            </div>
+            <div class="ui borderless menu attached teal" id="page-nav">
+                <a class="item active">1</a>
+            </div>
+        </div>
+    </div>
+</div>
 
-        function news(node) {
-            $('.leftMenu').removeClass('active');
-            $(node).addClass('active');
-            $('#body').html('<div class="ui fluid placeholder">\n' +
-                '  <div class="image header">\n' +
-                '    <div class="line"></div>\n' +
-                '    <div class="line"></div>\n' +
-                '  </div>\n' +
-                '  <div class="paragraph">\n' +
-                '    <div class="line"></div>\n' +
-                '    <div class="line"></div>\n' +
-                '    <div class="line"></div>\n' +
-                '  </div>\n' +
-                '</div>');
-            $('#page-nav').addClass('hide');
-            axios.get(`${getContextPath()}public/news`)
-                .then(({data}) => {
-                    console.log(data)
-                    if (data.error_code === 0) {
-                        createNews(data.result.data);
-                    } else {
-                        alert("请稍后再试");
-                    }
-                })
-                .catch(() => alert("请求失败"));
-        }
-        function createNews(list) {
-            $('#body').empty();
-            console.log(list)
-            for (let i = 0; i < 10; i++) {
-                let node = $(
-                    `<div class="ui segment attached">
+
+<div class="ui small modal notice">
+    <i class="close icon"></i>
+    <div class="content" id="noticeBody">
+    </div>
+</div>
+
+<div class="ui modal video large">
+    <i class="close icon"></i>
+    <div class="content" style="padding: 0em" id="vvv">
+
+    </div>
+</div>
+</body>
+<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+<script th:src="@{/js/axios.min.js}"></script>
+<script src="https://how2j.cn/study/js/chartjs/2.8.0/chart.min.js"></script>
+
+<script>
+    $(".ui.dropdown").dropdown({
+        on: "hover"
+    });
+
+    function showNotice(id) {
+        axios.get(`${getContextPath()}public/notice/${id}`)
+            .then(rep => {
+                if (rep.data.code === 200) {
+                    $('#noticeBody').html(rep.data.data.content)
+                } else {
+                    $('#noticeBody').html('<h3>获取消息失败</h3>')
+                }
+            })
+            .catch(() => $('#noticeBody').html('<h3>请求失败</h3>'));
+        $('.ui.modal.notice')
+            .modal('show');
+    }
+
+    function getContextPath() {
+        var pathName = document.location.pathname;
+        var index = pathName.substr(1).indexOf("/");
+        var result = pathName.substr(0, index + 1);
+        return result + '/';
+    }
+
+    function news(node) {
+        $('.leftMenu').removeClass('active');
+        $(node).addClass('active');
+        $('#body').html('<div class="ui fluid placeholder">\n' +
+            '  <div class="image header">\n' +
+            '    <div class="line"></div>\n' +
+            '    <div class="line"></div>\n' +
+            '  </div>\n' +
+            '  <div class="paragraph">\n' +
+            '    <div class="line"></div>\n' +
+            '    <div class="line"></div>\n' +
+            '    <div class="line"></div>\n' +
+            '  </div>\n' +
+            '</div>');
+        $('#page-nav').addClass('hide');
+        axios.get(`${getContextPath()}public/news`)
+            .then(({data}) => {
+
+                if (data.error_code === 0) {
+                    createNews(data.result.data);
+                } else {
+                    alert("请稍后再试");
+                }
+            })
+            .catch(() => alert("请求失败"));
+    }
+
+    function createNews(list) {
+        $('#body').empty();
+
+        for (let i = 0; i < 10; i++) {
+            let node = $(
+                `<div class="ui segment attached">
                          <a href="${list[i].url}" target="_blank">${list[i].title}</a>
                      </div>`
-                )
-                $('#body').append(node);
-            }
+            )
+            $('#body').append(node);
         }
+    }
 
 
+    function notice(node) {
+        $('.leftMenu').removeClass('active');
+        $(node).addClass('active');
+        listNotice(1)
+    }
 
-        function notice(node) {
-            $('.leftMenu').removeClass('active');
-            $(node).addClass('active');
-            listNotice(1)
-        }
-        function listNotice(page) {
-            axios.get(`${getContextPath()}stu/notice?page=${page}`)
-                .then(rep => {
-                    if (rep.data.code === 200) {
-                        console.log(rep);
-                        createNotice(rep.data.data.list);
-                        createNoticeNav(rep.data.data);
-                    } else {
-                        alert(rep.data.data);
-                    }
-                })
-                .catch(() => alert("请求失败"));
-        }
-        function createNotice(list) {
-            $('#body').empty();
-            list.forEach(item => {
-                let node = $(
-                    `<div class="ui segment attached">
+    function listNotice(page) {
+        axios.get(`${getContextPath()}stu/notice?page=${page}`)
+            .then(rep => {
+                if (rep.data.code === 200) {
+
+                    createNotice(rep.data.data.list);
+                    createNoticeNav(rep.data.data);
+                } else {
+                    alert(rep.data.data);
+                }
+            })
+            .catch(() => alert("请求失败"));
+    }
+
+    function createNotice(list) {
+        $('#body').empty();
+        list.forEach(item => {
+            let node = $(
+                `<div class="ui segment attached">
                          <a href="javascript:showNotice(${item.id})">${item.title}</a>
                          <span class="my-font-tips my-margin-left-1">by: ${item.course.name}</span>
                          <span class="my-font-tips">${item.time}</span>
                      </div>`
-                );
-                $('#body').append(node);
-            });
-        }
-        function createNoticeNav(page) {
-            $('#page-nav').empty();
-            $('#page-nav').removeClass('hide');
-            page.navigatepageNums.forEach(item => {
-                var node = $(`<a class="item" id="nav-${item}" onclick="listNotice(${item})">${item}</a>`);
-                $('#page-nav').append(node);
-            });
+            );
+            $('#body').append(node);
+        });
+    }
 
-            $('#nav-' + page.pageNum).addClass('active');
-        }
-        listNotice(1);
+    function createNoticeNav(page) {
+        $('#page-nav').empty();
+        $('#page-nav').removeClass('hide');
+        page.navigatepageNums.forEach(item => {
+            var node = $(`<a class="item" id="nav-${item}" onclick="listNotice(${item})">${item}</a>`);
+            $('#page-nav').append(node);
+        });
+
+        $('#nav-' + page.pageNum).addClass('active');
+    }
+
+    listNotice(1);
 
 
-    </script>
+</script>
 
+
+<script>
+    function showLine(node) {
+        $('.leftMenu').removeClass('active');
+        $(node).addClass('active');
+        $('#body').empty();
+        $('#page-nav').addClass('hide');
+        axios.get(`${getContextPath()}stu/index/homework`)
+            .then(rep => {
+                console.log(rep.data);
+                if (rep.data.code === 200) {
+                    rep.data.data.forEach(course => {
+                        let id = 'chart-' + course.id;
+                        $('#body').append(
+                            `
+                        <div class="ui segment">
+                             <canvas id="${id}"></canvas>
+                        </div>
+                        `
+                        );
+                        createLineChart(id, course)
+                    })
+
+                }
+            })
+            .catch(() => alert('请求失败'));
+    }
+
+    function createLineChart(id, course) {
+        let h = course.studentHomeworks;
+
+        let ctx = document.getElementById(id).getContext("2d");
+        let myChart = new Chart(ctx, {
+            type: "line",
+            data: {
+                labels: h.reduce((acc, cur) => {
+                    acc.push(cur.homework.title);
+                    return acc;
+                }, []),
+                datasets: [{
+                    label: course.name,
+                    data: h.reduce((acc, cur) => {
+                        acc.push(cur.grade);
+                        return acc;
+                    }, []),
+                    borderColor: 'blue',
+                    backgroundColor: 'skyBlue',
+                    borderWidth: 1,
+                    fill: false,
+                }]
+            }
+        });
+    }
+
+    function recommend(node) {
+        $('.leftMenu').removeClass('active');
+        $(node).addClass('active');
+        $('#body').empty();
+        $('#page-nav').addClass('hide');
+
+        // 占位
+        $('#body').append('<div class="ui three column stackable grid">\n' +
+            '  <div class="column">\n' +
+            '    <div class="ui raised segment">\n' +
+            '      <div class="ui placeholder">\n' +
+            '        <div class="image header">\n' +
+            '          <div class="line"></div>\n' +
+            '          <div class="line"></div>\n' +
+            '        </div>\n' +
+            '        <div class="paragraph">\n' +
+            '          <div class="medium line"></div>\n' +
+            '          <div class="short line"></div>\n' +
+            '        </div>\n' +
+            '      </div>\n' +
+            '    </div>\n' +
+            '  </div>\n' +
+            '  <div class="column">\n' +
+            '    <div class="ui raised segment">\n' +
+            '      <div class="ui placeholder">\n' +
+            '        <div class="image header">\n' +
+            '          <div class="line"></div>\n' +
+            '          <div class="line"></div>\n' +
+            '        </div>\n' +
+            '        <div class="paragraph">\n' +
+            '          <div class="medium line"></div>\n' +
+            '          <div class="short line"></div>\n' +
+            '        </div>\n' +
+            '      </div>\n' +
+            '    </div>\n' +
+            '  </div>\n' +
+            '  <div class="column">\n' +
+            '    <div class="ui raised segment">\n' +
+            '      <div class="ui placeholder">\n' +
+            '        <div class="image header">\n' +
+            '          <div class="line"></div>\n' +
+            '          <div class="line"></div>\n' +
+            '        </div>\n' +
+            '        <div class="paragraph">\n' +
+            '          <div class="medium line"></div>\n' +
+            '          <div class="short line"></div>\n' +
+            '        </div>\n' +
+            '      </div>\n' +
+            '    </div>\n' +
+            '  </div>\n' +
+            '</div>')
+
+        axios.get(`${getContextPath()}stu/recommend`).then(rep => {
+            $('#body').empty();
+            $('#body').append('<div class="ui three column grid" id="videoBody"></div>');
+            createVideoCard(JSON.parse(rep.data[0]).data.result)
+            createVideoCard(JSON.parse(rep.data[1]).data.result)
+            createVideoCard(JSON.parse(rep.data[2]).data.result)
+        });
+
+    }
+
+    function createVideoCard(video) {
+
+        video.forEach((item, index) => {
+            if (index > 2) {
+                return;
+            }
+            let node = $(`<div class="column">
+                            <div class="ui fluid card">
+                              <div class="image">
+                                <img src="https:${item.pic}@320w_200h.webp">
+                              </div>
+                              <div class="content">
+                                <a onclick="watchVideo(${item.aid})">${item.title}</a>
+                              </div>
+                            </div>
+                          </div>`);
+            $('#videoBody').append(node);
+        });
+    }
+
+    function watchVideo(aid) {
+        let node = $(`
+            <div style="position: relative; padding: 35% 45%;" id="bilibili">
+            <iframe style="position: absolute; width: 100%; height: 100%; left: 0; top: 0;" src="https://player.bilibili.com/player.html?cid=1&aid=${aid}&page=1&as_wide=1&high_quality=1&danmaku=0" frameborder="no" scrolling="no"></iframe>
+        </div>`);
+        $('#vvv').append(node);
+
+        $('.large.modal')
+            .modal('show').modal('setting', 'onHidden', (a) => $('#bilibili').remove());
+    }
+</script>
+
+<script>
+
+</script>
 </html>

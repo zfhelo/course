@@ -90,4 +90,18 @@ public interface CourseService {
      * @param sid
      */
     void exitCourse(Integer cid, Integer sid);
+
+    /**
+     * 添加标签
+     * @param tags
+     * @param cid
+     */
+    void addTags(List<String> tags, Integer cid);
+
+    /**
+     * 查询加入课程的所有tag
+     * @param sid
+     * @return
+     */
+    List<String> findTags(Integer sid);
 }

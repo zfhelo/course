@@ -1,6 +1,7 @@
 package org.gdpi.course.service;
 
 import org.apache.ibatis.annotations.Param;
+import org.gdpi.course.entity.Course;
 import org.gdpi.course.entity.Homework;
 import org.gdpi.course.entity.StudentHomework;
 
@@ -111,4 +112,19 @@ public interface HomeworkService {
      * @param sid
      */
     void deleteByAllForStu(Integer cid, Integer sid);
+
+    /**
+     * 查询所有选课的作业
+     * @param courses
+     * @param sid
+     */
+    void findAllHomework(List<Course> courses, Integer sid);
+
+
+    /**
+     * 查找所有作业
+     * @param cid
+     * @return
+     */
+    List<Homework> findByHomeworkByCid(Integer cid);
 }

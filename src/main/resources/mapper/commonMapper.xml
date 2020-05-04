@@ -83,12 +83,16 @@
         <result property="grade" column="grade"/>
     </resultMap>
 
+    <resultMap id="allHomework" type="homework" extends="baseHomework">
+        <collection property="studentHomeworks" column="id" select="org.gdpi.course.mapper.HomeworkMapper.findByHomeworkId"/>
+    </resultMap>
+
+
     <resultMap id="homeworkAndSubmitNum" type="homework" extends="baseHomework">
         <association property="submitNum" column="id" select="org.gdpi.course.mapper.HomeworkMapper.countSubmitNum"/>
     </resultMap>
 
-
-    <resultMap id="homeworkAndStu" type="studentHomework">
+    <resultMap id="baseStudentHomework" type="studentHomework">
         <id property="id" column="id"/>
         <result property="homeworkId" column="homework_id"/>
         <result property="stuId" column="stu_id"/>
@@ -96,16 +100,11 @@
         <result property="grade" column="grade"/>
         <result property="updateTime" column="update_time"/>
         <result property="time" column="time"/>
+    </resultMap>
+    <resultMap id="homeworkAndStu" type="studentHomework" extends="baseStudentHomework">
         <association property="student" javaType="student" column="stu_id" select="org.gdpi.course.mapper.StudentMapper.findById"/>
     </resultMap>
-    <resultMap id="homeworkAndStuAndTitle" type="studentHomework">
-        <id property="id" column="id"/>
-        <result property="homeworkId" column="homework_id"/>
-        <result property="stuId" column="stu_id"/>
-        <result property="answer" column="answer"/>
-        <result property="grade" column="grade"/>
-        <result property="updateTime" column="update_time"/>
-        <result property="time" column="time"/>
+    <resultMap id="homeworkAndStuAndTitle" type="studentHomework" extends="baseStudentHomework">
         <association property="student" javaType="student" column="stu_id" select="org.gdpi.course.mapper.StudentMapper.findById"/>
         <association property="homework" javaType="homework" column="homework_id" select="org.gdpi.course.mapper.HomeworkMapper.findById"/>
     </resultMap>

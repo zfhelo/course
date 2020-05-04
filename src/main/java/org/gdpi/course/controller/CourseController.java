@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
+import java.util.List;
 
 /**
  * @author zhf
@@ -50,6 +51,11 @@ public class CourseController {
         } catch (CourseAlreadyExistedException e) {
             return SimpleResponse.error("课程号已存在");
         }
+
+
+        // 添加标签
+        courseService.addTags(course.getTags(), course.getId());
+
         return SimpleResponse.success("创建成功");
     }
 
@@ -69,6 +75,23 @@ public class CourseController {
                 .doSelectPageInfo(() -> courseService.findByTeaId(teacher.getId()));
 
         return SimpleResponse.success(pageInfo);
+    }
+
+    /**
+     * 查找所有课程
+     * @param page
+     * @param userDetails
+     * @return
+     */
+    @GetMapping("/courses")
+    public SimpleResponse getCourses(@RequestParam(defaultValue = "1") Integer page,
+                                     @AuthenticationPrincipal UserDetails userDetails) {
+        // 先查出教师id
+        Teacher teacher = teacherService.findByUsername(userDetails.getUsername());
+
+        List<Course> courses = courseService.findByTeaId(teacher.getId());
+
+        return SimpleResponse.success(courses);
     }
 
     /**

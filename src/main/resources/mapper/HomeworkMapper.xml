@@ -66,4 +66,15 @@
     <delete id="deleteByAllForStu">
         DELETE FROM stu_homework_answer WHERE stu_id = #{sid} AND homework_id IN(SELECT id FROM homework WHERE course_id = #{cid})
     </delete>
+
+    <select id="findAllHomework" resultMap="#.homeworkAndStuAndTitle">
+        SELECT * FROM stu_homework_answer WHERE stu_id = #{sid} AND homework_id IN(SELECT id FROM homework WHERE course_id = #{cid})
+    </select>
+
+
+    <select id="findByHomeworkByCid" resultMap="#.allHomework">
+        SELECT * FROM homework WHERE course_id = #{cid}
+    </select>
+
+
 </mapper>

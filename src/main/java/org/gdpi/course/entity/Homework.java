@@ -11,6 +11,7 @@ import org.hibernate.validator.constraints.Range;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * @author zhf
@@ -50,4 +51,5 @@ public class Homework {
     private Integer submitNum;
 
     private StudentHomework studentHomework;
+    private List<StudentHomework> studentHomeworks;
 }

@@ -507,4 +507,5 @@ public class StudentController {
         mv.setViewName("stu/invitation_detail");
         return mv;
     }
+
 }

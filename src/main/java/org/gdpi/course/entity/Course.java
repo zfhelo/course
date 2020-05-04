@@ -42,4 +42,6 @@ public class Course {
     private List<Homework> homework;
     private List<Homework> submitHomework;
     private List<Homework> overdueHomework;
+    private List<StudentHomework> studentHomeworks;
+    private List<String> tags;
 }

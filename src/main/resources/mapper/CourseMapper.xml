@@ -58,4 +58,12 @@
     <delete id="exitCourse">
         DELETE FROM stu_course_map WHERE course_id = #{cid} AND stu_id = #{sid}
     </delete>
+
+    <insert id="addTag">
+        INSERT INTO course_tag(`name`, course_id) VALUES(#{name}, #{courseId})
+    </insert>
+
+    <select id="findTags" resultType="string">
+        SELECT `name` FROM course_tag WHERE course_id IN (SELECT course_id FROM stu_course_map WHERE stu_id = #{sid})
+    </select>
 </mapper>

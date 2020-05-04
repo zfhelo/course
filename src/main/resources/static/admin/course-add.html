@@ -22,7 +22,7 @@
 <div class="ui container my-padding-top-2">
     <div class="ui horizontal divider"><h1>创建课程</h1></div>
 
-    <div class="animated bounceInDown">
+    <div class="animated bounceInDown" id="content">
         <div class="ui grid  my-patted-5 my-padding-left-2">
             <div class="ui eight wide column">
                 <form class="ui form" action="#" id="add-course" method="post">
@@ -48,6 +48,14 @@
                         <label for="uploadFile" class="ui button mini">选择封面</label>
                         <input type="file" id="uploadFile" style="display: none;"/>
                     </div>
+                    <div class="field " style="max-width: 300px">
+                        <div class="ui right labeled left icon input small">
+                            <i class="tags icon"></i>
+                            <input type="text" placeholder="输入标签" id="tag">
+                            <a class="ui tag label" onclick="addTag()">添加标签 </a>
+                        </div>
+                    </div>
+
                     <div class="ui black clear button right floated small" id="clear">
                         清空
                     </div>
@@ -63,6 +71,9 @@
                 <img class="ui medium rounded image" id="uploaded-img"
                      src="https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=2462524992,179895772&fm=26&gp=0.jpg"/>
             </div>
+        </div>
+        <div id="tags">
+
         </div>
     </div>
 </div>
@@ -121,15 +132,21 @@
                 'name': fields.name,
                 'number': fields.number,
                 'description': fields.description,
-                'cover': $('#uploaded-img').attr('src')
+                'cover': $('#uploaded-img').attr('src'),
+                tags: tags.map(item => item.tag)
             };
             axios
                 .post(getContextPath() + 'tea/course', data)
                 .then(rep => {
                     if (rep .data.code !== 200) {
+
                         alert(rep.data.data);
+
                     } else {
                         alert(rep.data.data);
+                        tags = [];
+                        let tagDiv = $('#tags');
+                        tagDiv.empty();
                         $('#clear').click();
                     }
                 })
@@ -164,5 +181,47 @@
             processData: false,
         });
     });
+
+    // 课程标签
+    let tags = [];
+    const color = ['red', 'teal', 'blue', 'grey', 'orange', 'yellow', 'purple', 'pink'];
+    function addTag() {
+        let tag = $('#tag').val().trim();
+        $('#tag').val('');
+        if (tag === '') {
+            return;
+        }
+
+        if (tag.length > 10) {
+            alert("限制10个字符")
+            return;
+        }
+        let repeat = tags.every((item) => {
+            return item.tag !== tag;
+        });
+
+        if (!repeat) {
+            alert('该标签已经添加了换个别的吧');
+            return;
+        }
+
+        tags.push({
+            tag,
+            color:color[Math.floor(Math.random() * color.length)]
+        });
+        addTags();
+    }
+    function delTag(tag) {
+        tags = tags.filter(item => item.tag !== tag.innerText);
+        addTags();
+    }
+
+    function addTags() {
+        let tagDiv = $('#tags');
+        tagDiv.empty();
+        tags.forEach(item => {
+            tagDiv.append(`<a class="ui tag label ${item.color} mini" onclick="delTag(this)">${item.tag}</a>`);
+        });
+    }
 </script>
 </html>

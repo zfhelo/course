@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <base id="base" href="/course/">
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta http-equiv="x-ua-compatible" content="ie=edge"/>
+    <script>
+        function getContextPath() {
+            var pathName = document.location.pathname;
+            var index = pathName.substr(1).indexOf("/");
+            var result = pathName.substr(0, index + 1);
+            return result + '/';
+        }
+
+        document.getElementById('base').href = getContextPath();
+    </script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css"/>
+    <!--<link href="https://cdn.bootcss.com/animate.css/3.7.2/animate.css" rel="stylesheet" />-->
+    <script src="https://how2j.cn/study/js/chartjs/2.8.0/chart.min.js"></script>
+    <link rel="stylesheet" href="css/my-style.css"/>
+    <title>首页</title>
+</head>
+<body>
+<div class="ui  my-padding-top-2" style="padding-left: 10px!important; padding-right: 10px">
+    <select class="ui compact selection dropdown" id="courses" onchange="getData(this.value)">
+    </select>
+    <div id="body1"></div>
+
+</div>
+</body>
+<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+<script src="https://cdn.bootcss.com/wangEditor/10.0.13/wangEditor.min.js"></script>
+<script src="js/my.js"></script>
+<script src="js/axios.min.js"></script>
+<script>
+    $(".ui.dropdown").dropdown({
+        on: "hover"
+    });
+    axios.get(`${getContextPath()}tea/courses`)
+        .then(rep => {
+            if (rep.data.code === 200) {
+                let node = $('#courses');
+                rep.data.data.forEach(item => {
+                    node.append(`<option value="${item.id}">${item.name}</option>`);
+                });
+                let first = node.children(":first").val();
+                return first;
+            } else {
+                console.error('获取失败', rep.data.data);
+            }
+        })
+        .then((id) => {
+            getData(id);
+        })
+        .catch(() => alert('查询失败'));
+
+    function getData(id) {
+        axios.get(`${getContextPath()}tea/homeworks/index/${id}`)
+            .then(rep => {
+                if (rep.data.code === 200) {
+                    let id = 'homeworks'
+                    $('#body1').empty();
+                    $('#body1').append(
+                        `
+                         <div style="margin:0 auto">
+                                <canvas id="${id}"></canvas>
+                         </div>
+                        `
+                    );
+                    createLineChart(id, rep.data.data)
+
+
+                } else {
+                    alert(rep.data.data);
+                }
+            })
+            .catch(() => alert('请求失败'));
+    }
+
+    function createLineChart(id, homeworks) {
+        console.log(homeworks);
+        var ctx = document.getElementById(id).getContext('2d');
+
+        let data = homeworks.reduce((acc, pre) => {
+            let data = pre.studentHomeworks.reduce((acc, p) => {
+                if (p.grade >= pre.grade * 0.8) {
+                    acc[0]++;
+                } else if (p.grade >= pre.grade * 0.6) {
+                    acc[1]++;
+                } else if (p.grade > 0) {
+                    acc[2]++;
+                } else {
+                    acc[3]++;
+                }
+                return acc;
+            }, [0, 0, 0, 0]);
+            acc[0].push(pre.title);
+            acc[1].push(data[0]);
+            acc[2].push(data[1]);
+            acc[3].push(data[2]);
+            acc[4].push(data[3]);
+            return acc;
+        }, [[], [], [], [], []]); // 0->label, 1->优秀 2->良好 3->一般 4->未提交
+
+        console.log(data);
+        var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: data[0],
+                datasets: [
+                    {
+                        label: '优秀',
+                        data: data[1],
+                        borderColor: 'pink',
+                        backgroundColor: 'pink',
+                        borderWidth: 1,
+                        fill: false,
+                        yAxisID: 'y-axis-1',
+                    },
+                    {
+                        label: '良好',
+                        data: data[2],
+                        borderColor: 'green',
+                        backgroundColor: 'green',
+                        borderWidth: 1,
+                        fill: false,
+                        yAxisID: 'y-axis-1',
+
+                    }, {
+                        label: '一般',
+                        data: data[3],
+                        borderColor: 'skyblue',
+                        backgroundColor: 'skyblue',
+                        borderWidth: 1,
+                        fill: false,
+                        yAxisID: 'y-axis-1',
+
+
+                    }, {
+                        label: '未提交',
+                        data: data[4],
+                        borderColor: 'gray',
+                        backgroundColor: 'gray',
+                        borderWidth: 1,
+                        fill: false,
+                        yAxisID: 'y-axis-1',
+
+                    },
+
+                ]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        type: 'linear',
+                        display: true,
+                        position: 'left',
+                        id: 'y-axis-1',
+                        scaleLabel: {
+                            display: true,
+                            labelString: '人数'
+                        },
+                        ticks: {
+                            beginAtZero: true,
+                            callback: function(value) {if (value % 1   === 0) {return value;}}
+                        }
+
+                    }]
+
+                }
+            }
+        });
+    }
+</script>
+
+
+</html>

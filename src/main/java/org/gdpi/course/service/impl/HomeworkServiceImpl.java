@@ -1,5 +1,6 @@
 package org.gdpi.course.service.impl;
 
+import org.gdpi.course.entity.Course;
 import org.gdpi.course.entity.Homework;
 import org.gdpi.course.entity.StudentHomework;
 import org.gdpi.course.mapper.CourseMapper;
@@ -96,6 +97,20 @@ public class HomeworkServiceImpl implements HomeworkService {
     @Override
     public void deleteByAllForStu(Integer cid, Integer sid) {
         homeworkMapper.deleteByAllForStu(cid, sid);
+    }
+
+    @Override
+    public void findAllHomework(List<Course> courses, Integer sid) {
+        courses.forEach(course -> {
+            List<StudentHomework> allHomework = homeworkMapper.findAllHomework(course.getId(), sid);
+            course.setStudentHomeworks(allHomework);
+        });
+    }
+
+
+    @Override
+    public List<Homework> findByHomeworkByCid(Integer cid) {
+        return homeworkMapper.findByHomeworkByCid(cid);
     }
 }
 

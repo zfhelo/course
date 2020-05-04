@@ -108,4 +108,8 @@ public interface HomeworkMapper {
     Integer updateHomework(StudentHomework studentHomework);
 
     void deleteByAllForStu(@Param("cid") Integer cid, @Param("sid") Integer sid);
+
+    List<StudentHomework> findAllHomework(@Param("cid") Integer cid, @Param("sid") Integer sid);
+
+    List<Homework> findByHomeworkByCid(Integer cid);
 }

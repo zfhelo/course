@@ -86,4 +86,18 @@ public class CourseServiceImpl implements CourseService {
     public void exitCourse(Integer cid, Integer sid) {
         courseMapper.exitCourse(cid, sid);
     }
+
+    @Override
+    public void addTags(List<String> tags, Integer cid) {
+        if(tags == null) {
+            return;
+        }
+        tags.forEach(name -> courseMapper.addTag(name, cid));
+    }
+
+
+    @Override
+    public List<String> findTags(Integer sid) {
+        return courseMapper.findTags(sid);
+    }
 }

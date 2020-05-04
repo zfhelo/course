@@ -70,6 +70,7 @@
             axios.get(`${getContextPath()}tea/homework/list?page=${page}&homeworkId=${getUrlParam('id')}`)
                 .then(rep => {
                     if (rep.data.code === 200) {
+                        console.log(rep.data);
                         createNode(rep.data.data.list);
                         createPageNav(rep.data.data);
                     } else {
