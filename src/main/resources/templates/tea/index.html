@@ -1,187 +1,196 @@
 <!DOCTYPE html>
 <html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-        <link rel="icon" th:href="@{/favicon.ico}" type="image/x-icon">
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css" />
-        <link rel="stylesheet" href="../../static/css/my-style.css" th:href="@{/css/my-style.css}"/>
-        <title>首页</title>
-    </head>
-    <body>
-        <!--导航-->
-        <nav th:replace="~{tea/_fragment :: menu('index', ${user.getPhoto()}, ${user.getNickname()})}" class="ui  attached segment my-padded-tb-mini">
-            <div class="ui container">
-                <div class="ui  secondary stackable menu">
-                    <h2 class="ui teal header item">Course</h2>
-                    <a href="#" class="active item"><i class="home icon"></i>首页</a>
-                    <a href="#" class="item"><i class="comment alternate outline icon"></i>讨论区</a>
-                    <a href="#" class="item"><i class="box icon"></i>资源</a>
-                    <a href="#" class="item"><i class="cog icon"></i>课程管理</a>
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="icon" th:href="@{/favicon.ico}" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css"/>
+    <link rel="stylesheet" href="../../static/css/my-style.css" th:href="@{/css/my-style.css}"/>
+    <title>首页</title>
+</head>
+<body>
+<!--导航-->
+<nav th:replace="~{tea/_fragment :: menu('index', ${user.getPhoto()}, ${user.getNickname()})}"
+     class="ui  attached segment my-padded-tb-mini">
+    <div class="ui container">
+        <div class="ui  secondary stackable menu">
+            <h2 class="ui teal header item">Course</h2>
+            <a href="#" class="active item"><i class="home icon"></i>首页</a>
+            <a href="#" class="item"><i class="comment alternate outline icon"></i>讨论区</a>
+            <a href="#" class="item"><i class="box icon"></i>资源</a>
+            <a href="#" class="item"><i class="cog icon"></i>课程管理</a>
 
-                    <!--搜索-->
-                    <div class="right item">
-                        <div class="ui icon input ">
-                            <input type="text" placeholder="搜索..." />
-                            <i class="search icon link"></i>
-                        </div>
-                    </div>
-                    <div class="right menu">
-                        <div class="ui dropdown item">
-                            <div>
-                                <img class="ui avatar image" src="https://unsplash.it/100/100?image=1005" />
-                                zfhelo
-                            </div>
-                            <i class="dropdown icon"></i>
-                            <div class="menu" id="_dropdown">
-                                <a th:href="@{/logout}" class="item">注销</a>
-                                <a class="item" href="edit-detial.html">修改资料</a>
-                            </div>
-                        </div>
-                    </div>
+            <!--搜索-->
+            <div class="right item">
+                <div class="ui icon input ">
+                    <input type="text" placeholder="搜索..."/>
+                    <i class="search icon link"></i>
                 </div>
             </div>
-        </nav>
-
-        <div class="ui container margin-top-2">
-            <div class="ui stackable grid centered animated bounceInDown">
-                <div class="ui three wide column">
-                    <div class="ui  vertical pointing menu">
-                        <a class="item leftMenu active" onclick="notice(this)">课程公告</a>
-                        <a class="item leftMenu" onclick="news(this)">新闻资讯 </a>
+            <div class="right menu">
+                <div class="ui dropdown item">
+                    <div>
+                        <img class="ui avatar image" src="https://unsplash.it/100/100?image=1005"/>
+                        zfhelo
                     </div>
-                </div>
-                <div class="ui ten wide column">
-                    <div id="body">
-
-                    </div>
-                    <div class="ui borderless menu attached teal" id="page-nav">
-                        <a class="item active">1</a>
+                    <i class="dropdown icon"></i>
+                    <div class="menu" id="_dropdown">
+                        <a th:href="@{/logout}" class="item">注销</a>
+                        <a class="item" href="edit-detial.html">修改资料</a>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
+</nav>
 
-
-        <div class="ui small modal">
-            <i class="close icon"></i>
-            <div class="content" id="noticeBody">
-
+<div class="ui container margin-top-2">
+    <div class="ui stackable grid centered animated bounceInDown">
+        <div class="ui three wide column" style="margin-right: 30px">
+            <div class="ui  vertical pointing menu">
+                <a class="item  leftMenu active" onclick="notice(this)"><span><i
+                        class="bullhorn icon"></i>课程公告</span></a>
+                <a class="item  leftMenu " onclick="news(this)"><span><i
+                        class="newspaper outline icon"></i>新闻资讯</span></a>
             </div>
         </div>
-    </body>
-    <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
-    <script th:src="@{/js/axios.min.js}"></script>
-    <script>
-        $(".ui.dropdown").dropdown({
-            on: "hover"
-        });
-        function showNotice(id) {
-            axios.get(`${getContextPath()}public/notice/${id}`)
-                .then(rep => {
-                    if (rep.data.code === 200) {
-                        $('#noticeBody').html(rep.data.data.content)
-                    } else {
-                        $('#noticeBody').html('<h3>获取消息失败</h3>')
-                    }
-                })
-                .catch(() => $('#noticeBody').html('<h3>请求失败</h3>'));
-            $('.ui.modal')
-                .modal('show');
-        }
-        function getContextPath() {
-            var pathName = document.location.pathname;
-            var index = pathName.substr(1).indexOf("/");
-            var result = pathName.substr(0, index + 1);
-            return result + '/';
-        }
+        <div class="ui ten wide column">
+            <div id="body">
 
-        function news(node) {
-            $('.leftMenu').removeClass('active');
-            $(node).addClass('active');
-            $('#body').html('<div class="ui fluid placeholder">\n' +
-                '  <div class="image header">\n' +
-                '    <div class="line"></div>\n' +
-                '    <div class="line"></div>\n' +
-                '  </div>\n' +
-                '  <div class="paragraph">\n' +
-                '    <div class="line"></div>\n' +
-                '    <div class="line"></div>\n' +
-                '    <div class="line"></div>\n' +
-                '  </div>\n' +
-                '</div>');
-            $('#page-nav').addClass('hide');
-            axios.get(`${getContextPath()}public/news`)
-                .then(({data}) => {
-                    console.log(data)
-                    if (data.error_code === 0) {
-                        createNews(data.result.data);
-                    } else {
-                        alert("请稍后再试");
-                    }
-                })
-                .catch(() => alert("请求失败"));
-        }
-        function createNews(list) {
-            $('#body').empty();
-            console.log(list)
-            for (let i = 0; i < 10; i++) {
-                let node = $(
-                    `<div class="ui segment attached">
+            </div>
+            <div class="ui borderless menu attached teal" id="page-nav">
+                <a class="item active">1</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="ui small modal">
+    <i class="close icon"></i>
+    <div class="content" id="noticeBody">
+
+    </div>
+</div>
+</body>
+<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+<script th:src="@{/js/axios.min.js}"></script>
+<script>
+    $(".ui.dropdown").dropdown({
+        on: "hover"
+    });
+
+    function showNotice(id) {
+        axios.get(`${getContextPath()}public/notice/${id}`)
+            .then(rep => {
+                if (rep.data.code === 200) {
+                    $('#noticeBody').html(rep.data.data.content)
+                } else {
+                    $('#noticeBody').html('<h3>获取消息失败</h3>')
+                }
+            })
+            .catch(() => $('#noticeBody').html('<h3>请求失败</h3>'));
+        $('.ui.modal')
+            .modal('show');
+    }
+
+    function getContextPath() {
+        var pathName = document.location.pathname;
+        var index = pathName.substr(1).indexOf("/");
+        var result = pathName.substr(0, index + 1);
+        return result + '/';
+    }
+
+    function news(node) {
+        $('.leftMenu').removeClass('active');
+        $(node).addClass('active');
+        $('#body').html('<div class="ui fluid placeholder">\n' +
+            '  <div class="image header">\n' +
+            '    <div class="line"></div>\n' +
+            '    <div class="line"></div>\n' +
+            '  </div>\n' +
+            '  <div class="paragraph">\n' +
+            '    <div class="line"></div>\n' +
+            '    <div class="line"></div>\n' +
+            '    <div class="line"></div>\n' +
+            '  </div>\n' +
+            '</div>');
+        $('#page-nav').addClass('hide');
+        axios.get(`${getContextPath()}public/news`)
+            .then(({data}) => {
+                console.log(data)
+                if (data.error_code === 0) {
+                    createNews(data.result.data);
+                } else {
+                    alert("请稍后再试");
+                }
+            })
+            .catch(() => alert("请求失败"));
+    }
+
+    function createNews(list) {
+        $('#body').empty();
+        console.log(list)
+        for (let i = 0; i < 10; i++) {
+            let node = $(
+                `<div class="ui segment attached">
                          <a href="${list[i].url}" target="_blank">${list[i].title}</a>
                      </div>`
-                )
-                $('#body').append(node);
-            }
+            )
+            $('#body').append(node);
         }
+    }
 
 
+    function notice(node) {
+        $('.leftMenu').removeClass('active');
+        $(node).addClass('active');
+        listNotice(1)
+    }
 
-        function notice(node) {
-            $('.leftMenu').removeClass('active');
-            $(node).addClass('active');
-            listNotice(1)
-        }
-        function listNotice(page) {
-            axios.get(`${getContextPath()}tea/notice?page=${page}`)
-                .then(rep => {
-                    if (rep.data.code === 200) {
-                        console.log(rep);
-                        createNotice(rep.data.data.list);
-                        createNoticeNav(rep.data.data);
-                    } else {
-                        alert(rep.data.data);
-                    }
-                })
-                .catch(() => alert("请求失败"));
-        }
-        function createNotice(list) {
-            $('#body').empty();
-            list.forEach(item => {
-                let node = $(
-                    `<div class="ui segment attached">
-                         <a href="javascript:showNotice(${item.id})">${item.title}</a>
-                         <span class="my-font-tips my-margin-left-1">by: ${item.course.name}</span>
-                         <span class="my-font-tips">${item.time}</span>
+    function listNotice(page) {
+        axios.get(`${getContextPath()}tea/notice?page=${page}`)
+            .then(rep => {
+                if (rep.data.code === 200) {
+                    console.log(rep);
+                    createNotice(rep.data.data.list);
+                    createNoticeNav(rep.data.data);
+                } else {
+                    alert(rep.data.data);
+                }
+            })
+            .catch(() => alert("请求失败"));
+    }
+
+    function createNotice(list) {
+        $('#body').empty();
+        list.forEach(item => {
+            let node = $(
+                `<div class="ui segment attached">
+                         <a href="javascript:showNotice(${item.id})" style="font-size: large">${item.title}</a>
+                         <span class="my-margin-left-1" style="font-size: smaller" > ${item.course.name}</span>
+                         <span style="float: right">${item.time}</span>
                      </div>`
-                );
-                $('#body').append(node);
-            });
-        }
-        function createNoticeNav(page) {
-            $('#page-nav').empty();
-            $('#page-nav').removeClass('hide');
-            page.navigatepageNums.forEach(item => {
-                var node = $(`<a class="item" id="nav-${item}" onclick="listNotice(${item})">${item}</a>`);
-                $('#page-nav').append(node);
-            });
+            );
+            $('#body').append(node);
+        });
+    }
 
-            $('#nav-' + page.pageNum).addClass('active');
-        }
-        listNotice(1);
+    function createNoticeNav(page) {
+        $('#page-nav').empty();
+        $('#page-nav').removeClass('hide');
+        page.navigatepageNums.forEach(item => {
+            var node = $(`<a class="item" id="nav-${item}" onclick="listNotice(${item})">${item}</a>`);
+            $('#page-nav').append(node);
+        });
+
+        $('#nav-' + page.pageNum).addClass('active');
+    }
+
+    listNotice(1);
 
 
-    </script>
+</script>
 
 </html>

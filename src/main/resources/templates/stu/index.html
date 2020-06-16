@@ -52,12 +52,15 @@
 
 <div class="ui container margin-top-2">
     <div class="ui stackable grid centered animated bounceInDown">
-        <div class="ui three wide column">
+        <div class="ui three wide column" style="margin-right: 30px">
             <div class="ui  vertical pointing menu">
-                <a class="item leftMenu active" onclick="notice(this)">课程公告</a>
-                <a class="item leftMenu" onclick="showLine(this)">成绩统计</a>
-                <a class="item leftMenu" onclick="recommend(this)">视频推荐</a>
-                <a class="item leftMenu" onclick="news(this)">新闻资讯 </a>
+                <a class="item  leftMenu active" onclick="notice(this)"><span><i
+                        class="bullhorn icon"></i>课程公告</span></a>
+                <a class="item  leftMenu " onclick="showLine(this)"><span><i
+                        class="graduation cap icon"></i>成绩统计</span></a>
+                <a class="item  leftMenu " onclick="recommend(this)"><span><i class="video icon"></i>视频推荐</span></a>
+                <a class="item  leftMenu " onclick="news(this)"><span><i
+                        class="newspaper outline icon"></i>新闻资讯</span></a>
             </div>
         </div>
         <div class="ui ten wide column">
@@ -181,9 +184,9 @@
         list.forEach(item => {
             let node = $(
                 `<div class="ui segment attached">
-                         <a href="javascript:showNotice(${item.id})">${item.title}</a>
-                         <span class="my-font-tips my-margin-left-1">by: ${item.course.name}</span>
-                         <span class="my-font-tips">${item.time}</span>
+                    <a href="javascript:showNotice(${item.id})" style="font-size: large">${item.title}</a>
+                         <span class="my-margin-left-1" style="font-size: smaller" > ${item.course.name}</span>
+                         <span style="float: right">${item.time}</span>
                      </div>`
             );
             $('#body').append(node);

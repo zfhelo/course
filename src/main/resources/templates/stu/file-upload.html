@@ -17,7 +17,7 @@
      th:replace="~{stu/_fragment :: menu('resources', ${user.getPhoto()}, ${user.getNickname()})}">
 </nav>
 
-<div class="ui container segment margin-top-1 animated bounceInDown">
+<div class="ui container margin-top-2 segment  animated bounceInDown">
     <div class="ui grid stackable">
         <div class="ui nine wide column">
             <div class="ui segments">
@@ -32,21 +32,23 @@
                     </div>
                 </div>
 
-                    <div class="ui segment  grid stackable my-margin-top-0 tag1 animated" th:if="${page.list.size() != 0}" th:each="item : ${page.list}" th:id="'item-'+${item.id}">
-                        <div class="ui five wide column">
-                            <h4 class="ui header" th:text="${item.description}"></h4>
-                        </div>
-                        <div class="ui eleven wide right aligned column font-10">
-                            所属课程：<span th:text="${item.course.name}">java</span>
-                            上传者 <span th:text="${item.user.nickname}">xxx</span>
-                            大小 <span th:text="${item.size / 1024 / 1024}">210</span>M
-                            <a th:href="@{/public/res/stu/{id}(id=${item.id})}">下载</a>
-                            <a th:href="'javascript:deleteNode('+${item.id}+')'" th:if="${item.isSelf}">删除</a>
-                        </div>
+                <div class="ui segment  grid stackable my-margin-top-0 tag1 animated" th:if="${page.list.size() != 0}"
+                     th:each="item : ${page.list}" th:id="'item-'+${item.id}">
+                    <div class="ui five wide column">
+                        <h4 class="ui header" th:text="${item.description}"></h4>
                     </div>
+                    <div class="ui eleven wide right aligned column font-10">
+                        所属课程：<span th:text="${item.course.name}">java</span>
+                        上传者 <span th:text="${item.user.nickname}">xxx</span>
+                        大小 <span th:text="${item.size / 1024 / 1024}">210</span>M
+                        <a th:href="@{/public/res/stu/{id}(id=${item.id})}">下载</a>
+                        <a th:href="'javascript:deleteNode('+${item.id}+')'" th:if="${item.isSelf}">删除</a>
+                    </div>
+                </div>
 
                 <div class="ui borderless menu attached teal" id="page-nav">
-                    <a class="item" th:each="p : ${page.navigatepageNums}" th:text="${p}" th:classappend="${page.pageNum == p} ? 'active'" th:onclick="'listPage('+${p}+')'"></a>
+                    <a class="item" th:each="p : ${page.navigatepageNums}" th:text="${p}"
+                       th:classappend="${page.pageNum == p} ? 'active'" th:onclick="'listPage('+${p}+')'"></a>
                 </div>
             </div>
         </div>
@@ -65,12 +67,12 @@
             </div>
             <div class="ui my-margin-top-08">
                 <label class="ui animated fade button basic green mini" for="file">
-                    <div class="visible content" ><i class="icon folder"> </i> 选择</div>
+                    <div class="visible content"><i class="icon folder"> </i> 选择</div>
                     <div class="hidden content">限制500M</div>
                 </label>
                 <input type="file" id="file" class="hide" onchange="tips(this)">
                 <div class="ui animated fade button primary mini disabled" onclick="upload()" id="upload-btn">
-                    <div class="visible content" ><i class="icon upload"> </i> 上传</div>
+                    <div class="visible content"><i class="icon upload"> </i> 上传</div>
                     <div class="hidden content"><i class="icon cloud"></i></div>
                 </div>
                 <div class="ui olive message hide mini"></div>
@@ -87,6 +89,7 @@
         on: "hover"
     });
     let identity = 'stu';
+
     function tips(e) {
         var file = e.files[0];
         $(".olive.message").text(file.name);
@@ -107,7 +110,7 @@
         formData.append('description', description);
         formData.append('courseNumber', courseNumber);
         axios.post(`${getContextPath()}stu/upload`, formData, {
-            headers: { "Content-Type": "multipart/form-data;boundary="+new Date().getTime() }
+            headers: {"Content-Type": "multipart/form-data;boundary=" + new Date().getTime()}
         })
             .then(rep => {
                 if (rep.data.code === 200) {
@@ -160,16 +163,16 @@
         $('.tag1').remove();
         list.forEach(item => {
             var node = $(
-                '<div class="ui segment  grid stackable my-margin-top-0 tag1 animated" id="item-'+item.id+'">' +
+                '<div class="ui segment  grid stackable my-margin-top-0 tag1 animated" id="item-' + item.id + '">' +
                 '     <div class="ui five wide column">' +
-                '           <h4 class="ui header">'+item.description+'</h4>' +
+                '           <h4 class="ui header">' + item.description + '</h4>' +
                 '     </div>' +
                 '       <div class="ui eleven wide right aligned column font-10">' +
-                '       所属课程：<span>'+item.course.name+'</span>' +
-                '       上传者 <span>'+item.user.nickname+'</span>' +
-                '       大小 <span>'+Math.round(item.size / 1024 / 1024) +'</span>M' +
-                '       <a href="'+`${getContextPath()}public/res/${identity}/${item.id}`+'">下载</a>' +
-                '      '+(item.isSelf ? '<a href="javascript:deleteNode('+item.id+')">删除</a>' :'')+
+                '       所属课程：<span>' + item.course.name + '</span>' +
+                '       上传者 <span>' + item.user.nickname + '</span>' +
+                '       大小 <span>' + Math.round(item.size / 1024 / 1024) + '</span>M' +
+                '       <a href="' + `${getContextPath()}public/res/${identity}/${item.id}` + '">下载</a>' +
+                '      ' + (item.isSelf ? '<a href="javascript:deleteNode(' + item.id + ')">删除</a>' : '') +
                 '     </div>\n' +
                 '</div>'
             );
@@ -186,6 +189,7 @@
 
         $('#nav-' + page.pageNum).addClass('active');
     }
+
     function createPageNav1(page) {
         $('#page-nav').empty();
         page.navigatepageNums.forEach(item => {
@@ -211,7 +215,7 @@
                     alert(rep.data.data);
                 }
             })
-            .catch(()=> alert("请求失败"));
+            .catch(() => alert("请求失败"));
     }
 </script>
 

@@ -17,11 +17,12 @@
 </style>
 <body style="background-image: url(https://i.loli.net/2020/03/27/7zpgTsbHovPuJm6.png);">
 <!--导航-->
-<nav class="ui  attached segment my-padded-tb-mini" th:replace="~{stu/_fragment :: menu('homework', ${user.getPhoto()}, ${user.getNickname()})}">
+<nav class="ui  attached segment my-padded-tb-mini"
+     th:replace="~{stu/_fragment :: menu('homework', ${user.getPhoto()}, ${user.getNickname()})}">
 </nav>
 
 <div class="animated fadeIn ui margin-bottom-1 container margin-top-2">
-    <div class="ui segments">
+    <div class="ui segments" style="max-width: 60em; margin: auto">
         <input type="hidden" th:value="${homework.studentHomework.id}" id="homeworkId">
         <div class="ui segment green">
             <h3 th:text="${homework.title}"></h3>
@@ -31,14 +32,14 @@
         </div>
         <div class="ui segment" th:unless="${homework.endTime == null}">
             <div id="div1"></div>
-            <input type="text"th:value="${homework.studentHomework.answer}" id="answer" class="hide">
+            <input type="text" th:value="${homework.studentHomework.answer}" id="answer" class="hide">
         </div>
         <div class="ui segment" th:if="${homework.endTime == null}">
             <div th:utext="${homework.studentHomework.answer}"></div>
         </div>
         <div class="ui segment right aligned">
-                <button class="ui button mini" onclick="history.back()">返回</button>
-                <button class="ui button green mini" th:unless="${homework.endTime == null}" onclick="submit()">提交</button>
+            <button class="ui button mini" onclick="history.back()">返回</button>
+            <button class="ui button green mini" th:unless="${homework.endTime == null}" onclick="submit()">提交</button>
         </div>
     </div>
 </div>
@@ -115,13 +116,13 @@
 
     function submit() {
         axios.put(`${getContextPath()}stu/homework/`, {
-            id:$("#homeworkId").val(),
-            answer:editor.txt.html()
+            id: $("#homeworkId").val(),
+            answer: editor.txt.html()
         })
             .then(rep => {
                 if (rep.data.code === 200) {
                     $('.button.green').text('成功');
-                    setTimeout(()=>$('.button.green').text('提交'),2000);
+                    setTimeout(() => $('.button.green').text('提交'), 2000);
                 } else {
                     alert(rep.data.data.code);
                 }

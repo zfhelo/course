@@ -9,14 +9,14 @@
     <link rel="stylesheet" th:href="@{/css/my-style.css}"/>
     <title>讨论区</title>
 </head>
-<body style="background-image: url('https://i.loli.net/2020/04/08/X1y2R4pHI5d6qNn.png')">
+<body>
 <!--导航-->
 <nav th:replace="~{tea/_fragment :: menu('comment', ${user.getPhoto()}, ${user.getNickname()})}"
      class="ui  attached segment my-padded-tb-mini">
 </nav>
 
 <div class="ui container margin-top-2">
-    <div class="ui segments animated fadeIn" style="max-width: 55em; margin: 0 auto">
+    <div class="ui segments animated fadeIn" style="max-width: 60em; margin: 0 auto">
         <div class="ui segment">
             <div class="ui compact selection dropdown">
                 <input type="hidden" name="gender">
@@ -45,14 +45,18 @@
                 <div class="hidden content"><i class="user icon"></i></div>
             </a>
         </div>
-        <div id="body">
-            <div class="ui segment attached" th:each="p : ${page}" th:onclick="'detail('+${p.id}+')'">
-                    <div class="ui medium header">[[${p.title}]]<span class="my-font-tips my-padding-left-2">by:[[${p.user.nickname}]]</span>
-                    </div>
-                    <div th:if='${p.content.replaceAll("<[^>]+>|&[^>]+;","").trim().length() > 30}'
-                         th:text='${p.content.replaceAll("<[^>]+>|&[^>]+;","").trim().substring(0,30)}'></div>
-                    <div th:if='${p.content.replaceAll("<[^>]+>|&[^>]+;","").trim().length() <=30}'
+        <div id="body" class="ui segment">
+            <div class="ui segment " th:each="p : ${page}">
+                <img class="ui avatar image" th:src="${p.user.photo}">
+                <span>[(${p.user.nickname})]</span>
+                <span th:text="${#temporals.format(p.time, 'yyyy-MM-dd HH:mm')}" class="my-margin-left-1"></span>
+                <h2 class="ui header"><span th:onclick="'detail('+${p.id}+')'" class="hand">[(${p.title})]
+                </span>
+                    <div class="sub header" th:if='${p.content.replaceAll("<[^>]+>|&[^>]+;","").trim().length() > 40}'
+                         th:text='${p.content.replaceAll("<[^>]+>|&[^>]+;","").trim().substring(0,40)}'></div>
+                    <div class="sub header" th:if='${p.content.replaceAll("<[^>]+>|&[^>]+;","").trim().length() <=40}'
                          th:text='${p.content.replaceAll("<[^>]+>|&[^>]+;","")}'></div>
+                </h2>
             </div>
         </div>
         <div class="ui borderless menu attached teal hide" id="page-nav">
@@ -108,11 +112,17 @@
     function createNode(list) {
         $('#body').empty();
         list.forEach(item => {
+            console.log(JSON.stringify(item))
             var node = $(
-            `<div class="ui segment attached" onclick="detail(${item.id})">
-                    <div class="ui medium header">${item.title}<span class="my-font-tips my-padding-left-2">by:${item.user.nickname}</span></div>
-                    <div>${getSimpleText(item.content).substring(0, 30).trim()}</div>
-            </div>`
+                `<div class="ui segment ">
+                    <img class="ui avatar image" src="${item.user.photo}">
+                    <span>${item.user.nickname}</span>
+                    <span class="my-margin-left-1">${item.time}</span>
+                    <h2 class="ui header"><span onclick="detail(${item.id})" class="hand">${item.title}
+                    </span>
+                    <div class="sub header">${getSimpleText(item.content).substring(0, 40).trim()}</div>
+                    </h2>
+                </div>`
             );
             $('#body').append(node);
         })
@@ -138,6 +148,9 @@
             location.href = getContextPath() + 'tea/invitationTea/' + id
         }
     }
+
+    mo
+    now.format('YYYY-MM-DD'); //格式化输出
 </script>
 
 
